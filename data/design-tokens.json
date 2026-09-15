@@ -1,0 +1,137 @@
+{
+  "project": "کیمیای وحش",
+  "projectLatin": "Kimiyaye Vahsh",
+  "version": 2,
+  "status": "approved",
+  "phase": "visual-repair",
+  "artDirectionRef": "docs/final-art-direction.md",
+  "card": {
+    "width": 1000,
+    "height": 1400,
+    "ratio": "5:7",
+    "cornerRadius": 26,
+    "safeMargin": 22
+  },
+  "typography": {
+    "persianFont": "Amiri Bold",
+    "englishFont": "Cinzel Regular",
+    "fontFiles": {
+      "persianBold": "assets/fonts/Amiri-Bold.ttf",
+      "persianRegular": "assets/fonts/Amiri-Regular.ttf",
+      "englishBold": "assets/fonts/Cinzel-Bold.ttf",
+      "englishRegular": "assets/fonts/Cinzel-Regular.ttf",
+      "fallbackPersian": "assets/fonts/Vazirmatn-Bold.ttf",
+      "fallbackLatin": "assets/fonts/Vazirmatn-Regular.ttf"
+    },
+    "persianNameSize": 42,
+    "englishNameSize": 18,
+    "rankBadgeSize": 98,
+    "rtlPipeline": ["arabic-reshaper", "python-bidi"],
+    "fallback": "Tahoma",
+    "notes": "Mysterious readable pairing: Amiri for Persian names (full Persian glyph coverage), Cinzel for English + rank glyphs. El Messiri omitted — missing Persian codepoints. Dual-line nameplate optically centered as one block."
+  },
+  "suits": {
+    "carnivore": {
+      "nameEn": "Carnivores",
+      "nameFa": "گوشتخواران",
+      "primary": [148, 24, 32],
+      "secondary": [48, 10, 14],
+      "accent": [232, 176, 96],
+      "metal": [196, 72, 54],
+      "symbol": "fang",
+      "motif": "claw",
+      "atmosphere": "crimson ember mist",
+      "powerFill": [210, 72, 62]
+    },
+    "herbivore": {
+      "nameEn": "Herbivores",
+      "nameFa": "گیاه‌خواران",
+      "primary": [36, 108, 58],
+      "secondary": [14, 42, 28],
+      "accent": [186, 214, 140],
+      "metal": [120, 160, 90],
+      "symbol": "leaf",
+      "motif": "vine",
+      "atmosphere": "sage fog",
+      "powerFill": [72, 168, 96]
+    },
+    "bird": {
+      "nameEn": "Birds",
+      "nameFa": "پرندگان",
+      "primary": [32, 78, 148],
+      "secondary": [12, 28, 64],
+      "accent": [168, 206, 255],
+      "metal": [96, 140, 210],
+      "symbol": "feather",
+      "motif": "wing",
+      "atmosphere": "azure mist",
+      "powerFill": [72, 140, 220]
+    },
+    "reptile": {
+      "nameEn": "Reptiles",
+      "nameFa": "خزندگان",
+      "primary": [96, 44, 132],
+      "secondary": [36, 16, 56],
+      "accent": [208, 168, 255],
+      "metal": [150, 90, 190],
+      "symbol": "scale",
+      "motif": "coil",
+      "atmosphere": "violet fog",
+      "powerFill": [150, 90, 200]
+    }
+  },
+  "specialFamily": {
+    "nameEn": "Special / Alchemy",
+    "nameFa": "کارت‌های ویژه",
+    "primary": [36, 28, 22],
+    "secondary": [18, 14, 12],
+    "accent": [212, 160, 64],
+    "highlight": [240, 210, 140],
+    "symbol": "alchemical-seal"
+  },
+  "powerBar": {
+    "segments": 13,
+    "orientation": "horizontal",
+    "housing": true,
+    "legendaryFill": [230, 196, 90],
+    "empty": [36, 34, 40],
+    "mappingRef": "data/rank-model.json"
+  },
+  "frames": {
+    "normal": {
+      "outlineWidth": 10,
+      "braidedBorder": true,
+      "cornerOrnaments": true,
+      "innerGold": false
+    },
+    "legendary": {
+      "outlineWidth": 14,
+      "braidedBorder": true,
+      "cornerOrnaments": true,
+      "innerGold": true,
+      "innerGoldColor": [255, 220, 140]
+    }
+  },
+  "rankBadge": {
+    "shape": "hexagon-medallion",
+    "mirroredCorners": ["top-left", "bottom-right"]
+  },
+  "nameplate": {
+    "layered": true,
+    "sideGems": true,
+    "persianPrimary": true
+  },
+  "herbivoreLegendaryTrio": {
+    "A": "herbivore-behemoth",
+    "B": "herbivore-unicorn",
+    "C": "herbivore-mammoth",
+    "archived": "herbivore-bonnacon"
+  },
+  "export": {
+    "colorSpace": "sRGB",
+    "cleanDir": "assets/cards/final/clean",
+    "presentationDir": "assets/cards/final/presentation",
+    "portraitFinalDir": "assets/cards/portraits/final",
+    "portraitMasterDir": "assets/cards/portraits/masters"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "$comment": "Kimiyaye Vahsh — suit / category foundation (Phase 01). Visual assets and UI are out of scope.",
+  "project": "کیمیای وحش",
+  "projectLatin": "Kimiyaye Vahsh",
+  "deckTarget": {
+    "cardsPerSuit": 13,
+    "totalMainCards": 52,
+    "preferredComposition": {
+      "normalPerSuit": 10,
+      "legendaryPerSuit": 3,
+      "hardness": "preferred-target-not-hardcoded"
+    },
+    "note": "Target structure for main deck. Phase 01 kept all candidates; Phase 02 selects 52 without inventing creatures."
+  },
+  "powerScale": {
+    "rankModelRef": "./rank-model.json",
+    "powerBarSegments": 13,
+    "faceRanks": [
+      "C",
+      "B",
+      "A"
+    ],
+    "faceRankMappingStatus": "configured-in-rank-model",
+    "displayRankToPowerBarFill": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "C": 11,
+      "B": 12,
+      "A": 13
+    },
+    "comparisonOrderDescending": [
+      "A",
+      "B",
+      "C",
+      "10",
+      "9",
+      "8",
+      "7",
+      "6",
+      "5",
+      "4",
+      "3",
+      "2",
+      "1"
+    ],
+    "notes": [
+      "Use rank-model.json as single source for power-bar fill and comparison keys.",
+      "Do not hardcode A/B/C→11/12/13 in renderer code."
+    ]
+  },
+  "suits": [
+    {
+      "id": "carnivores",
+      "nameFa": "گوشتخواران پستاندار",
+      "nameEn": "Carnivores",
+      "themeColor": "red",
+      "themeColorNote": "Confirmed in prompts.txt — carnivore theme is red.",
+      "symbolStatus": "referenced-not-specified",
+      "symbolNote": "Category mark appears top-right and bottom-left; exact glyph not defined in sources.",
+      "sourceFolder": "../گوشتخواران",
+      "listFile": "../لیست گوشتخواران.txt",
+      "targetCardCount": 13,
+      "namedCandidateCount": 13,
+      "rankCompleteness": "complete",
+      "baseListLocked": true,
+      "baseListFile": "./carnivores.json"
+    },
+    {
+      "id": "herbivores",
+      "nameFa": "گیاه‌خواران پستاندار",
+      "nameEn": "Herbivores",
+      "themeColor": "green",
+      "themeColorNote": "Confirmed in prompts.txt — herbivore theme is green.",
+      "symbolStatus": "referenced-not-specified",
+      "symbolNote": "Category mark appears top-right and bottom-left; exact glyph not defined in sources.",
+      "sourceFolder": "../گیاهخواران",
+      "listFile": "../لیست گیاه خواران.txt",
+      "targetCardCount": 13,
+      "namedCandidateCount": 18,
+      "rankCompleteness": "unranked"
+    },
+    {
+      "id": "birds",
+      "nameFa": "پرندگان",
+      "nameEn": "Birds",
+      "themeColor": "blue",
+      "themeColorNote": "Confirmed in prompts.txt — bird theme is blue.",
+      "symbolStatus": "referenced-not-specified",
+      "symbolNote": "Category mark appears top-right and bottom-left; exact glyph not defined in sources.",
+      "sourceFolder": "../پرندگان",
+      "listFile": "../لیست پرندگان.txt",
+      "targetCardCount": 13,
+      "namedCandidateCount": 19,
+      "rankCompleteness": "partial"
+    },
+    {
+      "id": "reptiles",
+      "nameFa": "خزندگان",
+      "nameEn": "Reptiles",
+      "themeColor": "purple",
+      "themeColorNote": "Confirmed in prompts.txt — reptile theme is purple (بنفش).",
+      "symbolStatus": "referenced-not-specified",
+      "symbolNote": "Category mark appears top-right and bottom-left; exact glyph not defined in sources.",
+      "sourceFolder": "../خزندگان",
+      "listFile": "../لیست خزندگان.txt",
+      "targetCardCount": 13,
+      "namedCandidateCount": 14,
+      "rankCompleteness": "complete-plus-extra"
+    }
+  ],
+  "candidatesFile": "./candidates-by-suit.json",
+  "canonicalCardsFile": "./cards.json",
+  "mainDeckDraftFile": "./main-deck.draft.json",
+  "deckReviewDoc": "../docs/deck-candidate-review.md",
+  "legendaryDesignTarget": {
+    "normalPerSuit": 10,
+    "legendaryPerSuit": 3,
+    "hardness": "design-target-not-hardcoded"
+  },
+  "phase": "08-canonical-checkpoint"
+}

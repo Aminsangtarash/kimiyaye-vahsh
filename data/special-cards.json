@@ -1,0 +1,160 @@
+{
+  "project": "کیمیای وحش",
+  "version": 1,
+  "status": "approved-v1",
+  "designGoals": [
+    "Preserve Hokm-like trick structure: follow-suit, hand-reading, teammate play",
+    "Add depth without making animal ranks meaningless",
+    "Deterministic resolution; no infinite chains; limited randomness",
+    "Special visual family distinct from the four animal suits"
+  ],
+  "distribution": {
+    "model": "fixed-small-special-hand",
+    "rationale": "Keeps specials as scarce tactical tools instead of a second draw engine that would overshadow animal cards.",
+    "copiesPerType": 2,
+    "specialDeckSize": 14,
+    "dealtPerPlayer": 2,
+    "when": "After the 52 animal cards are dealt (13 each), shuffle the special deck and deal 2 specials to each player face-down.",
+    "visibility": "private",
+    "spentCards": "discard face-up to a shared special discard; not redrawn during the same hand"
+  },
+  "globalRules": {
+    "maxSpecialsPerTrickPerPlayer": 1,
+    "maxStrengthDeltaFromSpecialsPerCard": 2,
+    "stacking": "Same effect type does not stack on one animal. Adrenaline and Poison are independent. If both apply, net = +2 then -2 on the targeted cards separately.",
+    "conflictPriority": [
+      "silence",
+      "shield",
+      "poison",
+      "adrenaline",
+      "chameleon",
+      "anchor",
+      "scout"
+    ],
+    "notes": [
+      "Silence resolves first and can cancel later special plays in the same trick.",
+      "Shield only cancels Poison or Adrenaline targeting the shielded animal for this trick.",
+      "Scout is out-of-trick information and never alters trick strength."
+    ]
+  },
+  "cards": [
+    {
+      "id": "special-adrenaline",
+      "slug": "adrenaline",
+      "persianName": "آدرنالین",
+      "englishName": "Adrenaline",
+      "effect": "+2 effective strength to one animal card you control in the current trick.",
+      "timing": "After you play an animal into the current trick, before trick resolution. May also be played immediately after your animal is tabled.",
+      "validTargets": ["Your own animal card already played into the current trick"],
+      "invalidTargets": ["Opponent animals", "Animals still in hand", "Special cards", "Already-resolved tricks"],
+      "stackingRule": "Does not stack with a second Adrenaline on the same animal. Caps at +2.",
+      "conflictPriority": "After Silence/Shield; before Chameleon/Anchor.",
+      "perMatchLimit": "Uses equal copies in hand (max 2 dealt). Each physical card is single-use.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "medium-high if spammable on A-rank; mitigated by 2-card hand and 1-special-per-trick.",
+      "strengthDelta": 2,
+      "category": "combat-buff"
+    },
+    {
+      "id": "special-poison",
+      "slug": "poison",
+      "persianName": "زهر",
+      "englishName": "Poison",
+      "effect": "-2 effective strength to one opponent animal card in the current trick.",
+      "timing": "After the target opponent animal has been played into the current trick, before resolution.",
+      "validTargets": ["One opponent animal already in the current trick"],
+      "invalidTargets": ["Your animals", "Cards in hand", "Specials", "Resolved tricks"],
+      "stackingRule": "Does not stack with a second Poison on the same animal. Caps at -2.",
+      "conflictPriority": "After Shield (Shield may cancel it).",
+      "perMatchLimit": "Single-use per physical card.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "medium; strong vs mid ranks, less decisive vs A without help.",
+      "strengthDelta": -2,
+      "category": "combat-debuff"
+    },
+    {
+      "id": "special-chameleon",
+      "slug": "chameleon",
+      "persianName": "آفتاب‌پرست",
+      "englishName": "Chameleon",
+      "effect": "When you cannot follow the led suit, your played animal counts as the led suit for this trick’s comparison only. Printed rank and power-bar value are unchanged. It does not become Superior Suit unless the led suit currently is Superior.",
+      "timing": "Must be declared when you play an off-suit animal while void in the led suit.",
+      "validTargets": ["The animal you are playing right now while void in led suit"],
+      "invalidTargets": [
+        "Plays made while you still hold a card of the led suit",
+        "Converting an on-suit card to another suit",
+        "Changing Superior Suit identity by itself"
+      ],
+      "stackingRule": "One Chameleon declaration per play. Cannot combine with a second suit rewrite.",
+      "conflictPriority": "After combat modifiers; applied when determining which suit track the card competes on.",
+      "perMatchLimit": "Single-use per physical card.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "medium — softens voids without deleting follow-suit for players who can follow.",
+      "category": "suit-adaptation"
+    },
+    {
+      "id": "special-shield",
+      "slug": "shield",
+      "persianName": "سپر",
+      "englishName": "Shield",
+      "effect": "Cancel one Adrenaline or Poison that currently targets your animal in this trick.",
+      "timing": "Immediate response after an opponent plays Adrenaline or Poison affecting your animal, before resolution.",
+      "validTargets": ["One pending Adrenaline or Poison on your animal in the current trick"],
+      "invalidTargets": ["Chameleon", "Anchor", "Scout", "Silence", "Effects on other players’ animals"],
+      "stackingRule": "Cancels one effect instance. Does not grant immunity to a later second effect unless another Shield is played (blocked by max 1 special/player/trick).",
+      "conflictPriority": "Very high — resolves before the cancelled effect applies.",
+      "perMatchLimit": "Single-use per physical card.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "low-medium; reactive and situational.",
+      "category": "reaction"
+    },
+    {
+      "id": "special-scout",
+      "slug": "scout",
+      "persianName": "دیده‌بان",
+      "englishName": "Scout",
+      "effect": "Choose one opponent and one suit. Privately learn how many animal cards of that suit remain in that opponent’s hand.",
+      "timing": "On your turn before leading or before playing to a trick, once when activating this card. Does not alter the current trick’s legal plays beyond information.",
+      "validTargets": ["One living opponent + one animal suit"],
+      "invalidTargets": ["Partner’s hand", "Special-card counts", "Deck", "Discard"],
+      "stackingRule": "Information only; no strength interaction.",
+      "conflictPriority": "Lowest combat relevance; ignored by Silence if Silence already active for the trick (Scout may still be used before a trick starts).",
+      "perMatchLimit": "Single-use per physical card.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "low; helps hand-reading without swinging tricks alone.",
+      "category": "information"
+    },
+    {
+      "id": "special-silence",
+      "slug": "silence",
+      "persianName": "خاموشی",
+      "englishName": "Silence",
+      "effect": "For the remainder of the current trick, no further special cards may be played.",
+      "timing": "Any time during the current trick before resolution, on your turn window (including immediately after lead).",
+      "validTargets": ["Current trick (global)"],
+      "invalidTargets": ["Future tricks", "Already-applied specials earlier in this trick (those stand)"],
+      "stackingRule": "Multiple Silences do nothing extra. Does not unwind prior Adrenaline/Poison already accepted.",
+      "conflictPriority": "Highest — locks the trick’s special channel.",
+      "perMatchLimit": "Single-use per physical card.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "medium; strong anti-combo tool that preserves animal primacy.",
+      "category": "meta"
+    },
+    {
+      "id": "special-anchor",
+      "slug": "anchor",
+      "persianName": "لنگر",
+      "englishName": "Anchor",
+      "effect": "After you win a trick, lock the Superior Suit that would normally be set by that win for one additional trick (Superior remains that suit for the next two tricks total: the immediate next trick and the one after).",
+      "timing": "Immediately after you win a trick, before the next lead.",
+      "validTargets": ["The Superior Suit transition created by your just-won trick"],
+      "invalidTargets": ["Tricks you did not win", "Changing Superior to a different suit than the winner’s suit"],
+      "stackingRule": "If another Anchor is played later, replace the remaining lock duration (no infinite extend).",
+      "conflictPriority": "After combat resolution of the won trick.",
+      "perMatchLimit": "Single-use per physical card.",
+      "perHandLimit": "No extra limit beyond cards held.",
+      "balanceRisk": "medium — can create short superior-suit runs; limited duration and scarcity keep it in check.",
+      "category": "superior-control"
+    }
+  ]
+}

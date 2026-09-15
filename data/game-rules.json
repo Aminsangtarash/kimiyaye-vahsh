@@ -1,0 +1,84 @@
+{
+  "project": "کیمیای وحش",
+  "projectLatin": "Kimiyaye Vahsh",
+  "version": "1.0.0",
+  "status": "canonical",
+  "players": 4,
+  "teams": {
+    "count": 2,
+    "size": 2,
+    "seating": "Partners sit opposite. Seats 0 opposite 2 (Team A); seats 1 opposite 3 (Team B).",
+    "teamIds": ["A", "B"]
+  },
+  "decks": {
+    "main": {
+      "cards": 52,
+      "suits": ["carnivore", "herbivore", "bird", "reptile"],
+      "cardsPerSuit": 13,
+      "ranks": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "C", "B", "A"],
+      "source": "data/cards.json",
+      "strengthSource": "data/rank-model.json"
+    },
+    "special": {
+      "enabled": true,
+      "source": "data/special-cards.json",
+      "deckSize": 14,
+      "dealtPerPlayer": 2
+    }
+  },
+  "match": {
+    "handsToWinMatch": 3,
+    "tricksToWinHand": 7,
+    "maxTricksPerHand": 13
+  },
+  "deal": {
+    "shuffle": "cryptographically strong RNG in production; any fair shuffle in offline",
+    "animalDeal": "all 52 cards, 13 per player",
+    "specialDeal": "after animals: shuffle 14 specials, deal 2 per player",
+    "firstLead": "For the first hand of a match, choose a random seat to lead. For later hands, the player who won the last trick of the previous hand leads (if unavailable, random among remaining)."
+  },
+  "superiorSuit": {
+    "id": "dynamic-winner-suit",
+    "nameEn": "Superior Suit",
+    "nameFa": "دستهٔ برتر",
+    "rule": "After a trick is won, the printed suit of the winning animal becomes the Superior Suit for the next trick. The first trick of each hand has no Superior Suit.",
+    "withAnchor": "If Anchor is played by the winner, that Superior Suit remains for the next two tricks (the immediate next trick and the one after), then normal updating resumes.",
+    "examples": [
+      "Trick 1 has no Superior. Led suit Birds. Highest Bird wins with Falcon. Superior for Trick 2 becomes Birds.",
+      "Trick 2 Superior=Birds. Player void in led Carnivores plays a Bird (Superior) and wins. Superior for Trick 3 becomes Birds again (winner's printed suit).",
+      "Winner plays Anchor after Trick 2. Superior Birds is locked for Trick 3 and Trick 4."
+    ]
+  },
+  "trick": {
+    "followSuit": "If you hold at least one card of the led suit, you must play a card of that suit.",
+    "void": "If you hold none of the led suit, you may play any animal card.",
+    "resolutionOrder": [
+      "Apply accepted special modifiers (respecting Silence/Shield/priority)",
+      "Cards whose effective suit equals Superior outrank all non-Superior cards",
+      "Among Superior cards, highest effective strength wins",
+      "If no Superior card was played, highest effective strength among led-suit cards wins",
+      "Off-suit non-Superior cards cannot win if any led-suit or Superior card exists",
+      "If effective strength ties on the winning track, the earliest played of those tied cards wins"
+    ],
+    "effectiveStrength": "powerBarFill from rank-model, plus Adrenaline/Poison deltas"
+  },
+  "specials": {
+    "ref": "data/special-cards.json",
+    "maxPerPlayerPerTrick": 1
+  },
+  "scoring": {
+    "hand": "First team to win 7 tricks wins the hand. Remaining undealt tricks are not required once 7 is reached (implementation may finish the hand for UX; rules winner is first to 7).",
+    "match": "First team to win 3 hands wins the match.",
+    "rematch": "Players may agree to a new match; seats may rotate by agreement or stay fixed."
+  },
+  "conduct": {
+    "surrender": "A player may surrender the match for their team only with partner confirmation in online mode; in hotseat, single confirmation. Surrender awards the match to opponents.",
+    "disconnect": "Online: reconnect window 60s; if not restored, AI temporary take-over for the hand or hand forfeit per server policy. Rules perspective: the match must remain resolvable without soft-lock.",
+    "inactivity": "Online: 60s play timer default; on timeout auto-play lowest legal animal (no special). Repeated timeouts may trigger disconnect policy."
+  },
+  "modes": {
+    "standalone": "Playable without website account (local/hotseat/private room).",
+    "connected": "Authenticated users; future tournaments/rewards hook into match results without changing core rules."
+  },
+  "lorePolicy": "Lore enriches presentation; legal moves are fully defined by this rules object and special-cards.json without story knowledge."
+}

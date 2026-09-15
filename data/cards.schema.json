@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimiyaye-vahsh.local/schemas/canonical-card.json",
+  "title": "KimiyayeVahshCanonicalCard",
+  "description": "Canonical Phase 01 card object for کیمیای وحش.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "originalName",
+    "englishName",
+    "persianName",
+    "suit",
+    "type",
+    "originalRank",
+    "numericPower",
+    "displayRank",
+    "source",
+    "notes",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "originalName": {
+      "type": "string"
+    },
+    "englishName": {
+      "type": "string"
+    },
+    "persianName": {
+      "type": "string"
+    },
+    "suit": {
+      "type": "string",
+      "enum": [
+        "carnivore",
+        "herbivore",
+        "bird",
+        "reptile"
+      ]
+    },
+    "type": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "normal",
+            "legendary"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "originalRank": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "C",
+            "B",
+            "A"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "numericPower": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 13
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "displayRank": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "C",
+            "B",
+            "A"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "needs-review",
+        "candidate",
+        "approved"
+      ]
+    },
+    "portraitConcept": {
+      "description": "Art-direction portrait concept key for future illustration phases.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "artDirection": {
+      "type": "object",
+      "description": "Future art framing guidance. No art produced in Phase 02.",
+      "properties": {
+        "portraitConcept": {
+          "type": "string"
+        },
+        "framing": {
+          "type": "string"
+        },
+        "scaleFeel": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "description": "Creature identity metadata (e.g. Dragon of Moses manifestation)."
+    }
+  },
+  "additionalProperties": false
+}

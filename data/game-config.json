@@ -1,0 +1,13 @@
+{
+  "tricksToWinHand": 7,
+  "handsToWinMatch": 3,
+  "maxTricksPerHand": 13,
+  "specialsPerPlayer": 2,
+  "specialCopiesPerType": 2,
+  "maxSpecialsPerTrickPerPlayer": 1,
+  "maxStrengthDelta": 2,
+  "reconnectGraceMs": 60000,
+  "inactivityTimeoutMs": 60000,
+  "roomTtlMs": 7200000,
+  "notes": "Server/admin configuration only. Never exposed for client mutation."
+}

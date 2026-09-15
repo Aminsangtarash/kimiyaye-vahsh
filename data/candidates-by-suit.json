@@ -1,0 +1,1792 @@
+{
+  "project": "کیمیای وحش",
+  "projectLatin": "Kimiyaye Vahsh",
+  "phase": "01-extract-all-suit-candidates",
+  "deckTarget": {
+    "suits": [
+      "carnivores",
+      "herbivores",
+      "birds",
+      "reptiles"
+    ],
+    "cardsPerSuit": 13,
+    "totalMainCards": 52
+  },
+  "extractionRule": "Extract every known option from lists, named assets, and unnamed Gemini dumps. Do NOT trim any suit down to 13 in this phase.",
+  "suits": {
+    "carnivores": {
+      "nameEn": "Carnivores",
+      "nameFa": "گوشتخواران پستاندار",
+      "themeColor": "red",
+      "targetCardCount": 13,
+      "namedCandidateCount": 13,
+      "unnamedAssetCount": 6,
+      "overflowVsTarget": 0,
+      "rankStatus": "complete-13-base-list-locked",
+      "baseListFile": "./carnivores.json",
+      "namedCandidates": [
+        {
+          "id": "carnivores-wolverine",
+          "originalName": "wolverine",
+          "englishName": "Wolverine",
+          "nameFa": "گورکن عسلی",
+          "displayRank": "1",
+          "numericPower": 1,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/1_wolverin.png",
+          "assetFilenameOriginal": "1_wolverin.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "گورکن عسلی",
+          "nameEn": "Wolverine",
+          "notes": [
+            "Previous draft persian transliteration was ولوورین; common zoological Persian is گورکن عسلی.",
+            "Asset filename uses wolverin."
+          ]
+        },
+        {
+          "id": "carnivores-fox",
+          "originalName": "fox",
+          "englishName": "Fox",
+          "nameFa": "روباه",
+          "displayRank": "2",
+          "numericPower": 2,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/2_fox.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "روباه",
+          "nameEn": "Fox",
+          "notes": []
+        },
+        {
+          "id": "carnivores-snow-leopard",
+          "originalName": "snow loard",
+          "englishName": "Snow Leopard",
+          "nameFa": "پلنگ برفی",
+          "displayRank": "3",
+          "numericPower": 3,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/3_snow leopard.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "پلنگ برفی",
+          "nameEn": "Snow Leopard",
+          "notes": [
+            "List typo: loard → leopard."
+          ]
+        },
+        {
+          "id": "carnivores-wolf",
+          "originalName": "wolf",
+          "englishName": "Wolf",
+          "nameFa": "گرگ",
+          "displayRank": "4",
+          "numericPower": 4,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/4_wolf.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "گرگ",
+          "nameEn": "Wolf",
+          "notes": []
+        },
+        {
+          "id": "carnivores-hyena",
+          "originalName": "hyena",
+          "englishName": "Hyena",
+          "nameFa": "کفتار",
+          "displayRank": "5",
+          "numericPower": 5,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/5_hyena.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "کفتار",
+          "nameEn": "Hyena",
+          "notes": []
+        },
+        {
+          "id": "carnivores-jaguar",
+          "originalName": "jagvar",
+          "englishName": "Jaguar",
+          "nameFa": "جگوار",
+          "displayRank": "6",
+          "numericPower": 6,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/6_jaguar.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "جگوار",
+          "nameEn": "Jaguar",
+          "notes": [
+            "List typo: jagvar → jaguar."
+          ]
+        },
+        {
+          "id": "carnivores-bear",
+          "originalName": "bear",
+          "englishName": "Bear",
+          "nameFa": "خرس",
+          "displayRank": "7",
+          "numericPower": 7,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/7_bear.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "خرس",
+          "nameEn": "Bear",
+          "notes": [
+            "Generic bear; distinct from Polar Bear."
+          ]
+        },
+        {
+          "id": "carnivores-tiger",
+          "originalName": "tiger",
+          "englishName": "Tiger",
+          "nameFa": "ببر",
+          "displayRank": "8",
+          "numericPower": 8,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/9_tiger.png",
+          "assetFilenameRankHint": 9,
+          "notes": [
+            "Base List=8; asset filename prefix=9"
+          ],
+          "type": "normal",
+          "status": null,
+          "persianName": "ببر",
+          "nameEn": "Tiger"
+        },
+        {
+          "id": "carnivores-lion",
+          "originalName": "lion",
+          "englishName": "Lion",
+          "nameFa": "شیر",
+          "displayRank": "9",
+          "numericPower": 9,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/8_lion.png",
+          "assetFilenameRankHint": 8,
+          "notes": [
+            "Base List=9; asset filename prefix=8",
+            "Distinct from legendary Nemean Lion."
+          ],
+          "type": "normal",
+          "status": null,
+          "persianName": "شیر",
+          "nameEn": "Lion"
+        },
+        {
+          "id": "carnivores-polar-bear",
+          "originalName": "polar bear",
+          "englishName": "Polar Bear",
+          "nameFa": "خرس قطبی",
+          "displayRank": "10",
+          "numericPower": 10,
+          "mythic": false,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/10_polar bear.png",
+          "type": "normal",
+          "status": null,
+          "persianName": "خرس قطبی",
+          "nameEn": "Polar Bear",
+          "notes": []
+        },
+        {
+          "id": "carnivores-amarok",
+          "originalName": "amarok",
+          "englishName": "Amarok",
+          "nameFa": "آماروک",
+          "originalRank": "C",
+          "displayRank": "C",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/11_amarok.png",
+          "assetFilenameRankHint": 11,
+          "type": "legendary",
+          "status": null,
+          "persianName": "آماروک",
+          "nameEn": "Amarok",
+          "notes": [
+            "Inuit legendary wolf; type=legendary."
+          ]
+        },
+        {
+          "id": "carnivores-griffon",
+          "originalName": "griffon",
+          "englishName": "Griffon",
+          "nameFa": "گریفون",
+          "originalRank": "B",
+          "displayRank": "B",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/12_griffon.png",
+          "assetFilenameRankHint": 12,
+          "type": "legendary",
+          "status": null,
+          "persianName": "گریفون",
+          "nameEn": "Griffon",
+          "notes": [
+            "Alternate English spelling: griffin.",
+            "Alternate Persian literary name: شیردال.",
+            "Suit kept as carnivores per Base List (hybrid eagle/lion)."
+          ]
+        },
+        {
+          "id": "carnivores-nemean-lion",
+          "originalName": "nemean lion",
+          "englishName": "Nemean Lion",
+          "nameFa": "شیر نمه‌ای",
+          "originalRank": "A",
+          "displayRank": "A",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "base-list",
+            "named-asset"
+          ],
+          "assetRef": "../گوشتخواران/13_nemean lion.png",
+          "assetFilenameRankHint": 13,
+          "type": "legendary",
+          "status": null,
+          "persianName": "شیر نمه‌ای",
+          "nameEn": "Nemean Lion",
+          "notes": [
+            "Greek myth; distinct from normal Lion."
+          ]
+        }
+      ],
+      "unnamedAssets": [
+        {
+          "id": "carnivores-gemini-7x55dt",
+          "assetRef": "../گوشتخواران/Gemini_Generated_Image_7x55dt7x55dt7x55.png",
+          "alsoInZip": true,
+          "identity": null
+        },
+        {
+          "id": "carnivores-gemini-f9cau1",
+          "assetRef": "../گوشتخواران/Gemini_Generated_Image_f9cau1f9cau1f9ca.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "carnivores-gemini-gj42pw",
+          "assetRef": "../گوشتخواران/Gemini_Generated_Image_gj42pwgj42pwgj42.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "carnivores-gemini-pnmk5z",
+          "assetRef": "../گوشتخواران/Gemini_Generated_Image_pnmk5zpnmk5zpnmk.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "carnivores-gemini-sgm9zs",
+          "assetRef": "../گوشتخواران/Gemini_Generated_Image_sgm9zssgm9zssgm9.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "carnivores-gemini-t4ragb",
+          "assetRef": "../گوشتخواران/Gemini_Generated_Image_t4ragbt4ragbt4ra.png",
+          "alsoInZip": false,
+          "identity": null
+        }
+      ]
+    },
+    "herbivores": {
+      "nameEn": "Herbivores",
+      "nameFa": "گیاه‌خواران پستاندار",
+      "themeColor": "green",
+      "targetCardCount": 13,
+      "namedCandidateCount": 18,
+      "unnamedAssetCount": 0,
+      "overflowVsTarget": 5,
+      "rankStatus": "all-unranked",
+      "namedCandidates": [
+        {
+          "id": "herbivores-unicorn",
+          "nameEn": "Unicorn",
+          "nameFa": "تک‌شاخ",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/unicorn.png",
+          "type": "legendary",
+          "status": null,
+          "originalName": "unicorn",
+          "englishName": "Unicorn",
+          "persianName": "تک‌شاخ",
+          "notes": []
+        },
+        {
+          "id": "herbivores-panda",
+          "nameEn": "Panda",
+          "nameFa": "پاندا",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/panda.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "panda",
+          "englishName": "Panda",
+          "persianName": "پاندا",
+          "notes": [
+            "Assumed giant panda; species not explicit in list."
+          ]
+        },
+        {
+          "id": "herbivores-deer",
+          "nameEn": "Deer",
+          "nameFa": "گوزن",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/deer.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "deer",
+          "englishName": "Deer",
+          "persianName": "گوزن",
+          "notes": [
+            "Species not specified; گوزن vs آهو ambiguity possible."
+          ]
+        },
+        {
+          "id": "herbivores-rhinoceros",
+          "nameEn": "Rhinoceros",
+          "nameFa": "کرگدن",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/rhinoceros.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "rhinoceros",
+          "englishName": "Rhinoceros",
+          "persianName": "کرگدن",
+          "notes": []
+        },
+        {
+          "id": "herbivores-elephant",
+          "nameEn": "Elephant",
+          "nameFa": "فیل",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/elephant.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "elephant",
+          "englishName": "Elephant",
+          "persianName": "فیل",
+          "notes": []
+        },
+        {
+          "id": "herbivores-bonnacon",
+          "nameEn": "Bonnacon",
+          "nameFa": "بوناکن",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "legendary",
+          "status": null,
+          "originalName": "bonnacon",
+          "englishName": "Bonnacon",
+          "persianName": "بوناکن",
+          "notes": [
+            "Medieval legendary beast; persian is transliteration."
+          ]
+        },
+        {
+          "id": "herbivores-behemoth",
+          "nameEn": "Behemoth",
+          "nameFa": "بهیموت",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/behemoth.png",
+          "type": "legendary",
+          "status": null,
+          "originalName": "behemoth",
+          "englishName": "Behemoth",
+          "persianName": "بهیموت",
+          "notes": [
+            "Alternate persian spelling: بهیموت."
+          ]
+        },
+        {
+          "id": "herbivores-mammoth",
+          "nameEn": "Mammoth",
+          "nameFa": "ماموت",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/mammoth.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "mammoth",
+          "englishName": "Mammoth",
+          "persianName": "ماموت",
+          "notes": [
+            "Extinct real animal; type=normal."
+          ]
+        },
+        {
+          "id": "herbivores-giraffe",
+          "nameEn": "Giraffe",
+          "nameFa": "زرافه",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/giraffe.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "giraffe",
+          "englishName": "Giraffe",
+          "persianName": "زرافه",
+          "notes": []
+        },
+        {
+          "id": "herbivores-boar",
+          "nameEn": "Boar",
+          "nameFa": "گراز",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/boar.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "boar",
+          "englishName": "Boar",
+          "persianName": "گراز",
+          "notes": []
+        },
+        {
+          "id": "herbivores-tapir",
+          "nameEn": "Tapir",
+          "nameFa": "تاپیر",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "normal",
+          "status": null,
+          "originalName": "tapir",
+          "englishName": "Tapir",
+          "persianName": "تاپیر",
+          "notes": []
+        },
+        {
+          "id": "herbivores-okapi",
+          "nameEn": "Okapi",
+          "nameFa": "اوکاپی",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "normal",
+          "status": null,
+          "originalName": "okapi",
+          "englishName": "Okapi",
+          "persianName": "اوکاپی",
+          "notes": []
+        },
+        {
+          "id": "herbivores-kangaroo",
+          "nameEn": "Kangaroo",
+          "nameFa": "کانگورو",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/kangaroo.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "kangaroo",
+          "englishName": "Kangaroo",
+          "persianName": "کانگورو",
+          "notes": []
+        },
+        {
+          "id": "herbivores-yak",
+          "nameEn": "Yak",
+          "nameFa": "یاک",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "normal",
+          "status": null,
+          "originalName": "yak",
+          "englishName": "Yak",
+          "persianName": "یاک",
+          "notes": [
+            "Also called گاو تبتی in Persian."
+          ]
+        },
+        {
+          "id": "herbivores-buffalo",
+          "nameEn": "Buffalo",
+          "nameFa": "بوفالو",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/buffalo (2).png",
+          "type": "normal",
+          "status": null,
+          "originalName": "buffalo",
+          "englishName": "Buffalo",
+          "persianName": "بوفالو",
+          "notes": [
+            "Ambiguous: water buffalo (گاومیش) vs Cape buffalo etc.",
+            "persianName kept as list transliteration; species needs review."
+          ]
+        },
+        {
+          "id": "herbivores-hippopotamus",
+          "nameEn": "Hippopotamus",
+          "nameFa": "اسب آبی",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/hippopotamus.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "hippopotamus",
+          "englishName": "Hippopotamus",
+          "persianName": "اسب آبی",
+          "notes": []
+        },
+        {
+          "id": "herbivores-gorilla",
+          "nameEn": "Gorilla",
+          "nameFa": "گوریل",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/gorilla.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "gorilla",
+          "englishName": "Gorilla",
+          "persianName": "گوریل",
+          "notes": [
+            "Omnivore/herbivore-leaning ape; suit=herbivores per source list.",
+            "Distinct from King Kong candidate."
+          ]
+        },
+        {
+          "id": "herbivores-king-kong",
+          "nameEn": "King Kong",
+          "nameFa": "کینگ‌کنگ",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": null,
+          "evidence": [
+            "named-asset"
+          ],
+          "assetRef": "../گیاهخواران/گیاهخواران/king kong.png",
+          "notes": [
+            "not in herbivore list; kept as candidate",
+            "Fictional creature, but legendary classification for this deck's 10+3 target needs design review.",
+            "Asset-only; not in herbivore list.",
+            "status=needs-review for legendary classification and whether suit should stay herbivores."
+          ],
+          "type": null,
+          "status": "needs-review",
+          "originalName": "king kong",
+          "englishName": "King Kong",
+          "persianName": "کینگ‌کنگ"
+        }
+      ],
+      "unnamedAssets": [],
+      "selectionNote": "18 named options for a 13-card suit. No trimming in Phase 01."
+    },
+    "birds": {
+      "nameEn": "Birds",
+      "nameFa": "پرندگان",
+      "themeColor": "blue",
+      "targetCardCount": 13,
+      "namedCandidateCount": 19,
+      "unnamedAssetCount": 22,
+      "overflowVsTarget": 6,
+      "rankStatus": "partial-7-of-13",
+      "namedCandidates": [
+        {
+          "id": "birds-bearded-vulture",
+          "nameEn": "Bearded Vulture",
+          "nameFa": "کرکس ریش‌دار",
+          "displayRank": "7",
+          "numericPower": 7,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/7_Bearded Vulture.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "bearded vulture",
+          "englishName": "Bearded Vulture",
+          "persianName": "کرکس ریش‌دار",
+          "notes": [
+            "Also known as Lammergeier.",
+            "Alternate Persian همای ریش‌دار exists but risks confusion with legendary Homa (هما).",
+            "Distinct from generic Vulture and legendary Homa."
+          ]
+        },
+        {
+          "id": "birds-ostrich",
+          "nameEn": "Ostrich",
+          "nameFa": "شترمرغ",
+          "displayRank": "8",
+          "numericPower": 8,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/8_Ostrich.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "ostrich",
+          "englishName": "Ostrich",
+          "persianName": "شترمرغ",
+          "notes": []
+        },
+        {
+          "id": "birds-cassowary",
+          "nameEn": "Cassowary",
+          "nameFa": "کاسوآر",
+          "displayRank": "9",
+          "numericPower": 9,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/9_Cassowary.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "cassowary",
+          "englishName": "Cassowary",
+          "persianName": "کاسوآر",
+          "notes": [
+            "Earlier draft کاسوآری normalized to کاسوآر."
+          ]
+        },
+        {
+          "id": "birds-harpy-eagle",
+          "nameEn": "Harpy Eagle",
+          "nameFa": "عقاب هارپی",
+          "displayRank": "10",
+          "numericPower": 10,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset-ambiguous"
+          ],
+          "assetRef": "../پرندگان/10_eagle.png",
+          "notes": [
+            "asset named generic eagle; may be harpy or separate eagle",
+            "Possible duplicate/overlap with birds-eagle and asset 10_eagle.png — needs identity confirmation."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "harpy eagle",
+          "englishName": "Harpy Eagle",
+          "persianName": "عقاب هارپی"
+        },
+        {
+          "id": "birds-homa",
+          "nameEn": "Homa",
+          "nameFa": "هما",
+          "displayRank": "C",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Homa.png",
+          "originalRank": "C",
+          "type": "legendary",
+          "status": null,
+          "originalName": "homa",
+          "englishName": "Homa",
+          "persianName": "هما",
+          "notes": [
+            "Persian mythic bird; distinct from Bearded Vulture."
+          ]
+        },
+        {
+          "id": "birds-phoenix",
+          "nameEn": "Phoenix",
+          "nameFa": "ققنوس",
+          "displayRank": "B",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/12_phonix.png",
+          "notes": [
+            "filename typo: phonix",
+            "List/asset typo: phonix → Phoenix."
+          ],
+          "originalRank": "B",
+          "type": "legendary",
+          "status": null,
+          "originalName": "phonix",
+          "englishName": "Phoenix",
+          "persianName": "ققنوس"
+        },
+        {
+          "id": "birds-simurgh",
+          "nameEn": "Simurgh",
+          "nameFa": "سیمرغ",
+          "displayRank": "A",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset",
+            "prompts"
+          ],
+          "assetRef": "../پرندگان/13_Simurgh-3.png",
+          "originalRank": "A",
+          "type": "legendary",
+          "status": null,
+          "originalName": "simurgh",
+          "englishName": "Simurgh",
+          "persianName": "سیمرغ",
+          "notes": []
+        },
+        {
+          "id": "birds-secretary-bird",
+          "nameEn": "Secretary Bird",
+          "nameFa": "مرغ منشی",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Secretary bird.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "secretary bird",
+          "englishName": "Secretary Bird",
+          "persianName": "مرغ منشی",
+          "notes": []
+        },
+        {
+          "id": "birds-shikra",
+          "nameEn": "Shikra",
+          "nameFa": "شکرا",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "normal",
+          "status": null,
+          "originalName": "shikra",
+          "englishName": "Shikra",
+          "persianName": "شکرا",
+          "notes": [
+            "Earlier draft شیکرا; common Persian/ornithological form is often شکرا."
+          ]
+        },
+        {
+          "id": "birds-great-hornbill",
+          "nameEn": "Great Hornbill",
+          "nameFa": "نوک‌شاخ بزرگ",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Greate hornbill.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "great hornbill",
+          "englishName": "Great Hornbill",
+          "persianName": "نوک‌شاخ بزرگ",
+          "notes": [
+            "Asset filename typo: Greate hornbill.png.",
+            "Earlier draft هورنبیل بزرگ was transliteration; نوک‌شاخ is common Persian for hornbill."
+          ]
+        },
+        {
+          "id": "birds-philippine-eagle",
+          "nameEn": "Philippine Eagle",
+          "nameFa": "عقاب فیلیپینی",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "normal",
+          "status": null,
+          "originalName": "philippine eagle",
+          "englishName": "Philippine Eagle",
+          "persianName": "عقاب فیلیپینی",
+          "notes": [
+            "Related eagle cluster with harpy eagle / generic eagle — keep all until curated."
+          ]
+        },
+        {
+          "id": "birds-wandering-albatross",
+          "nameEn": "Wandering Albatross",
+          "nameFa": "آلباتروس سرگردان",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "notes": [
+            "list typo: albatoress",
+            "List typo: albatoress → albatross."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "wandering albatoress",
+          "englishName": "Wandering Albatross",
+          "persianName": "آلباتروس سرگردان"
+        },
+        {
+          "id": "birds-mish-margh",
+          "nameEn": "Mish Margh",
+          "nameFa": "میش‌مرغ",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": null,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": null,
+          "status": "needs-review",
+          "notes": [
+            "Identity/spelling of Mish Margh not confirmed in sources; legendary vs normal undecided.",
+            "Identity unclear from sources (real bird vs folkloric name).",
+            "status=needs-review for type and possibly naming."
+          ],
+          "originalName": "mish margh",
+          "englishName": "Mish Margh",
+          "persianName": "میش‌مرغ"
+        },
+        {
+          "id": "birds-heron",
+          "nameEn": "Heron",
+          "nameFa": "حواصیل",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "type": "normal",
+          "status": null,
+          "originalName": "heron",
+          "englishName": "Heron",
+          "persianName": "حواصیل",
+          "notes": [
+            "Species not specified."
+          ]
+        },
+        {
+          "id": "birds-owl",
+          "nameEn": "Owl",
+          "nameFa": "جغد",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Owl.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "owl",
+          "englishName": "Owl",
+          "persianName": "جغد",
+          "notes": [
+            "Species not specified."
+          ]
+        },
+        {
+          "id": "birds-raven",
+          "nameEn": "Raven",
+          "nameFa": "غراب",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Raven.png",
+          "notes": [
+            "list typo: reven",
+            "List typo: reven → raven.",
+            "Earlier draft کلاغ is broader (crow/raven); غراب is more specific for raven."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "reven",
+          "englishName": "Raven",
+          "persianName": "غراب"
+        },
+        {
+          "id": "birds-vulture",
+          "nameEn": "Vulture",
+          "nameFa": "کرکس",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Vulture.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "vulture",
+          "englishName": "Vulture",
+          "persianName": "کرکس",
+          "notes": [
+            "Generic; distinct from Bearded Vulture."
+          ]
+        },
+        {
+          "id": "birds-eagle",
+          "nameEn": "Eagle",
+          "nameFa": "عقاب",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "notes": [
+            "may collide with 10_eagle.png / harpy eagle",
+            "Generic eagle entry overlaps conceptually with Harpy Eagle / Philippine Eagle / 10_eagle.png.",
+            "Kept as separate candidate; do not delete in Phase 01."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "eagle",
+          "englishName": "Eagle",
+          "persianName": "عقاب"
+        },
+        {
+          "id": "birds-falcon",
+          "nameEn": "Falcon",
+          "nameFa": "شاهین",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "named-asset"
+          ],
+          "assetRef": "../پرندگان/Falcon.png",
+          "notes": [
+            "not in bird list; kept as candidate",
+            "Asset-only (not in لیست پرندگان.txt).",
+            "شاهین often means falcon broadly; species not specified."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "Falcon",
+          "englishName": "Falcon",
+          "persianName": "شاهین"
+        }
+      ],
+      "unnamedAssets": [
+        {
+          "id": "birds-gemini-1i2x51",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_1i2x511i2x511i2x.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-26xnsn",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_26xnsn26xnsn26xn.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-484y7p",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_484y7p484y7p484y.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-4ppi09",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_4ppi094ppi094ppi.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-4ve4lp",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_4ve4lp4ve4lp4ve4.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-5ccpuc",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_5ccpuc5ccpuc5ccp.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-8q91bb",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_8q91bb8q91bb8q91.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-8volhc",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_8volhc8volhc8vol.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-ap3fdk",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_ap3fdkap3fdkap3f.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-ax0ut4",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_ax0ut4ax0ut4ax0u.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-az1pp4",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_az1pp4az1pp4az1p.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-ccfd69",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_ccfd69ccfd69ccfd.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-denr7x",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_denr7xdenr7xdenr.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-jpll6n",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_jpll6njpll6njpll.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-l32fli",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_l32flil32flil32f.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-o0oek1",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_o0oek1o0oek1o0oe.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-oben5j",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_oben5joben5joben.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-oi8s8s",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_oi8s8soi8s8soi8s.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-r7zxih",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_r7zxihr7zxihr7zx.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-w9h9t7",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_w9h9t7w9h9t7w9h9.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-x859a1",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_x859a1x859a1x859.png",
+          "location": "zip-only",
+          "identity": null
+        },
+        {
+          "id": "birds-gemini-yozluz",
+          "assetRef": "../پرندگان.zip#پرندگان/Gemini_Generated_Image_yozluzyozluzyozl.png",
+          "location": "zip-only",
+          "identity": null
+        }
+      ],
+      "missingRanks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "selectionNote": "19 named options for a 13-card suit; ranks 1–6 open. No trimming in Phase 01."
+    },
+    "reptiles": {
+      "nameEn": "Reptiles",
+      "nameFa": "خزندگان",
+      "themeColor": "purple",
+      "targetCardCount": 13,
+      "namedCandidateCount": 14,
+      "unnamedAssetCount": 17,
+      "overflowVsTarget": 1,
+      "rankStatus": "complete-13-plus-1-extra",
+      "namedCandidates": [
+        {
+          "id": "reptiles-alligator-snapping-turtle",
+          "nameEn": "Alligator Snapping Turtle",
+          "nameFa": "لاک‌پشت گازگیر تمساحی",
+          "displayRank": "1",
+          "numericPower": 1,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/alligator_turtle.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Alligator Snapping Turtle",
+          "englishName": "Alligator Snapping Turtle",
+          "persianName": "لاک‌پشت گازگیر تمساحی",
+          "notes": [
+            "Persian from لیست خزندگان.txt. Asset: alligator_turtle.png."
+          ]
+        },
+        {
+          "id": "reptiles-gila-monster",
+          "nameEn": "Gila Monster",
+          "nameFa": "هیولای گیلا",
+          "displayRank": "2",
+          "numericPower": 2,
+          "mythic": false,
+          "evidence": [
+            "list"
+          ],
+          "assetRef": null,
+          "notes": [
+            "ranked but no named asset yet",
+            "Persian from لیست خزندگان.txt."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "Gila Monster",
+          "englishName": "Gila Monster",
+          "persianName": "هیولای گیلا"
+        },
+        {
+          "id": "reptiles-python",
+          "nameEn": "Python",
+          "nameFa": "پایتون",
+          "displayRank": "3",
+          "numericPower": 3,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/python.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Python",
+          "englishName": "Python",
+          "persianName": "پایتون",
+          "notes": []
+        },
+        {
+          "id": "reptiles-king-cobra",
+          "nameEn": "King Cobra",
+          "nameFa": "شاه‌کبرا",
+          "displayRank": "4",
+          "numericPower": 4,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/kong_cobra.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "King Cobra",
+          "englishName": "King Cobra",
+          "persianName": "شاه‌کبرا",
+          "notes": [
+            "Asset filename typo: kong_cobra.png."
+          ]
+        },
+        {
+          "id": "reptiles-black-mamba",
+          "nameEn": "Black Mamba",
+          "nameFa": "مامبای سیاه",
+          "displayRank": "5",
+          "numericPower": 5,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/black_mamba.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Black Mamba",
+          "englishName": "Black Mamba",
+          "persianName": "مامبای سیاه",
+          "notes": []
+        },
+        {
+          "id": "reptiles-taipan",
+          "nameEn": "Taipan",
+          "nameFa": "تایپان",
+          "displayRank": "6",
+          "numericPower": 6,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/taipan.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Taipan",
+          "englishName": "Taipan",
+          "persianName": "تایپان",
+          "notes": []
+        },
+        {
+          "id": "reptiles-anaconda",
+          "nameEn": "Anaconda",
+          "nameFa": "آناکوندا",
+          "displayRank": "7",
+          "numericPower": 7,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/anaconda.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Anaconda",
+          "englishName": "Anaconda",
+          "persianName": "آناکوندا",
+          "notes": []
+        },
+        {
+          "id": "reptiles-crocodile",
+          "nameEn": "Crocodile",
+          "nameFa": "کروکودیل",
+          "displayRank": "8",
+          "numericPower": 8,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/crocodill.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Crocodile",
+          "englishName": "Crocodile",
+          "persianName": "کروکودیل",
+          "notes": [
+            "Asset filename typo: crocodill.png. Species not specified."
+          ]
+        },
+        {
+          "id": "reptiles-black-caiman",
+          "nameEn": "Black Caiman",
+          "nameFa": "کایمن سیاه",
+          "displayRank": "9",
+          "numericPower": 9,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/black caiman.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Black Caiman",
+          "englishName": "Black Caiman",
+          "persianName": "کایمن سیاه",
+          "notes": []
+        },
+        {
+          "id": "reptiles-komodo-dragon",
+          "nameEn": "Komodo Dragon",
+          "nameFa": "اژدهای کومودو",
+          "displayRank": "10",
+          "numericPower": 10,
+          "mythic": false,
+          "evidence": [
+            "list",
+            "named-asset"
+          ],
+          "assetRef": "../خزندگان/Komodo_dragon.png",
+          "type": "normal",
+          "status": null,
+          "originalName": "Komodo Dragon",
+          "englishName": "Komodo Dragon",
+          "persianName": "اژدهای کومودو",
+          "notes": [
+            "Real animal despite 'dragon' in name; type=normal."
+          ]
+        },
+        {
+          "id": "reptiles-dragon-of-moses-i",
+          "nameEn": "Dragon of Moses I",
+          "nameFa": "اژدهای موسی، تجلی نخست",
+          "displayRank": "C",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset",
+            "prompts"
+          ],
+          "assetRef": "../خزندگان/dragon_of_Moses.png",
+          "originalRank": "C",
+          "type": "legendary",
+          "status": null,
+          "originalName": "Dragon of Moses I",
+          "englishName": "Dragon of Moses I",
+          "persianName": "اژدهای موسی، تجلی نخست",
+          "notes": [
+            "Independent legendary card (not alt-art). First transformation: large horned serpent, frightening. Rank C.",
+            "FINAL: Dragon of Moses I/II/III are three independent legendary cards (not alternate images of one creature). Per story, the staff becomes a dragon three times; each appearance is larger, stronger, and more terrifying. Ranks: I=C, II=B, III=A."
+          ],
+          "independence": "independent-legendary-card",
+          "legendaryFamily": "dragon-of-moses",
+          "identity": {
+            "manifestation": 1,
+            "titleEn": "First manifestation",
+            "titleFa": "تجلی نخست",
+            "scaleNote": "Creature size is still comprehensible."
+          },
+          "artDirection": {
+            "portraitConcept": "large-head-and-neck",
+            "framing": "Show a large portion of the head and neck.",
+            "scaleFeel": "readable-scale",
+            "notes": "First manifestation — still graspable in size; portrait should feature substantial head and neck."
+          },
+          "portraitConcept": "large-head-and-neck"
+        },
+        {
+          "id": "reptiles-dragon-of-moses-ii",
+          "nameEn": "Dragon of Moses II",
+          "nameFa": "اژدهای موسی، تجلی دوم",
+          "displayRank": "B",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset",
+            "prompts"
+          ],
+          "assetRef": "../خزندگان/dragon_of_Moses_2.png",
+          "originalRank": "B",
+          "type": "legendary",
+          "status": null,
+          "originalName": "Dragon of Moses II",
+          "englishName": "Dragon of Moses II",
+          "persianName": "اژدهای موسی، تجلی دوم",
+          "notes": [
+            "Independent legendary card (not alt-art). Second transformation: larger, with limbs, lava eyes, melting teeth. Rank B.",
+            "FINAL: Dragon of Moses I/II/III are three independent legendary cards (not alternate images of one creature). Per story, the staff becomes a dragon three times; each appearance is larger, stronger, and more terrifying. Ranks: I=C, II=B, III=A."
+          ],
+          "independence": "independent-legendary-card",
+          "legendaryFamily": "dragon-of-moses",
+          "identity": {
+            "manifestation": 2,
+            "titleEn": "Second manifestation",
+            "titleFa": "تجلی دوم",
+            "scaleNote": "Larger and more formidable than I."
+          },
+          "artDirection": {
+            "portraitConcept": "frame-filling-colossal-head",
+            "framing": "Head should occupy more of the frame; creature scale must feel vastly larger.",
+            "scaleFeel": "overwhelming-scale",
+            "notes": "Second manifestation — bigger and more terrifying; head dominates the card frame."
+          },
+          "portraitConcept": "frame-filling-colossal-head"
+        },
+        {
+          "id": "reptiles-dragon-of-moses-iii",
+          "nameEn": "Dragon of Moses III",
+          "nameFa": "اژدهای موسی، تجلی نهایی",
+          "displayRank": "A",
+          "numericPower": null,
+          "mythic": true,
+          "evidence": [
+            "list",
+            "named-asset",
+            "prompts"
+          ],
+          "assetRef": "../خزندگان/dragon_of_Moses_3.png",
+          "originalRank": "A",
+          "type": "legendary",
+          "status": null,
+          "originalName": "Dragon of Moses III",
+          "englishName": "Dragon of Moses III",
+          "persianName": "اژدهای موسی، تجلی نهایی",
+          "notes": [
+            "Independent legendary card (not alt-art). Third transformation: colossal; source says only the head/eye scale is seen. Rank A.",
+            "FINAL: Dragon of Moses I/II/III are three independent legendary cards (not alternate images of one creature). Per story, the staff becomes a dragon three times; each appearance is larger, stronger, and more terrifying. Ranks: I=C, II=B, III=A."
+          ],
+          "independence": "independent-legendary-card",
+          "legendaryFamily": "dragon-of-moses",
+          "identity": {
+            "manifestation": 3,
+            "titleEn": "Final manifestation",
+            "titleFa": "تجلی نهایی",
+            "scaleNote": "Creature is so immense that a complete head must not fit on the card."
+          },
+          "artDirection": {
+            "portraitConcept": "extreme-scale-eye-only",
+            "artisticException": true,
+            "frameRule": "Use the same Legendary Frame as other legendaries — do not redesign the frame.",
+            "portraitShowsOnly": [
+              "giant-eye",
+              "surrounding-scales",
+              "fragment-of-face",
+              "strong-shadow"
+            ],
+            "portraitMustNotShow": [
+              "full-head",
+              "full-face",
+              "readable-full-creature"
+            ],
+            "framing": "Only giant eye, surrounding scales, a fragment of face, and strong shadow.",
+            "scaleFeel": "incomprehensible-scale",
+            "goal": "Convey unimaginable size — the card frame cannot contain the creature.",
+            "tone": "mysterious-fantasy-not-horror",
+            "notes": "Defined artistic exception for Dragon of Moses III. Legendary Frame unchanged; portrait is extreme crop only."
+          },
+          "portraitConcept": "extreme-scale-eye-only",
+          "artisticException": true
+        },
+        {
+          "id": "reptiles-gharial",
+          "nameEn": "Gharial",
+          "nameFa": "گاریال",
+          "displayRank": null,
+          "numericPower": null,
+          "mythic": false,
+          "evidence": [
+            "named-asset",
+            "zip"
+          ],
+          "assetRef": "../خزندگان/gharial.png",
+          "notes": [
+            "extra beyond the ranked 13; not trimmed",
+            "Asset-only; not in ranked reptiles list.",
+            "Earlier draft persian غارایال corrected to گاریال (common form); original asset token was gharial."
+          ],
+          "type": "normal",
+          "status": null,
+          "originalName": "gharial",
+          "englishName": "Gharial",
+          "persianName": "گاریال"
+        }
+      ],
+      "unnamedAssets": [
+        {
+          "id": "reptiles-gemini-18pz8j",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_18pz8j18pz8j18pz.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-1c93d6",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_1c93d61c93d61c93.png",
+          "alsoInZip": true,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-1r3n0x",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_1r3n0x1r3n0x1r3n.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-4jsu5p",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_4jsu5p4jsu5p4jsu.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-68nzcq",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_68nzcq68nzcq68nz.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-9g9fyz",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_9g9fyz9g9fyz9g9f.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-bmhath",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_bmhathbmhathbmha.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-ch7tlf",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_ch7tlfch7tlfch7t.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-fj8cb9",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_fj8cb9fj8cb9fj8c.png",
+          "alsoInZip": true,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-m6u2im",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_m6u2imm6u2imm6u2.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-q4eytt",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_q4eyttq4eyttq4ey.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-rrlihd",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_rrlihdrrlihdrrli.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-vcnxd8",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_vcnxd8vcnxd8vcnx.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-w1ltcj",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_w1ltcjw1ltcjw1lt.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-w4uymm",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_w4uymmw4uymmw4uy.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-wpnov9",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_wpnov9wpnov9wpno.png",
+          "alsoInZip": false,
+          "identity": null
+        },
+        {
+          "id": "reptiles-gemini-yciq0d",
+          "assetRef": "../خزندگان/Gemini_Generated_Image_yciq0dyciq0dyciq.png",
+          "alsoInZip": false,
+          "identity": null
+        }
+      ],
+      "selectionNote": "13 ranked + Gharial extra. Gila Monster still needs art. No trimming in Phase 01."
+    }
+  },
+  "unassignedRootAssets": [
+    {
+      "id": "root-gemini-82oqeb",
+      "assetRef": "../Gemini_Generated_Image_82oqeb82oqeb82oq (2).png",
+      "suitHint": null,
+      "identity": null
+    },
+    {
+      "id": "root-gemini-gbscgn-a",
+      "assetRef": "../Gemini_Generated_Image_gbscgngbscgngbsc.png",
+      "suitHint": null,
+      "identity": null
+    },
+    {
+      "id": "root-gemini-gbscgn-b",
+      "assetRef": "../Gemini_Generated_Image_gbscgngbscgngbsc (1).png",
+      "suitHint": null,
+      "identity": null
+    },
+    {
+      "id": "root-gemini-gbscgn-c",
+      "assetRef": "../Gemini_Generated_Image_gbscgngbscgngbsc (1) (1).png",
+      "suitHint": null,
+      "identity": null
+    }
+  ],
+  "totals": {
+    "namedCandidatesAllSuits": 64,
+    "unnamedAssetsInSuitFoldersOrZips": 45,
+    "unassignedRootAssets": 4,
+    "mainDeckTarget": 52,
+    "note": "64 named candidates > 52 target. Final cut happens in a later curation step, not now."
+  },
+  "legendaryDesignTarget": {
+    "normalPerSuit": 10,
+    "legendaryPerSuit": 3,
+    "hardness": "design-target-not-hardcoded",
+    "note": "Soft preference only. Do not trim candidates to force 10+3 in Phase 01."
+  }
+}

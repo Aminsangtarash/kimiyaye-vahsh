@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.data/
+.env
+*.log
+.DS_Store
+apps/web/dist/
+packages/*/dist/
+coverage/
+*.tsbuildinfo
+data/_missing_prompts.json
+data/_gen_prompts.json
+data/_gen_carnivores.json

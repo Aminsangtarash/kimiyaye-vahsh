@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "invariantHands": 50,
+  "batch": {
+    "matches": 500,
+    "use_specials": true,
+    "team_wins": {
+      "1": 266,
+      "0": 234
+    },
+    "usage": {
+      "poison": 465,
+      "tricks": 5566,
+      "adrenaline": 504,
+      "scout": 366,
+      "anchor": 280,
+      "chameleon": 290,
+      "shield": 66,
+      "poison_blocked": 66,
+      "silence": 333
+    },
+    "avg_tricks": 11.132
+  },
+  "rulesRef": "data/game-rules.json"
+}

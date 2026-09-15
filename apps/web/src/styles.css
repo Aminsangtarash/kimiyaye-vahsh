@@ -1,0 +1,184 @@
+:root {
+  --bg: #0f0c10;
+  --panel: #1a1520;
+  --accent: #c9a24a;
+  --text: #f2ebe0;
+  --muted: #9a8f82;
+  --carnivore: #a01c24;
+  --herbivore: #227a44;
+  --bird: #1c4896;
+  --reptile: #6230a0;
+  --legal: #3ecf8e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Tahoma, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at 20% 0%, #241830, var(--bg));
+  color: var(--text);
+  min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  margin: 0.25rem 0;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+}
+
+.hero p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.entry-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 1.5rem;
+}
+
+button {
+  background: var(--panel);
+  border: 1px solid #3a3040;
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button.primary {
+  background: linear-gradient(180deg, #3a2f1a, #2a2215);
+  border-color: var(--accent);
+}
+
+.lobby,
+.game {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #342a3a;
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.seats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.seat {
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid #3a3040;
+}
+
+.seat.you {
+  border-color: var(--accent);
+}
+
+.seat .team {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.table {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .table {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.card-btn {
+  width: 86px;
+  padding: 0.25rem;
+  border-radius: 8px;
+  background: #121018;
+}
+
+.card-btn.legal {
+  box-shadow: 0 0 0 2px var(--legal);
+}
+
+.card-btn.selected {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+.card-btn img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+.card-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.trick-area {
+  min-height: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  background: var(--panel);
+  border: 1px solid #3a3040;
+  color: var(--text);
+  padding: 0.5rem;
+  border-radius: 8px;
+}

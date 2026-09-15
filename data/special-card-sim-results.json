@@ -1,0 +1,34 @@
+{
+  "baseline_no_specials": {
+    "matches": 1500,
+    "use_specials": false,
+    "team_wins": {
+      "0": 747,
+      "1": 753
+    },
+    "usage": {
+      "tricks": 16685
+    },
+    "avg_tricks": 11.123333333333333
+  },
+  "with_specials": {
+    "matches": 1500,
+    "use_specials": true,
+    "team_wins": {
+      "1": 759,
+      "0": 741
+    },
+    "usage": {
+      "scout": 1141,
+      "adrenaline": 1503,
+      "tricks": 16712,
+      "poison": 1362,
+      "silence": 1033,
+      "anchor": 842,
+      "chameleon": 841,
+      "shield": 230,
+      "poison_blocked": 230
+    },
+    "avg_tricks": 11.141333333333334
+  }
+}

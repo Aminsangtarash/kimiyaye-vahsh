@@ -1,0 +1,43 @@
+{
+  "archivedAt": "2026-09-15T09:14:49.977386+00:00",
+  "reason": "Canonical herbivore legendary trio = Behemoth(A), Unicorn(B), Mammoth(C).",
+  "card": {
+    "id": "herbivore-bonnacon",
+    "slug": "bonnacon",
+    "originalName": "bonnacon",
+    "englishName": "Bonnacon",
+    "persianName": "بوناکن",
+    "suit": "herbivore",
+    "type": "legendary",
+    "originalRank": "C",
+    "displayRank": "C",
+    "numericPower": 11,
+    "powerBarFill": 11,
+    "rankModelRef": "./rank-model.json",
+    "source": "لیست گیاه خواران.txt",
+    "notes": "Mythical medieval beast; no asset found. | Medieval legendary beast; persian is transliteration.",
+    "status": "provisional",
+    "locked": false,
+    "assets": {
+      "portrait": {
+        "status": "missing",
+        "ref": null,
+        "note": "No portrait asset yet."
+      },
+      "portraitPrompt": {
+        "status": "missing",
+        "ref": null
+      },
+      "frame": {
+        "status": "missing",
+        "ref": null,
+        "note": "Normal vs Legendary frames not built yet."
+      },
+      "suitIcon": {
+        "status": "missing",
+        "ref": null
+      }
+    },
+    "renderStatus": "missing"
+  }
+}

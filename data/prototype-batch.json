@@ -1,0 +1,30 @@
+{
+  "phase": "09-cross-suit-prototype-batch",
+  "artDirection": {
+    "status": "provisional",
+    "style": "Stylized Semi-Realistic Fantasy Illustration",
+    "doc": "../docs/art-direction-provisional.md"
+  },
+  "prototypes": [
+    {"cardId": "carnivore-lion", "slug": "lion", "role": "carnivore-midhigh"},
+    {"cardId": "carnivore-wolf", "slug": "wolf", "role": "carnivore-mid"},
+    {"cardId": "carnivore-fox", "slug": "fox", "role": "carnivore-low"},
+    {"cardId": "herbivore-mammoth", "slug": "mammoth", "role": "herbivore-powerful-representative", "note": "Canonical rank 10 herbivore used instead of inventing Elephant-only override."},
+    {"cardId": "bird-harpy-eagle", "slug": "harpy-eagle", "role": "bird-eagle-representative", "note": "Canonical rank 10; source-art identity still needs-review."},
+    {"cardId": "reptile-king-cobra", "slug": "king-cobra", "role": "reptile-representative"},
+    {"cardId": "carnivore-griffon", "slug": "griffon", "role": "legendary-B"}
+  ],
+  "outputs": {
+    "prompts": "prompts/portraits/prototypes/",
+    "portraits": "assets/prototypes/portraits/",
+    "cleanCards": "assets/prototypes/cards/clean/",
+    "presentationCards": "assets/prototypes/cards/presentation/",
+    "sheets": "assets/prototypes/sheets/"
+  },
+  "renderer": {
+    "path": "tools/render_card.py",
+    "status": "prototype",
+    "size": [1000, 1400],
+    "note": "Created in Phase 09 because no prior renderer existed."
+  }
+}

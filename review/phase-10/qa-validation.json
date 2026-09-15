@@ -1,0 +1,382 @@
+{
+  "powerBars": [
+    {
+      "slug": "lion",
+      "expectedFill": 9,
+      "measuredFill": 9,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    },
+    {
+      "slug": "wolf",
+      "expectedFill": 4,
+      "measuredFill": 4,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    },
+    {
+      "slug": "fox",
+      "expectedFill": 2,
+      "measuredFill": 2,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    },
+    {
+      "slug": "mammoth",
+      "expectedFill": 10,
+      "measuredFill": 10,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    },
+    {
+      "slug": "harpy-eagle",
+      "expectedFill": 10,
+      "measuredFill": 10,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    },
+    {
+      "slug": "king-cobra",
+      "expectedFill": 4,
+      "measuredFill": 4,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    },
+    {
+      "slug": "griffon",
+      "expectedFill": 12,
+      "measuredFill": 12,
+      "totalSegments": 13,
+      "ok": true,
+      "cardSize": [
+        1000,
+        1400
+      ],
+      "ratio": 0.7143
+    }
+  ],
+  "rtl": [
+    {
+      "slug": "lion",
+      "original": "شیر",
+      "shaped": "ﺮﯿﺷ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    },
+    {
+      "slug": "wolf",
+      "original": "گرگ",
+      "shaped": "ﮒﺮﮔ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    },
+    {
+      "slug": "fox",
+      "original": "روباه",
+      "shaped": "ﻩﺎﺑﻭﺭ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    },
+    {
+      "slug": "mammoth",
+      "original": "ماموت",
+      "shaped": "ﺕﻮﻣﺎﻣ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    },
+    {
+      "slug": "harpy-eagle",
+      "original": "عقاب هارپی",
+      "shaped": "ﯽﭘﺭﺎﻫ ﺏﺎﻘﻋ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    },
+    {
+      "slug": "king-cobra",
+      "original": "شاه‌کبرا",
+      "shaped": "ﺍﺮﺒﮐﻩﺎﺷ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    },
+    {
+      "slug": "griffon",
+      "original": "گریفون",
+      "shaped": "ﻥﻮﻔﯾﺮﮔ",
+      "has_persian_letters": true,
+      "shaped_nonempty": true,
+      "ok": true
+    }
+  ],
+  "sizes": [
+    {
+      "slug": "lion",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "lion",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "lion",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    },
+    {
+      "slug": "wolf",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "wolf",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "wolf",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    },
+    {
+      "slug": "fox",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "fox",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "fox",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    },
+    {
+      "slug": "mammoth",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "mammoth",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "mammoth",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    },
+    {
+      "slug": "harpy-eagle",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "harpy-eagle",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "harpy-eagle",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    },
+    {
+      "slug": "king-cobra",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "king-cobra",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "king-cobra",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    },
+    {
+      "slug": "griffon",
+      "label": "100%",
+      "size": [
+        1000,
+        1400
+      ],
+      "rankBadgePx": 120.0,
+      "suitSymbolPxApprox": 52.0,
+      "powerSegW": 14.0
+    },
+    {
+      "slug": "griffon",
+      "label": "50%",
+      "size": [
+        500,
+        700
+      ],
+      "rankBadgePx": 60.0,
+      "suitSymbolPxApprox": 26.0,
+      "powerSegW": 7.0
+    },
+    {
+      "slug": "griffon",
+      "label": "thumbnail",
+      "size": [
+        86,
+        120
+      ],
+      "rankBadgePx": 10.3,
+      "suitSymbolPxApprox": 4.5,
+      "powerSegW": 1.2
+    }
+  ],
+  "ratios": [],
+  "allPowerBarsOk": true,
+  "allRtlOk": true
+}

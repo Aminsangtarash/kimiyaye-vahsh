@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kimiyaye-vahsh.local/schemas/deck-card.json",
+  "title": "KimiyayeVahshDeckCard",
+  "description": "Phase 01 data schema for a single card in کیمیای وحش. No art/UI/engine fields required.",
+  "type": "object",
+  "required": [
+    "id",
+    "suitId",
+    "nameEn",
+    "nameFa",
+    "dataStatus",
+    "mythic"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Stable slug, unique across the whole deck."
+    },
+    "suitId": {
+      "type": "string",
+      "enum": [
+        "carnivores",
+        "herbivores",
+        "reptiles",
+        "birds"
+      ]
+    },
+    "nameEn": {
+      "type": "string",
+      "description": "Normalized English display name. Prefer englishName when both exist; nameEn is kept for compatibility."
+    },
+    "englishName": {
+      "type": "string",
+      "description": "Corrected / canonical English name."
+    },
+    "originalName": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Exact spelling as it appeared in the source list file, including typos."
+    },
+    "nameFa": {
+      "type": "string",
+      "description": "Alias of persianName for compatibility."
+    },
+    "assetFilenameOriginal": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Exact asset filename spelling when it differs from the creature id/name."
+    },
+    "assetFilenameRankHint": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 13
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Numeric prefix parsed from an asset filename, if any. Does not override Base List ranks."
+    },
+    "originalRank": {
+      "description": "Rank exactly as recorded in the authoritative source (e.g. \"A\", \"B\", \"C\", or \"1\"–\"10\"). Not auto-mapped.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "C",
+            "B",
+            "A"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "displayRank": {
+      "description": "What is printed on the card. For face ranks, currently mirrors originalRank (A/B/C).",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "C",
+            "B",
+            "A"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "numericPower": {
+      "description": "Comparable numeric power when assigned. For A/B/C face ranks this stays null until a later mapping decision. For ranks 1–10 it equals the integer rank.",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 13
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "mythic": {
+      "type": "boolean",
+      "description": "Legacy boolean aligned with type===legendary when classification is known; null when status is needs-review.",
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "mythicForm": {
+      "description": "Deprecated for Dragon of Moses. Those are three independent legendary cards, not multi-form variants. Field may remain null for compatibility.",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dataStatus": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "partial",
+        "unranked",
+        "list-only",
+        "asset-only",
+        "conflict"
+      ],
+      "description": "How trustworthy this card row is for later phases."
+    },
+    "assetRef": {
+      "description": "Relative path to an existing source image under the parent project folder, if any. Phase 01 stores reference only.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "type": {
+      "description": "Creature class for the soft 10-normal + 3-legendary design target. Null when status is needs-review.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "normal",
+            "legendary"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "description": "Review flag. Use needs-review when legendary/normal classification is uncertain. Do not guess.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "needs-review"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "persianName": {
+      "type": "string",
+      "description": "Appropriate Persian display name."
+    }
+  },
+  "additionalProperties": false
+}

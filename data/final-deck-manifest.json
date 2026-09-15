@@ -1,0 +1,548 @@
+{
+  "project": "کیمیای وحش",
+  "phase": "visual-repair",
+  "count": 52,
+  "cardDimensions": {
+    "w": 1000,
+    "h": 1400
+  },
+  "herbivoreLegendaryTrio": {
+    "A": "behemoth",
+    "B": "unicorn",
+    "C": "mammoth"
+  },
+  "cards": [
+    {
+      "cardId": "carnivore-wolverine",
+      "cleanAsset": "assets/cards/final/clean/wolverine.png",
+      "presentationAsset": "assets/cards/final/presentation/wolverine.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/wolverine.png",
+      "suit": "carnivore",
+      "rank": "1",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-fox",
+      "cleanAsset": "assets/cards/final/clean/fox.png",
+      "presentationAsset": "assets/cards/final/presentation/fox.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/fox.png",
+      "suit": "carnivore",
+      "rank": "2",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-snow-leopard",
+      "cleanAsset": "assets/cards/final/clean/snow-leopard.png",
+      "presentationAsset": "assets/cards/final/presentation/snow-leopard.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/snow-leopard.png",
+      "suit": "carnivore",
+      "rank": "3",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-wolf",
+      "cleanAsset": "assets/cards/final/clean/wolf.png",
+      "presentationAsset": "assets/cards/final/presentation/wolf.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/wolf.png",
+      "suit": "carnivore",
+      "rank": "4",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-hyena",
+      "cleanAsset": "assets/cards/final/clean/hyena.png",
+      "presentationAsset": "assets/cards/final/presentation/hyena.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/hyena.png",
+      "suit": "carnivore",
+      "rank": "5",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-jaguar",
+      "cleanAsset": "assets/cards/final/clean/jaguar.png",
+      "presentationAsset": "assets/cards/final/presentation/jaguar.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/jaguar.png",
+      "suit": "carnivore",
+      "rank": "6",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-bear",
+      "cleanAsset": "assets/cards/final/clean/bear.png",
+      "presentationAsset": "assets/cards/final/presentation/bear.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/bear.png",
+      "suit": "carnivore",
+      "rank": "7",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-tiger",
+      "cleanAsset": "assets/cards/final/clean/tiger.png",
+      "presentationAsset": "assets/cards/final/presentation/tiger.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/tiger.png",
+      "suit": "carnivore",
+      "rank": "8",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-lion",
+      "cleanAsset": "assets/cards/final/clean/lion.png",
+      "presentationAsset": "assets/cards/final/presentation/lion.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/lion.png",
+      "suit": "carnivore",
+      "rank": "9",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-polar-bear",
+      "cleanAsset": "assets/cards/final/clean/polar-bear.png",
+      "presentationAsset": "assets/cards/final/presentation/polar-bear.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/polar-bear.png",
+      "suit": "carnivore",
+      "rank": "10",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-amarok",
+      "cleanAsset": "assets/cards/final/clean/amarok.png",
+      "presentationAsset": "assets/cards/final/presentation/amarok.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/amarok.png",
+      "suit": "carnivore",
+      "rank": "C",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-griffon",
+      "cleanAsset": "assets/cards/final/clean/griffon.png",
+      "presentationAsset": "assets/cards/final/presentation/griffon.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/griffon.png",
+      "suit": "carnivore",
+      "rank": "B",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "carnivore-nemean-lion",
+      "cleanAsset": "assets/cards/final/clean/nemean-lion.png",
+      "presentationAsset": "assets/cards/final/presentation/nemean-lion.png",
+      "portraitAsset": "assets/cards/portraits/final/carnivores/nemean-lion.png",
+      "suit": "carnivore",
+      "rank": "A",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-deer",
+      "cleanAsset": "assets/cards/final/clean/deer.png",
+      "presentationAsset": "assets/cards/final/presentation/deer.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/deer.png",
+      "suit": "herbivore",
+      "rank": "1",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-panda",
+      "cleanAsset": "assets/cards/final/clean/panda.png",
+      "presentationAsset": "assets/cards/final/presentation/panda.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/panda.png",
+      "suit": "herbivore",
+      "rank": "2",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-kangaroo",
+      "cleanAsset": "assets/cards/final/clean/kangaroo.png",
+      "presentationAsset": "assets/cards/final/presentation/kangaroo.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/kangaroo.png",
+      "suit": "herbivore",
+      "rank": "3",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-buffalo",
+      "cleanAsset": "assets/cards/final/clean/buffalo.png",
+      "presentationAsset": "assets/cards/final/presentation/buffalo.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/buffalo.png",
+      "suit": "herbivore",
+      "rank": "4",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-boar",
+      "cleanAsset": "assets/cards/final/clean/boar.png",
+      "presentationAsset": "assets/cards/final/presentation/boar.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/boar.png",
+      "suit": "herbivore",
+      "rank": "5",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-gorilla",
+      "cleanAsset": "assets/cards/final/clean/gorilla.png",
+      "presentationAsset": "assets/cards/final/presentation/gorilla.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/gorilla.png",
+      "suit": "herbivore",
+      "rank": "6",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-rhinoceros",
+      "cleanAsset": "assets/cards/final/clean/rhinoceros.png",
+      "presentationAsset": "assets/cards/final/presentation/rhinoceros.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/rhinoceros.png",
+      "suit": "herbivore",
+      "rank": "7",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-hippopotamus",
+      "cleanAsset": "assets/cards/final/clean/hippopotamus.png",
+      "presentationAsset": "assets/cards/final/presentation/hippopotamus.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/hippopotamus.png",
+      "suit": "herbivore",
+      "rank": "8",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-giraffe",
+      "cleanAsset": "assets/cards/final/clean/giraffe.png",
+      "presentationAsset": "assets/cards/final/presentation/giraffe.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/giraffe.png",
+      "suit": "herbivore",
+      "rank": "9",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-elephant",
+      "cleanAsset": "assets/cards/final/clean/elephant.png",
+      "presentationAsset": "assets/cards/final/presentation/elephant.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/elephant.png",
+      "suit": "herbivore",
+      "rank": "10",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-mammoth",
+      "cleanAsset": "assets/cards/final/clean/mammoth.png",
+      "presentationAsset": "assets/cards/final/presentation/mammoth.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/mammoth.png",
+      "suit": "herbivore",
+      "rank": "C",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-unicorn",
+      "cleanAsset": "assets/cards/final/clean/unicorn.png",
+      "presentationAsset": "assets/cards/final/presentation/unicorn.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/unicorn.png",
+      "suit": "herbivore",
+      "rank": "B",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "herbivore-behemoth",
+      "cleanAsset": "assets/cards/final/clean/behemoth.png",
+      "presentationAsset": "assets/cards/final/presentation/behemoth.png",
+      "portraitAsset": "assets/cards/portraits/final/herbivores/behemoth.png",
+      "suit": "herbivore",
+      "rank": "A",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-raven",
+      "cleanAsset": "assets/cards/final/clean/raven.png",
+      "presentationAsset": "assets/cards/final/presentation/raven.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/raven.png",
+      "suit": "bird",
+      "rank": "1",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-owl",
+      "cleanAsset": "assets/cards/final/clean/owl.png",
+      "presentationAsset": "assets/cards/final/presentation/owl.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/owl.png",
+      "suit": "bird",
+      "rank": "2",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-vulture",
+      "cleanAsset": "assets/cards/final/clean/vulture.png",
+      "presentationAsset": "assets/cards/final/presentation/vulture.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/vulture.png",
+      "suit": "bird",
+      "rank": "3",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-great-hornbill",
+      "cleanAsset": "assets/cards/final/clean/great-hornbill.png",
+      "presentationAsset": "assets/cards/final/presentation/great-hornbill.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/great-hornbill.png",
+      "suit": "bird",
+      "rank": "4",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-secretary-bird",
+      "cleanAsset": "assets/cards/final/clean/secretary-bird.png",
+      "presentationAsset": "assets/cards/final/presentation/secretary-bird.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/secretary-bird.png",
+      "suit": "bird",
+      "rank": "5",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-falcon",
+      "cleanAsset": "assets/cards/final/clean/falcon.png",
+      "presentationAsset": "assets/cards/final/presentation/falcon.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/falcon.png",
+      "suit": "bird",
+      "rank": "6",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-bearded-vulture",
+      "cleanAsset": "assets/cards/final/clean/bearded-vulture.png",
+      "presentationAsset": "assets/cards/final/presentation/bearded-vulture.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/bearded-vulture.png",
+      "suit": "bird",
+      "rank": "7",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-ostrich",
+      "cleanAsset": "assets/cards/final/clean/ostrich.png",
+      "presentationAsset": "assets/cards/final/presentation/ostrich.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/ostrich.png",
+      "suit": "bird",
+      "rank": "8",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-cassowary",
+      "cleanAsset": "assets/cards/final/clean/cassowary.png",
+      "presentationAsset": "assets/cards/final/presentation/cassowary.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/cassowary.png",
+      "suit": "bird",
+      "rank": "9",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-harpy-eagle",
+      "cleanAsset": "assets/cards/final/clean/harpy-eagle.png",
+      "presentationAsset": "assets/cards/final/presentation/harpy-eagle.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/harpy-eagle.png",
+      "suit": "bird",
+      "rank": "10",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-homa",
+      "cleanAsset": "assets/cards/final/clean/homa.png",
+      "presentationAsset": "assets/cards/final/presentation/homa.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/homa.png",
+      "suit": "bird",
+      "rank": "C",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-phoenix",
+      "cleanAsset": "assets/cards/final/clean/phoenix.png",
+      "presentationAsset": "assets/cards/final/presentation/phoenix.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/phoenix.png",
+      "suit": "bird",
+      "rank": "B",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "bird-simurgh",
+      "cleanAsset": "assets/cards/final/clean/simurgh.png",
+      "presentationAsset": "assets/cards/final/presentation/simurgh.png",
+      "portraitAsset": "assets/cards/portraits/final/birds/simurgh.png",
+      "suit": "bird",
+      "rank": "A",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-gila-monster",
+      "cleanAsset": "assets/cards/final/clean/gila-monster.png",
+      "presentationAsset": "assets/cards/final/presentation/gila-monster.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/gila-monster.png",
+      "suit": "reptile",
+      "rank": "1",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-alligator-snapping-turtle",
+      "cleanAsset": "assets/cards/final/clean/alligator-snapping-turtle.png",
+      "presentationAsset": "assets/cards/final/presentation/alligator-snapping-turtle.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/alligator-snapping-turtle.png",
+      "suit": "reptile",
+      "rank": "2",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-python",
+      "cleanAsset": "assets/cards/final/clean/python.png",
+      "presentationAsset": "assets/cards/final/presentation/python.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/python.png",
+      "suit": "reptile",
+      "rank": "3",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-king-cobra",
+      "cleanAsset": "assets/cards/final/clean/king-cobra.png",
+      "presentationAsset": "assets/cards/final/presentation/king-cobra.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/king-cobra.png",
+      "suit": "reptile",
+      "rank": "4",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-black-mamba",
+      "cleanAsset": "assets/cards/final/clean/black-mamba.png",
+      "presentationAsset": "assets/cards/final/presentation/black-mamba.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/black-mamba.png",
+      "suit": "reptile",
+      "rank": "5",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-taipan",
+      "cleanAsset": "assets/cards/final/clean/taipan.png",
+      "presentationAsset": "assets/cards/final/presentation/taipan.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/taipan.png",
+      "suit": "reptile",
+      "rank": "6",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-anaconda",
+      "cleanAsset": "assets/cards/final/clean/anaconda.png",
+      "presentationAsset": "assets/cards/final/presentation/anaconda.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/anaconda.png",
+      "suit": "reptile",
+      "rank": "7",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-black-caiman",
+      "cleanAsset": "assets/cards/final/clean/black-caiman.png",
+      "presentationAsset": "assets/cards/final/presentation/black-caiman.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/black-caiman.png",
+      "suit": "reptile",
+      "rank": "8",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-crocodile",
+      "cleanAsset": "assets/cards/final/clean/crocodile.png",
+      "presentationAsset": "assets/cards/final/presentation/crocodile.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/crocodile.png",
+      "suit": "reptile",
+      "rank": "9",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-komodo-dragon",
+      "cleanAsset": "assets/cards/final/clean/komodo-dragon.png",
+      "presentationAsset": "assets/cards/final/presentation/komodo-dragon.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/komodo-dragon.png",
+      "suit": "reptile",
+      "rank": "10",
+      "type": "normal",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-dragon-of-moses-i",
+      "cleanAsset": "assets/cards/final/clean/dragon-of-moses-i.png",
+      "presentationAsset": "assets/cards/final/presentation/dragon-of-moses-i.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/dragon-of-moses-i.png",
+      "suit": "reptile",
+      "rank": "C",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-dragon-of-moses-ii",
+      "cleanAsset": "assets/cards/final/clean/dragon-of-moses-ii.png",
+      "presentationAsset": "assets/cards/final/presentation/dragon-of-moses-ii.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/dragon-of-moses-ii.png",
+      "suit": "reptile",
+      "rank": "B",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    },
+    {
+      "cardId": "reptile-dragon-of-moses-iii",
+      "cleanAsset": "assets/cards/final/clean/dragon-of-moses-iii.png",
+      "presentationAsset": "assets/cards/final/presentation/dragon-of-moses-iii.png",
+      "portraitAsset": "assets/cards/portraits/final/reptiles/dragon-of-moses-iii.png",
+      "suit": "reptile",
+      "rank": "A",
+      "type": "legendary",
+      "finalStatus": "visual-repair"
+    }
+  ],
+  "counts": {
+    "bySuit": {
+      "carnivore": 13,
+      "herbivore": 13,
+      "bird": 13,
+      "reptile": 13
+    },
+    "byType": {
+      "normal": 40,
+      "legendary": 12
+    }
+  }
+}

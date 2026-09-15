@@ -1,0 +1,152 @@
+{
+  "project": "کیمیای وحش",
+  "phase": "08-consolidation",
+  "policy": "Preserve shortlist rejects for later expansion. Do not delete.",
+  "count": 12,
+  "candidates": [
+    {
+      "id": "herbivore-king-kong",
+      "englishName": "King Kong",
+      "persianName": "کینگ‌کنگ",
+      "originalSuit": "herbivore",
+      "type": null,
+      "reason": "needs-review type/suit; legendary slots filled by Unicorn/Bonnacon/Behemoth.",
+      "previousSource": "گیاهخواران/گیاهخواران/king kong.png; asset:../گیاهخواران/گیاهخواران/king kong.png",
+      "notes": "Asset exists but not present in لیست گیاه خواران.txt. | May be intended as a mythic A/B/C tier candidate alongside Behemoth/Unicorn. | Fictional creature, but legendary classification for this deck's 10+3 target needs design review. | Asset-only; not in herbivore list. | status=needs-review for legendary classification and whether suit should stay herbivores.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "herbivore-okapi",
+      "englishName": "Okapi",
+      "persianName": "اوکاپی",
+      "originalSuit": "herbivore",
+      "type": "normal",
+      "reason": "Cut; list-only, lower competitive card fantasy.",
+      "previousSource": "لیست گیاه خواران.txt",
+      "notes": "",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "herbivore-tapir",
+      "englishName": "Tapir",
+      "persianName": "تاپیر",
+      "originalSuit": "herbivore",
+      "type": "normal",
+      "reason": "Cut; list-only and lower distinctiveness vs selected 10 normals.",
+      "previousSource": "لیست گیاه خواران.txt",
+      "notes": "",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "herbivore-yak",
+      "englishName": "Yak",
+      "persianName": "یاک",
+      "originalSuit": "herbivore",
+      "type": "normal",
+      "reason": "Cut; overlapping bovine niche with Buffalo.",
+      "previousSource": "لیست گیاه خواران.txt",
+      "notes": "Also called گاو تبتی in Persian.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "bird-eagle",
+      "englishName": "Eagle",
+      "persianName": "عقاب",
+      "originalSuit": "bird",
+      "type": "normal",
+      "reason": "Generic eagle overlaps Harpy/Philippine; needs-review — benched.",
+      "previousSource": "لیست پرندگان.txt",
+      "notes": "List contains a bare 'eagle' entry in addition to harpy eagle / philippine eagle. | May collide with 10_eagle.png — resolve before locking ranks 1–6. | Generic eagle entry overlaps conceptually with Harpy Eagle / Philippine Eagle / 10_eagle.png. | Kept as separate candidate; do not delete in Phase 01.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "bird-heron",
+      "englishName": "Heron",
+      "persianName": "حواصیل",
+      "originalSuit": "bird",
+      "type": "normal",
+      "reason": "Cut; lower combat presence than selected 1–6.",
+      "previousSource": "لیست پرندگان.txt",
+      "notes": "Species not specified.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "bird-mish-margh",
+      "englishName": "Mish Margh",
+      "persianName": "میش‌مرغ",
+      "originalSuit": "bird",
+      "type": null,
+      "reason": "needs-review identity/type; not forced into legendary slot.",
+      "previousSource": "لیست پرندگان.txt",
+      "notes": "Likely mythical / folkloric bird; confirm spelling and status. | Identity/spelling of Mish Margh not confirmed in sources; legendary vs normal undecided. | Identity unclear from sources (real bird vs folkloric name). | status=needs-review for type and possibly naming.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "bird-philippine-eagle",
+      "englishName": "Philippine Eagle",
+      "persianName": "عقاب فیلیپینی",
+      "originalSuit": "bird",
+      "type": "normal",
+      "reason": "Cut to avoid eagle-cluster overcrowding; Harpy Eagle kept at 10.",
+      "previousSource": "لیست پرندگان.txt",
+      "notes": "Related eagle cluster with harpy eagle / generic eagle — keep all until curated.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "bird-shikra",
+      "englishName": "Shikra",
+      "persianName": "شکرا",
+      "originalSuit": "bird",
+      "type": "normal",
+      "reason": "Cut for 13-card bird suit; weaker small raptor vs selected 1–6 draft.",
+      "previousSource": "لیست پرندگان.txt",
+      "notes": "Earlier draft شیکرا; common Persian/ornithological form is often شکرا.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "bird-wandering-albatross",
+      "englishName": "Wandering Albatross",
+      "persianName": "آلباتروس سرگردان",
+      "originalSuit": "bird",
+      "type": "normal",
+      "reason": "Cut; less combat fantasy identity than selected birds.",
+      "previousSource": "لیست پرندگان.txt",
+      "notes": "List typo: albatoress. | List typo: albatoress → albatross.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "reptile-gharial",
+      "englishName": "Gharial",
+      "persianName": "گاریال",
+      "originalSuit": "reptile",
+      "type": "normal",
+      "reason": "Cut from reptile normals (provisional): piscivore niche + crocodilian redundancy vs Crocodile/Black Caiman. See docs/deck-selection-decisions.md",
+      "previousSource": "خزندگان/gharial.png; asset:../خزندگان/gharial.png",
+      "notes": "Asset exists but animal is absent from the ranked reptiles list. | Asset-only; not in ranked reptiles list. | Earlier draft persian غارایال corrected to گاریال (common form); original asset token was gharial.",
+      "status": "rejected-shortlist",
+      "keepForExpansion": true
+    },
+    {
+      "id": "reptile-monitor-lizard",
+      "englishName": "Monitor Lizard",
+      "persianName": null,
+      "originalSuit": "reptile",
+      "type": "normal",
+      "reason": "Not present in Phase 01 named sources; niche overlaps Komodo Dragon. Not invented into deck.",
+      "previousSource": "mentioned in Phase 02 selection discussion only",
+      "notes": "See docs/deck-selection-decisions.md",
+      "status": "rejected-not-in-sources",
+      "keepForExpansion": true
+    }
+  ]
+}

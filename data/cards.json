@@ -1,0 +1,2450 @@
+{
+  "project": "کیمیای وحش",
+  "projectLatin": "Kimiyaye Vahsh",
+  "phase": "08-canonical-checkpoint",
+  "canonical": true,
+  "schemaVersion": 2,
+  "authoritative": true,
+  "note": "ONE authoritative main-deck source after Phase 08. Candidate pool remains in candidates-by-suit.json / deck.json / main-deck.draft.json. | Visual-repair: Herbivore A/B/C = Behemoth/Unicorn/Mammoth; Bonnacon archived; Giraffe restored as 9.",
+  "previousCandidatePoolCount": 64,
+  "rankModelRef": "./rank-model.json",
+  "rejectedCandidatesRef": "./rejected-card-candidates.json",
+  "designPrinciplesRef": "../docs/design-principles.md",
+  "enums": {
+    "suit": [
+      "carnivore",
+      "herbivore",
+      "bird",
+      "reptile"
+    ],
+    "type": [
+      "normal",
+      "legendary"
+    ],
+    "status": [
+      "draft",
+      "provisional",
+      "needs-review",
+      "candidate",
+      "approved"
+    ],
+    "assetStatus": [
+      "missing",
+      "draft",
+      "prototype",
+      "approved"
+    ]
+  },
+  "counts": {
+    "total": 52,
+    "bySuit": {
+      "carnivore": 13,
+      "herbivore": 13,
+      "bird": 13,
+      "reptile": 13
+    },
+    "byType": {
+      "normal": 40,
+      "legendary": 12
+    },
+    "byStatus": {
+      "approved": 16,
+      "provisional": 35,
+      "needs-review": 1
+    },
+    "legendaryPerSuit": {
+      "carnivore": 3,
+      "herbivore": 3,
+      "bird": 3,
+      "reptile": 3
+    },
+    "assetPortrait": {
+      "prototype": 50,
+      "missing": 2
+    },
+    "renderStatus": {
+      "missing": 52
+    }
+  },
+  "suitLocks": {
+    "carnivore": {
+      "locked": true,
+      "phase": "02",
+      "policy": "Do not remove or replace any of the 13 members.",
+      "typoPolicy": "Correct display names (englishName/persianName) but always preserve originalName.",
+      "members": [
+        {
+          "displayRank": "1",
+          "englishName": "Wolverine",
+          "originalName": "wolverine",
+          "type": "normal"
+        },
+        {
+          "displayRank": "2",
+          "englishName": "Fox",
+          "originalName": "fox",
+          "type": "normal"
+        },
+        {
+          "displayRank": "3",
+          "englishName": "Snow Leopard",
+          "originalName": "snow loard",
+          "type": "normal"
+        },
+        {
+          "displayRank": "4",
+          "englishName": "Wolf",
+          "originalName": "wolf",
+          "type": "normal"
+        },
+        {
+          "displayRank": "5",
+          "englishName": "Hyena",
+          "originalName": "hyena",
+          "type": "normal"
+        },
+        {
+          "displayRank": "6",
+          "englishName": "Jaguar",
+          "originalName": "jagvar",
+          "type": "normal"
+        },
+        {
+          "displayRank": "7",
+          "englishName": "Bear",
+          "originalName": "bear",
+          "type": "normal"
+        },
+        {
+          "displayRank": "8",
+          "englishName": "Tiger",
+          "originalName": "tiger",
+          "type": "normal"
+        },
+        {
+          "displayRank": "9",
+          "englishName": "Lion",
+          "originalName": "lion",
+          "type": "normal"
+        },
+        {
+          "displayRank": "10",
+          "englishName": "Polar Bear",
+          "originalName": "polar bear",
+          "type": "normal"
+        },
+        {
+          "displayRank": "C",
+          "englishName": "Amarok",
+          "originalName": "amarok",
+          "type": "legendary"
+        },
+        {
+          "displayRank": "B",
+          "englishName": "Griffon",
+          "originalName": "griffon",
+          "type": "legendary"
+        },
+        {
+          "displayRank": "A",
+          "englishName": "Nemean Lion",
+          "originalName": "nemean lion",
+          "type": "legendary"
+        }
+      ]
+    },
+    "reptile-legendaries": {
+      "locked": true,
+      "phase": "02",
+      "decision": "final",
+      "model": "three-independent-legendary-cards",
+      "not": "alternate-images-of-one-creature",
+      "story": "The staff transforms into a dragon three times; each time larger, stronger, more terrifying.",
+      "cards": [
+        {
+          "id": "reptile-dragon-of-moses-i",
+          "displayRank": "C",
+          "englishName": "Dragon of Moses I"
+        },
+        {
+          "id": "reptile-dragon-of-moses-ii",
+          "displayRank": "B",
+          "englishName": "Dragon of Moses II"
+        },
+        {
+          "id": "reptile-dragon-of-moses-iii",
+          "displayRank": "A",
+          "englishName": "Dragon of Moses III"
+        }
+      ],
+      "identityArtDirection": {
+        "I": {
+          "identity": {
+            "manifestation": 1,
+            "titleEn": "First manifestation",
+            "titleFa": "تجلی نخست",
+            "scaleNote": "Creature size is still comprehensible."
+          },
+          "artDirection": {
+            "portraitConcept": "large-head-and-neck",
+            "framing": "Show a large portion of the head and neck.",
+            "scaleFeel": "readable-scale",
+            "notes": "First manifestation — still graspable in size; portrait should feature substantial head and neck."
+          }
+        },
+        "II": {
+          "identity": {
+            "manifestation": 2,
+            "titleEn": "Second manifestation",
+            "titleFa": "تجلی دوم",
+            "scaleNote": "Larger and more formidable than I."
+          },
+          "artDirection": {
+            "portraitConcept": "frame-filling-colossal-head",
+            "framing": "Head should occupy more of the frame; creature scale must feel vastly larger.",
+            "scaleFeel": "overwhelming-scale",
+            "notes": "Second manifestation — bigger and more terrifying; head dominates the card frame."
+          }
+        },
+        "III": {
+          "identity": {
+            "manifestation": 3,
+            "titleEn": "Final manifestation",
+            "titleFa": "تجلی نهایی",
+            "scaleNote": "Creature is so immense that a complete head must not fit on the card."
+          },
+          "artDirection": {
+            "portraitConcept": "extreme-scale-eye-only",
+            "artisticException": true,
+            "frameRule": "Use the same Legendary Frame as other legendaries — do not redesign the frame.",
+            "portraitShowsOnly": [
+              "giant-eye",
+              "surrounding-scales",
+              "fragment-of-face",
+              "strong-shadow"
+            ],
+            "portraitMustNotShow": [
+              "full-head",
+              "full-face",
+              "readable-full-creature"
+            ],
+            "framing": "Only giant eye, surrounding scales, a fragment of face, and strong shadow.",
+            "scaleFeel": "incomprehensible-scale",
+            "goal": "Convey unimaginable size — the card frame cannot contain the creature.",
+            "tone": "mysterious-fantasy-not-horror",
+            "notes": "Defined artistic exception for Dragon of Moses III. Legendary Frame unchanged; portrait is extreme crop only."
+          }
+        }
+      },
+      "artisticException": {
+        "cardId": "reptile-dragon-of-moses-iii",
+        "frame": "legendary-frame-unchanged",
+        "portraitConcept": "extreme-scale-eye-only"
+      }
+    },
+    "reptile-normals": {
+      "locked": false,
+      "rankStatus": "provisional",
+      "awaitingUserConfirmation": true,
+      "selectionDoc": "../docs/deck-selection-decisions.md",
+      "selectedIds": [
+        "reptile-gila-monster",
+        "reptile-alligator-snapping-turtle",
+        "reptile-python",
+        "reptile-king-cobra",
+        "reptile-black-mamba",
+        "reptile-taipan",
+        "reptile-anaconda",
+        "reptile-black-caiman",
+        "reptile-crocodile",
+        "reptile-komodo-dragon"
+      ],
+      "cut": [
+        {
+          "id": "reptile-gharial",
+          "reason": "Third crocodilian; specialized piscivore; lower competitive card threat."
+        },
+        {
+          "id": "monitor-lizard",
+          "reason": "Not in Phase 01 named sources; niche overlaps Komodo Dragon. Not invented."
+        }
+      ],
+      "ranks": [
+        {
+          "displayRank": "1",
+          "id": "reptile-gila-monster",
+          "englishName": "Gila Monster"
+        },
+        {
+          "displayRank": "2",
+          "id": "reptile-alligator-snapping-turtle",
+          "englishName": "Alligator Snapping Turtle"
+        },
+        {
+          "displayRank": "3",
+          "id": "reptile-python",
+          "englishName": "Python"
+        },
+        {
+          "displayRank": "4",
+          "id": "reptile-king-cobra",
+          "englishName": "King Cobra"
+        },
+        {
+          "displayRank": "5",
+          "id": "reptile-black-mamba",
+          "englishName": "Black Mamba"
+        },
+        {
+          "displayRank": "6",
+          "id": "reptile-taipan",
+          "englishName": "Taipan"
+        },
+        {
+          "displayRank": "7",
+          "id": "reptile-anaconda",
+          "englishName": "Anaconda"
+        },
+        {
+          "displayRank": "8",
+          "id": "reptile-black-caiman",
+          "englishName": "Black Caiman"
+        },
+        {
+          "displayRank": "9",
+          "id": "reptile-crocodile",
+          "englishName": "Crocodile"
+        },
+        {
+          "displayRank": "10",
+          "id": "reptile-komodo-dragon",
+          "englishName": "Komodo Dragon"
+        }
+      ]
+    }
+  },
+  "designPrinciples": {
+    "doc": "../docs/design-principles.md",
+    "mustBe": [
+      "professional",
+      "fantasy",
+      "mysterious",
+      "competitive",
+      "readable",
+      "teen-and-adult"
+    ],
+    "mustNotBe": [
+      "childish",
+      "chibi",
+      "overly-busy",
+      "horror",
+      "photorealistic-stock-like"
+    ]
+  },
+  "visualSystem": {
+    "status": "not-started",
+    "designTokens": "missing",
+    "normalFrame": "missing",
+    "legendaryFrame": "missing",
+    "suitIcons": "missing",
+    "cardSize": {
+      "width": 1000,
+      "height": 1400,
+      "status": "specified-not-implemented"
+    }
+  },
+  "renderer": {
+    "status": "not-found",
+    "note": "No card renderer code exists in site/ as of Phase 08 audit."
+  },
+  "cards": [
+    {
+      "id": "carnivore-wolverine",
+      "slug": "wolverine",
+      "originalName": "wolverine",
+      "englishName": "Wolverine",
+      "persianName": "گورکن عسلی",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "1",
+      "displayRank": "1",
+      "numericPower": 1,
+      "powerBarFill": 1,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/1_wolverin.png",
+      "notes": "Asset filename spelling: wolverin | Previous draft persian transliteration was ولوورین; common zoological Persian is گورکن عسلی. | Asset filename uses wolverin.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/1_wolverin.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-fox",
+      "slug": "fox",
+      "originalName": "fox",
+      "englishName": "Fox",
+      "persianName": "روباه",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "2",
+      "displayRank": "2",
+      "numericPower": 2,
+      "powerBarFill": 2,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/2_fox.png",
+      "notes": "",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/2_fox.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-snow-leopard",
+      "slug": "snow-leopard",
+      "originalName": "snow loard",
+      "englishName": "Snow Leopard",
+      "persianName": "پلنگ برفی",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "3",
+      "displayRank": "3",
+      "numericPower": 3,
+      "powerBarFill": 3,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/3_snow leopard.png",
+      "notes": "originalName preserves list typo. | List typo: loard → leopard.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/3_snow",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-wolf",
+      "slug": "wolf",
+      "originalName": "wolf",
+      "englishName": "Wolf",
+      "persianName": "گرگ",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "4",
+      "displayRank": "4",
+      "numericPower": 4,
+      "powerBarFill": 4,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/4_wolf.png",
+      "notes": "",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/4_wolf.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-hyena",
+      "slug": "hyena",
+      "originalName": "hyena",
+      "englishName": "Hyena",
+      "persianName": "کفتار",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "5",
+      "displayRank": "5",
+      "numericPower": 5,
+      "powerBarFill": 5,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/5_hyena.png",
+      "notes": "",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/5_hyena.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-jaguar",
+      "slug": "jaguar",
+      "originalName": "jagvar",
+      "englishName": "Jaguar",
+      "persianName": "جگوار",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "6",
+      "displayRank": "6",
+      "numericPower": 6,
+      "powerBarFill": 6,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/6_jaguar.png",
+      "notes": "originalName preserves list typo. | List typo: jagvar → jaguar.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/6_jaguar.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-bear",
+      "slug": "bear",
+      "originalName": "bear",
+      "englishName": "Bear",
+      "persianName": "خرس",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "7",
+      "displayRank": "7",
+      "numericPower": 7,
+      "powerBarFill": 7,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/7_bear.png",
+      "notes": "Generic bear; distinct from Polar Bear.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/7_bear.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-tiger",
+      "slug": "tiger",
+      "originalName": "tiger",
+      "englishName": "Tiger",
+      "persianName": "ببر",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "8",
+      "displayRank": "8",
+      "numericPower": 8,
+      "powerBarFill": 8,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/9_tiger.png",
+      "notes": "Base List rank 8; asset filename prefix 9 kept as hint only.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/9_tiger.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-lion",
+      "slug": "lion",
+      "originalName": "lion",
+      "englishName": "Lion",
+      "persianName": "شیر",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "9",
+      "displayRank": "9",
+      "numericPower": 9,
+      "powerBarFill": 9,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/8_lion.png",
+      "notes": "Base List rank 9; asset filename prefix 8 kept as hint only. | Distinct from legendary Nemean Lion.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/8_lion.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-polar-bear",
+      "slug": "polar-bear",
+      "originalName": "polar bear",
+      "englishName": "Polar Bear",
+      "persianName": "خرس قطبی",
+      "suit": "carnivore",
+      "type": "normal",
+      "originalRank": "10",
+      "displayRank": "10",
+      "numericPower": 10,
+      "powerBarFill": 10,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/10_polar bear.png",
+      "notes": "",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/10_polar",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-amarok",
+      "slug": "amarok",
+      "originalName": "amarok",
+      "englishName": "Amarok",
+      "persianName": "آماروک",
+      "suit": "carnivore",
+      "type": "legendary",
+      "originalRank": "C",
+      "displayRank": "C",
+      "numericPower": 11,
+      "powerBarFill": 11,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/11_amarok.png",
+      "notes": "Face rank C not mapped to numericPower yet. | Inuit legendary wolf; type=legendary.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/11_amarok.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-griffon",
+      "slug": "griffon",
+      "originalName": "griffon",
+      "englishName": "Griffon",
+      "persianName": "شیر دال",
+      "suit": "carnivore",
+      "type": "legendary",
+      "originalRank": "B",
+      "displayRank": "B",
+      "numericPower": 12,
+      "powerBarFill": 12,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/12_griffon.png",
+      "notes": "Persian name locked as شیر دال (Shir-dal). Alternate English spelling: griffin. Distinct from bird-homa: eagle head WITH lion ears + visible lion torso + eagle wings.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/12_griffon.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "carnivore-nemean-lion",
+      "slug": "nemean-lion",
+      "originalName": "nemean lion",
+      "englishName": "Nemean Lion",
+      "persianName": "شیر نمه‌ای",
+      "suit": "carnivore",
+      "type": "legendary",
+      "originalRank": "A",
+      "displayRank": "A",
+      "numericPower": 13,
+      "powerBarFill": 13,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گوشتخواران.txt; carnivores.json; asset:../گوشتخواران/13_nemean lion.png",
+      "notes": "Face rank A not mapped to numericPower yet. | Greek myth; distinct from normal Lion.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گوشتخواران/13_nemean",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-deer",
+      "slug": "deer",
+      "originalName": "deer",
+      "englishName": "Deer",
+      "persianName": "گوزن",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "1",
+      "displayRank": "1",
+      "numericPower": 1,
+      "powerBarFill": 1,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/deer.png; asset:../گیاهخواران/گیاهخواران/deer.png",
+      "notes": "Species not specified; گوزن vs آهو ambiguity possible.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/deer.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-panda",
+      "slug": "panda",
+      "originalName": "panda",
+      "englishName": "Panda",
+      "persianName": "پاندا",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "2",
+      "displayRank": "2",
+      "numericPower": 2,
+      "powerBarFill": 2,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/panda.png; asset:../گیاهخواران/گیاهخواران/panda.png",
+      "notes": "Assumed giant panda; species not explicit in list.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/panda.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-kangaroo",
+      "slug": "kangaroo",
+      "originalName": "kangaroo",
+      "englishName": "Kangaroo",
+      "persianName": "کانگورو",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "3",
+      "displayRank": "3",
+      "numericPower": 3,
+      "powerBarFill": 3,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/kangaroo.png; asset:../گیاهخواران/گیاهخواران/kangaroo.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/kangaroo.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-buffalo",
+      "slug": "buffalo",
+      "originalName": "buffalo",
+      "englishName": "Buffalo",
+      "persianName": "بوفالو",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "4",
+      "displayRank": "4",
+      "numericPower": 4,
+      "powerBarFill": 4,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/buffalo (2).png; asset:../گیاهخواران/گیاهخواران/buffalo (2).png",
+      "notes": "Odd filename: buffalo (2).png. | Ambiguous: water buffalo (گاومیش) vs Cape buffalo etc. | persianName kept as list transliteration; species needs review.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/buffalo",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-boar",
+      "slug": "boar",
+      "originalName": "boar",
+      "englishName": "Boar",
+      "persianName": "گراز",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "5",
+      "displayRank": "5",
+      "numericPower": 5,
+      "powerBarFill": 5,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/boar.png; asset:../گیاهخواران/گیاهخواران/boar.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/boar.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-gorilla",
+      "slug": "gorilla",
+      "originalName": "gorilla",
+      "englishName": "Gorilla",
+      "persianName": "گوریل",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "6",
+      "displayRank": "6",
+      "numericPower": 6,
+      "powerBarFill": 6,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/gorilla.png; asset:../گیاهخواران/گیاهخواران/gorilla.png",
+      "notes": "Omnivore/herbivore-leaning ape; suit=herbivores per source list. | Distinct from King Kong candidate.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/gorilla.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-rhinoceros",
+      "slug": "rhinoceros",
+      "originalName": "rhinoceros",
+      "englishName": "Rhinoceros",
+      "persianName": "کرگدن",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "7",
+      "displayRank": "7",
+      "numericPower": 7,
+      "powerBarFill": 7,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/rhinoceros.png; asset:../گیاهخواران/گیاهخواران/rhinoceros.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/rhinoceros.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-hippopotamus",
+      "slug": "hippopotamus",
+      "originalName": "hippopotamus",
+      "englishName": "Hippopotamus",
+      "persianName": "اسب آبی",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "8",
+      "displayRank": "8",
+      "numericPower": 8,
+      "powerBarFill": 8,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/hippopotamus.png; asset:../گیاهخواران/گیاهخواران/hippopotamus.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/hippopotamus.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-giraffe",
+      "slug": "giraffe",
+      "originalName": "giraffe",
+      "englishName": "Giraffe",
+      "persianName": "زرافه",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "9",
+      "displayRank": "9",
+      "numericPower": 9,
+      "powerBarFill": 9,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; restored in visual-repair to keep 52 after Mammoth→C",
+      "notes": "Restored from rejected-shortlist so main deck remains 52 when Mammoth becomes legendary C.",
+      "status": "approved",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "final",
+          "ref": "assets/cards/portraits/final/herbivores/giraffe.png",
+          "note": "Generated in visual-repair."
+        },
+        "portraitPrompt": {
+          "status": "final",
+          "ref": "prompts/portraits/final/giraffe.md"
+        },
+        "frame": {
+          "status": "final",
+          "ref": "tools/render_card.py"
+        },
+        "suitIcon": {
+          "status": "final",
+          "ref": "tools/render_card.py"
+        }
+      },
+      "renderStatus": "final"
+    },
+    {
+      "id": "herbivore-elephant",
+      "slug": "elephant",
+      "originalName": "elephant",
+      "englishName": "Elephant",
+      "persianName": "فیل",
+      "suit": "herbivore",
+      "type": "normal",
+      "originalRank": "10",
+      "displayRank": "10",
+      "numericPower": 10,
+      "powerBarFill": 10,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/elephant.png; asset:../گیاهخواران/گیاهخواران/elephant.png",
+      "notes": "Visual-repair: promoted to rank 10; Giraffe restored as 9.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/elephant.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-mammoth",
+      "slug": "mammoth",
+      "originalName": "mammoth",
+      "englishName": "Mammoth",
+      "persianName": "ماموت",
+      "suit": "herbivore",
+      "type": "legendary",
+      "originalRank": "C",
+      "displayRank": "C",
+      "numericPower": 11,
+      "powerBarFill": 11,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/mammoth.png; asset:../گیاهخواران/گیاهخواران/mammoth.png",
+      "notes": "Canonical Herbivore legendary leader C — majestic ancient mythic presence.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/mammoth.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-unicorn",
+      "slug": "unicorn",
+      "originalName": "unicorn",
+      "englishName": "Unicorn",
+      "persianName": "تک‌شاخ",
+      "suit": "herbivore",
+      "type": "legendary",
+      "originalRank": "B",
+      "displayRank": "B",
+      "numericPower": 12,
+      "powerBarFill": 12,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/unicorn.png; asset:../گیاهخواران/گیاهخواران/unicorn.png",
+      "notes": "Canonical Herbivore legendary leader B.",
+      "status": "provisional",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/unicorn.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "herbivore-behemoth",
+      "slug": "behemoth",
+      "originalName": "behemoth",
+      "englishName": "Behemoth",
+      "persianName": "بهیموت",
+      "suit": "herbivore",
+      "type": "legendary",
+      "originalRank": "A",
+      "displayRank": "A",
+      "numericPower": 13,
+      "powerBarFill": 13,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست گیاه خواران.txt; گیاهخواران/گیاهخواران/behemoth.png; asset:../گیاهخواران/گیاهخواران/behemoth.png",
+      "notes": "Canonical Herbivore legendary leader A.",
+      "status": "provisional",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../گیاهخواران/گیاهخواران/behemoth.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-raven",
+      "slug": "raven",
+      "originalName": "reven",
+      "englishName": "Raven",
+      "persianName": "غراب",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "1",
+      "displayRank": "1",
+      "numericPower": 1,
+      "powerBarFill": 1,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/Raven.png; asset:../پرندگان/Raven.png",
+      "notes": "List typo: reven. | List typo: reven → raven. | Earlier draft کلاغ is broader (crow/raven); غراب is more specific for raven.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Raven.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-owl",
+      "slug": "owl",
+      "originalName": "owl",
+      "englishName": "Owl",
+      "persianName": "جغد",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "2",
+      "displayRank": "2",
+      "numericPower": 2,
+      "powerBarFill": 2,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/Owl.png; asset:../پرندگان/Owl.png",
+      "notes": "Species not specified.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Owl.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-vulture",
+      "slug": "vulture",
+      "originalName": "vulture",
+      "englishName": "Vulture",
+      "persianName": "کرکس",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "3",
+      "displayRank": "3",
+      "numericPower": 3,
+      "powerBarFill": 3,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/Vulture.png; asset:../پرندگان/Vulture.png",
+      "notes": "Distinct from ranked Bearded Vulture. | Generic; distinct from Bearded Vulture.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Vulture.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-great-hornbill",
+      "slug": "great-hornbill",
+      "originalName": "great hornbill",
+      "englishName": "Great Hornbill",
+      "persianName": "نوک‌شاخ بزرگ",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "4",
+      "displayRank": "4",
+      "numericPower": 4,
+      "powerBarFill": 4,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/Greate hornbill.png; asset:../پرندگان/Greate hornbill.png",
+      "notes": "Filename typo: Greate. | Asset filename typo: Greate hornbill.png. | Earlier draft هورنبیل بزرگ was transliteration; نوک‌شاخ is common Persian for hornbill.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Greate",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-secretary-bird",
+      "slug": "secretary-bird",
+      "originalName": "secretary bird",
+      "englishName": "Secretary Bird",
+      "persianName": "مرغ منشی",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "5",
+      "displayRank": "5",
+      "numericPower": 5,
+      "powerBarFill": 5,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/Secretary bird.png; asset:../پرندگان/Secretary bird.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Secretary",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-falcon",
+      "slug": "falcon",
+      "originalName": "Falcon",
+      "englishName": "Falcon",
+      "persianName": "شاهین",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "6",
+      "displayRank": "6",
+      "numericPower": 6,
+      "powerBarFill": 6,
+      "rankModelRef": "./rank-model.json",
+      "source": "پرندگان/Falcon.png; asset:../پرندگان/Falcon.png",
+      "notes": "Asset exists but falcon is not listed in لیست پرندگان.txt. | Asset-only (not in لیست پرندگان.txt). | شاهین often means falcon broadly; species not specified.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Falcon.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-bearded-vulture",
+      "slug": "bearded-vulture",
+      "originalName": "bearded vulture",
+      "englishName": "Bearded Vulture",
+      "persianName": "کرکس ریش‌دار",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "7",
+      "displayRank": "7",
+      "numericPower": 7,
+      "powerBarFill": 7,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/7_Bearded Vulture.png; asset:../پرندگان/7_Bearded Vulture.png",
+      "notes": "Also known as Lammergeier. | Alternate Persian همای ریش‌دار exists but risks confusion with legendary Homa (هما). | Distinct from generic Vulture and legendary Homa.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/7_Bearded",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-ostrich",
+      "slug": "ostrich",
+      "originalName": "ostrich",
+      "englishName": "Ostrich",
+      "persianName": "شترمرغ",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "8",
+      "displayRank": "8",
+      "numericPower": 8,
+      "powerBarFill": 8,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/8_Ostrich.png; asset:../پرندگان/8_Ostrich.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/8_Ostrich.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-cassowary",
+      "slug": "cassowary",
+      "originalName": "cassowary",
+      "englishName": "Cassowary",
+      "persianName": "کاسوآر",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "9",
+      "displayRank": "9",
+      "numericPower": 9,
+      "powerBarFill": 9,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/9_Cassowary.png; asset:../پرندگان/9_Cassowary.png",
+      "notes": "Earlier draft کاسوآری normalized to کاسوآر.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/9_Cassowary.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-harpy-eagle",
+      "slug": "harpy-eagle",
+      "originalName": "harpy eagle",
+      "englishName": "Harpy Eagle",
+      "persianName": "عقاب هارپی",
+      "suit": "bird",
+      "type": "normal",
+      "originalRank": "10",
+      "displayRank": "10",
+      "numericPower": 10,
+      "powerBarFill": 10,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/10_eagle.png; asset:../پرندگان/10_eagle.png",
+      "notes": "List assigns 10 to harpy eagle. | Asset is named 10_eagle.png (generic eagle) — needs confirmation whether this art is harpy or a separate eagle. | Possible duplicate/overlap with birds-eagle and asset 10_eagle.png — needs identity confirmation.",
+      "status": "needs-review",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/10_eagle.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-homa",
+      "slug": "homa",
+      "originalName": "homa",
+      "englishName": "Homa",
+      "persianName": "هما",
+      "suit": "bird",
+      "type": "legendary",
+      "originalRank": "C",
+      "displayRank": "C",
+      "numericPower": 11,
+      "powerBarFill": 11,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/Homa.png; asset:../پرندگان/Homa.png",
+      "notes": "List power 11 → face rank C. | Face rank C not mapped to numericPower yet. | Persian mythic bird; distinct from Bearded Vulture.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/Homa.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-phoenix",
+      "slug": "phoenix",
+      "originalName": "phonix",
+      "englishName": "Phoenix",
+      "persianName": "ققنوس",
+      "suit": "bird",
+      "type": "legendary",
+      "originalRank": "B",
+      "displayRank": "B",
+      "numericPower": 12,
+      "powerBarFill": 12,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست پرندگان.txt; پرندگان/12_phonix.png; asset:../پرندگان/12_phonix.png",
+      "notes": "List/file typo: phonix. Power 12 → face rank B. | Face rank B not mapped to numericPower yet. | List/asset typo: phonix → Phoenix.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/12_phonix.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "bird-simurgh",
+      "slug": "simurgh",
+      "originalName": "simurgh",
+      "englishName": "Simurgh",
+      "persianName": "سیمرغ",
+      "suit": "bird",
+      "type": "legendary",
+      "originalRank": "A",
+      "displayRank": "A",
+      "numericPower": 13,
+      "powerBarFill": 13,
+      "rankModelRef": "./rank-model.json",
+      "source": "prompts.txt; لیست پرندگان.txt; پرندگان/13_Simurgh-3.png; asset:../پرندگان/13_Simurgh-3.png",
+      "notes": "prompts.txt asks to start birds with Simurgh power A. | List power 13 → face rank A. | Face rank A not mapped to numericPower yet.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../پرندگان/13_Simurgh-3.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-gila-monster",
+      "slug": "gila-monster",
+      "originalName": "Gila Monster",
+      "englishName": "Gila Monster",
+      "persianName": "هیولای گیلا",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "1",
+      "displayRank": "1",
+      "numericPower": 1,
+      "powerBarFill": 1,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt",
+      "notes": "Ranked in list but no dedicated named asset found in خزندگان/. | Persian from لیست خزندگان.txt.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "missing",
+          "ref": null,
+          "note": "No portrait asset yet."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-alligator-snapping-turtle",
+      "slug": "alligator-snapping-turtle",
+      "originalName": "Alligator Snapping Turtle",
+      "englishName": "Alligator Snapping Turtle",
+      "persianName": "لاک‌پشت گازگیر تمساحی",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "2",
+      "displayRank": "2",
+      "numericPower": 2,
+      "powerBarFill": 2,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/alligator_turtle.png; asset:../خزندگان/alligator_turtle.png",
+      "notes": "Rank rationale from list: durable/dangerous but limited offense. | Persian from لیست خزندگان.txt. Asset: alligator_turtle.png.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/alligator_turtle.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-python",
+      "slug": "python",
+      "originalName": "Python",
+      "englishName": "Python",
+      "persianName": "پایتون",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "3",
+      "displayRank": "3",
+      "numericPower": 3,
+      "powerBarFill": 3,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/python.png; asset:../خزندگان/python.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/python.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-king-cobra",
+      "slug": "king-cobra",
+      "originalName": "King Cobra",
+      "englishName": "King Cobra",
+      "persianName": "شاه‌کبرا",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "4",
+      "displayRank": "4",
+      "numericPower": 4,
+      "powerBarFill": 4,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/kong_cobra.png; asset:../خزندگان/kong_cobra.png",
+      "notes": "Filename typo: kong_cobra. | Asset filename typo: kong_cobra.png.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/kong_cobra.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-black-mamba",
+      "slug": "black-mamba",
+      "originalName": "Black Mamba",
+      "englishName": "Black Mamba",
+      "persianName": "مامبای سیاه",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "5",
+      "displayRank": "5",
+      "numericPower": 5,
+      "powerBarFill": 5,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/black_mamba.png; asset:../خزندگان/black_mamba.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/black_mamba.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-taipan",
+      "slug": "taipan",
+      "originalName": "Taipan",
+      "englishName": "Taipan",
+      "persianName": "تایپان",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "6",
+      "displayRank": "6",
+      "numericPower": 6,
+      "powerBarFill": 6,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/taipan.png; asset:../خزندگان/taipan.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/taipan.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-anaconda",
+      "slug": "anaconda",
+      "originalName": "Anaconda",
+      "englishName": "Anaconda",
+      "persianName": "آناکوندا",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "7",
+      "displayRank": "7",
+      "numericPower": 7,
+      "powerBarFill": 7,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/anaconda.png; asset:../خزندگان/anaconda.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/anaconda.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-black-caiman",
+      "slug": "black-caiman",
+      "originalName": "Black Caiman",
+      "englishName": "Black Caiman",
+      "persianName": "کایمن سیاه",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "8",
+      "displayRank": "8",
+      "numericPower": 8,
+      "powerBarFill": 8,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/black caiman.png; asset:../خزندگان/black caiman.png",
+      "notes": "",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/black",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-crocodile",
+      "slug": "crocodile",
+      "originalName": "Crocodile",
+      "englishName": "Crocodile",
+      "persianName": "کروکودیل",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "9",
+      "displayRank": "9",
+      "numericPower": 9,
+      "powerBarFill": 9,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/crocodill.png; asset:../خزندگان/crocodill.png",
+      "notes": "Filename typo: crocodill. | Asset filename typo: crocodill.png. Species not specified.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/crocodill.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-komodo-dragon",
+      "slug": "komodo-dragon",
+      "originalName": "Komodo Dragon",
+      "englishName": "Komodo Dragon",
+      "persianName": "اژدهای کومودو",
+      "suit": "reptile",
+      "type": "normal",
+      "originalRank": "10",
+      "displayRank": "10",
+      "numericPower": 10,
+      "powerBarFill": 10,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; خزندگان/Komodo_dragon.png; asset:../خزندگان/Komodo_dragon.png",
+      "notes": "Highest real/non-mythic card in reptiles. | Real animal despite 'dragon' in name; type=normal.",
+      "status": "provisional",
+      "locked": false,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/Komodo_dragon.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing"
+    },
+    {
+      "id": "reptile-dragon-of-moses-i",
+      "slug": "dragon-of-moses-i",
+      "originalName": "Dragon of Moses I",
+      "englishName": "Dragon of Moses I",
+      "persianName": "اژدهای موسی، تجلی نخست",
+      "suit": "reptile",
+      "type": "legendary",
+      "originalRank": "C",
+      "displayRank": "C",
+      "numericPower": 11,
+      "powerBarFill": 11,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; prompts.txt; خزندگان/dragon_of_Moses.png; asset:../خزندگان/dragon_of_Moses.png",
+      "notes": "Independent legendary card (not alt-art). First transformation: large horned serpent, frightening. Rank C. | FINAL: Dragon of Moses I/II/III are three independent legendary cards (not alternate images of one creature). Per story, the staff becomes a dragon three times; each appearance is larger, stronger, and more terrifying. Ranks: I=C, II=B, III=A.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/dragon_of_Moses.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing",
+      "independence": "independent-legendary-card",
+      "legendaryFamily": "dragon-of-moses",
+      "identity": {
+        "manifestation": 1,
+        "titleEn": "First manifestation",
+        "titleFa": "تجلی نخست",
+        "scaleNote": "Creature size is still comprehensible."
+      },
+      "artDirection": {
+        "portraitConcept": "large-head-and-neck",
+        "framing": "Show a large portion of the head and neck.",
+        "scaleFeel": "readable-scale",
+        "notes": "First manifestation — still graspable in size; portrait should feature substantial head and neck."
+      },
+      "portraitConcept": "large-head-and-neck"
+    },
+    {
+      "id": "reptile-dragon-of-moses-ii",
+      "slug": "dragon-of-moses-ii",
+      "originalName": "Dragon of Moses II",
+      "englishName": "Dragon of Moses II",
+      "persianName": "اژدهای موسی، تجلی دوم",
+      "suit": "reptile",
+      "type": "legendary",
+      "originalRank": "B",
+      "displayRank": "B",
+      "numericPower": 12,
+      "powerBarFill": 12,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; prompts.txt; خزندگان/dragon_of_Moses_2.png; asset:../خزندگان/dragon_of_Moses_2.png",
+      "notes": "Independent legendary card (not alt-art). Second transformation: larger, with limbs, lava eyes, melting teeth. Rank B. | FINAL: Dragon of Moses I/II/III are three independent legendary cards (not alternate images of one creature). Per story, the staff becomes a dragon three times; each appearance is larger, stronger, and more terrifying. Ranks: I=C, II=B, III=A.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/dragon_of_Moses_2.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing",
+      "independence": "independent-legendary-card",
+      "legendaryFamily": "dragon-of-moses",
+      "identity": {
+        "manifestation": 2,
+        "titleEn": "Second manifestation",
+        "titleFa": "تجلی دوم",
+        "scaleNote": "Larger and more formidable than I."
+      },
+      "artDirection": {
+        "portraitConcept": "frame-filling-colossal-head",
+        "framing": "Head should occupy more of the frame; creature scale must feel vastly larger.",
+        "scaleFeel": "overwhelming-scale",
+        "notes": "Second manifestation — bigger and more terrifying; head dominates the card frame."
+      },
+      "portraitConcept": "frame-filling-colossal-head"
+    },
+    {
+      "id": "reptile-dragon-of-moses-iii",
+      "slug": "dragon-of-moses-iii",
+      "originalName": "Dragon of Moses III",
+      "englishName": "Dragon of Moses III",
+      "persianName": "اژدهای موسی، تجلی نهایی",
+      "suit": "reptile",
+      "type": "legendary",
+      "originalRank": "A",
+      "displayRank": "A",
+      "numericPower": 13,
+      "powerBarFill": 13,
+      "rankModelRef": "./rank-model.json",
+      "source": "لیست خزندگان.txt; prompts.txt; خزندگان/dragon_of_Moses_3.png; asset:../خزندگان/dragon_of_Moses_3.png",
+      "notes": "Independent legendary card (not alt-art). Third transformation: colossal; source says only the head/eye scale is seen. Rank A. | FINAL: Dragon of Moses I/II/III are three independent legendary cards (not alternate images of one creature). Per story, the staff becomes a dragon three times; each appearance is larger, stronger, and more terrifying. Ranks: I=C, II=B, III=A.",
+      "status": "approved",
+      "locked": true,
+      "assets": {
+        "portrait": {
+          "status": "prototype",
+          "ref": "../خزندگان/dragon_of_Moses_3.png",
+          "note": "Source concept art only; not final card portrait."
+        },
+        "portraitPrompt": {
+          "status": "missing",
+          "ref": null
+        },
+        "frame": {
+          "status": "missing",
+          "ref": null,
+          "note": "Normal vs Legendary frames not built yet."
+        },
+        "suitIcon": {
+          "status": "missing",
+          "ref": null
+        }
+      },
+      "renderStatus": "missing",
+      "independence": "independent-legendary-card",
+      "legendaryFamily": "dragon-of-moses",
+      "identity": {
+        "manifestation": 3,
+        "titleEn": "Final manifestation",
+        "titleFa": "تجلی نهایی",
+        "scaleNote": "Creature is so immense that a complete head must not fit on the card."
+      },
+      "artDirection": {
+        "portraitConcept": "extreme-scale-eye-only",
+        "artisticException": true,
+        "frameRule": "legendary-frame-unchanged",
+        "portraitShowsOnly": [
+          "giant-eye",
+          "surrounding-scales",
+          "fragment-of-face",
+          "strong-shadow"
+        ],
+        "portraitMustNotShow": [
+          "full-head",
+          "full-face",
+          "readable-full-creature"
+        ],
+        "framing": "Only giant eye, surrounding scales, a fragment of face, and strong shadow.",
+        "scaleFeel": "incomprehensible-scale",
+        "goal": "The creature is too large to fit inside the card.",
+        "tone": "mysterious-fantasy-not-horror",
+        "notes": "Defined artistic exception for Dragon of Moses III. Legendary Frame unchanged; portrait is extreme crop only."
+      },
+      "portraitConcept": "extreme-scale-eye-only",
+      "artisticException": true
+    }
+  ]
+}
