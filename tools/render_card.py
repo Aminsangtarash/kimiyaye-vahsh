@@ -381,52 +381,47 @@ def hexagon(cx, cy, r):
 
 def draw_rank_badge(card_img: Image.Image, cx, cy, text, theme, legendary=False, rotate_180=False):
     """Thematic hex seal; bottom-right corner can be inverted for opponent readability."""
-    r = 86 if legendary else 80
-    side = r * 2 + 22
+    # Oversized medallion + saturated gold digit — must stay bold at ~100px hand width.
+    r = 122 if legendary else 114
+    side = r * 2 + 36
     layer = Image.new("RGBA", (side, side), (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
     lx = ly = side / 2
 
-    draw_poly(draw, hexagon(lx + 3, ly + 5, r), fill=(0, 0, 0, 200))
+    draw_poly(draw, hexagon(lx + 4, ly + 6, r), fill=(0, 0, 0, 230))
 
-    ring = theme["metal_hi"] if legendary else theme["metal"]
+    ring = theme["metal_hi"] if legendary else lerp(theme["metal"], (255, 220, 150), 0.45)
     draw_poly(draw, hexagon(lx, ly, r), fill=ring)
-    draw.line(hexagon(lx, ly, r) + [hexagon(lx, ly, r)[0]], fill=lerp(ring, (255, 245, 210), 0.45), width=3)
+    draw.line(hexagon(lx, ly, r) + [hexagon(lx, ly, r)[0]], fill=(255, 236, 190, 255), width=5)
+    draw.line(hexagon(lx, ly, r - 5) + [hexagon(lx, ly, r - 5)[0]], fill=lerp(ring, (60, 35, 12), 0.4), width=3)
 
-    trough = lerp(theme["secondary"], (4, 4, 6), 0.35)
-    draw_poly(draw, hexagon(lx, ly, r - 7), fill=trough)
-    draw.line(
-        hexagon(lx, ly, r - 7) + [hexagon(lx, ly, r - 7)[0]],
-        fill=lerp(theme["metal_lo"], theme["accent"], 0.25),
-        width=2,
-    )
+    trough = lerp(theme["secondary"], (0, 0, 0), 0.6)
+    draw_poly(draw, hexagon(lx, ly, r - 10), fill=trough)
 
-    gem = lerp(theme["primary"], (8, 6, 10), 0.18)
-    draw_poly(draw, hexagon(lx, ly, r - 14), fill=gem)
-    hi_gem = lerp(gem, theme["accent"], 0.28)
-    draw_poly(draw, hexagon(lx - 2, ly - 3, r - 28), fill=hi_gem)
-    draw_poly(draw, hexagon(lx, ly, r - 22), fill=gem)
+    gem = lerp(theme["primary"], (0, 0, 0), 0.58)
+    draw_poly(draw, hexagon(lx, ly, r - 18), fill=gem)
     draw.line(
-        hexagon(lx, ly, r - 14) + [hexagon(lx, ly, r - 14)[0]],
-        fill=lerp(theme["accent"], (255, 255, 255), 0.35),
-        width=2,
+        hexagon(lx, ly, r - 18) + [hexagon(lx, ly, r - 18)[0]],
+        fill=lerp(theme["accent"], (255, 230, 160), 0.4),
+        width=3,
     )
 
     for i in range(6):
         ang = math.radians(60 * i - 30)
-        x0 = lx + (r - 4) * math.cos(ang)
-        y0 = ly + (r - 4) * math.sin(ang)
-        x1 = lx + (r - 11) * math.cos(ang)
-        y1 = ly + (r - 11) * math.sin(ang)
-        draw.line([(x0, y0), (x1, y1)], fill=lerp(ring, theme["accent"], 0.4), width=2)
+        x0 = lx + (r - 6) * math.cos(ang)
+        y0 = ly + (r - 6) * math.sin(ang)
+        x1 = lx + (r - 14) * math.cos(ang)
+        y1 = ly + (r - 14) * math.sin(ang)
+        draw.line([(x0, y0), (x1, y1)], fill=(255, 220, 150, 200), width=3)
 
     if legendary:
-        draw.line(hexagon(lx, ly, r - 2) + [hexagon(lx, ly, r - 2)[0]], fill=(255, 228, 150), width=3)
-        draw.ellipse([lx - 6, ly - 6, lx + 6, ly + 6], outline=(255, 220, 140, 180), width=1)
+        draw.line(hexagon(lx, ly, r - 2) + [hexagon(lx, ly, r - 2)[0]], fill=(255, 232, 150), width=5)
 
     label = str(text)
-    size = 98 if len(label) == 1 else (80 if len(label) == 2 else 64)
-    fnt = font(size, bold=True, face="en")
+    georgia = Path(r"C:\Windows\Fonts\georgiab.ttf")
+    size = 186 if len(label) == 1 else (148 if len(label) == 2 else 120)
+    fnt = ImageFont.truetype(str(georgia if georgia.exists() else FONT_EN_B), size)
+
     probe = Image.new("RGBA", (side, side), (0, 0, 0, 0))
     pd = ImageDraw.Draw(probe)
     pd.text((lx, ly), label, fill=(255, 255, 255, 255), font=fnt, anchor="mm")
@@ -437,8 +432,42 @@ def draw_rank_badge(card_img: Image.Image, cx, cy, text, theme, legendary=False,
         ink_cy = (bbox[1] + bbox[3]) / 2.0
         shift_x = lx - ink_cx
         shift_y = ly - ink_cy
-    draw.text((lx + shift_x + 2, ly + shift_y + 2), label, fill=(8, 10, 12, 230), font=fnt, anchor="mm")
-    draw.text((lx + shift_x, ly + shift_y), label, fill=(255, 252, 245, 255), font=fnt, anchor="mm")
+    tx, ty = lx + shift_x, ly + shift_y
+
+    # Thick black punch for silhouette
+    for ox in range(-5, 6):
+        for oy in range(-5, 6):
+            if ox * ox + oy * oy > 26 or (ox == 0 and oy == 0):
+                continue
+            draw.text((tx + ox, ty + oy), label, fill=(0, 0, 0, 255), font=fnt, anchor="mm")
+
+    # Saturated gold body (reads as shiny metal when downscaled)
+    gold_core = (255, 214, 96)
+    gold_hi = (255, 244, 180)
+    gold_lo = (210, 150, 48)
+    draw.text((tx, ty + 2), label, fill=gold_lo + (255,), font=fnt, anchor="mm")
+    draw.text((tx, ty), label, fill=gold_core + (255,), font=fnt, anchor="mm")
+
+    # Bright upper specular — limited band, not a full wash
+    spark = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(spark)
+    sd.text((tx, ty - 1), label, fill=gold_hi + (255,), font=fnt, anchor="mm")
+    band = Image.new("L", (side, side), 0)
+    bd = ImageDraw.Draw(band)
+    bd.rectangle([0, 0, side, int(ty - size * 0.18)], fill=255)
+    bd.rectangle([0, int(ty - size * 0.18), side, int(ty - size * 0.02)], fill=120)
+    spark.putalpha(ImageChops.multiply(spark.split()[-1], band))
+    layer = Image.alpha_composite(layer, spark)
+
+    # Hot white glint on the very top rim of the digit
+    glint = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glint)
+    gd.text((tx, ty - 2), label, fill=(255, 255, 250, 255), font=fnt, anchor="mm")
+    gband = Image.new("L", (side, side), 0)
+    gbd = ImageDraw.Draw(gband)
+    gbd.rectangle([0, 0, side, int(ty - size * 0.28)], fill=200)
+    glint.putalpha(ImageChops.multiply(glint.split()[-1], gband))
+    layer = Image.alpha_composite(layer, glint)
 
     if rotate_180:
         layer = layer.rotate(180, expand=False)
@@ -754,14 +783,15 @@ def compose_card(card: dict, portrait_path: Path, mode: str = "clean") -> Image.
     # Rank seals + power rails — neat corner alignment.
     # Left: rail hangs under TL seal (centered on seal, small gap).
     # Right: rail sits above BR seal; both BR seal and rail inverted 180°.
-    badge = 128
-    badge_r = 86 if legendary else 80
-    rail_gap = 12
+    badge = 160
+    badge_r = 122 if legendary else 114
+    rail_gap = 8
     total_h = power_bar_total_h()
     seg_w = POWER_SEG_W
 
     tl_cx = tl_cy = badge
     br_cx, br_cy = W - badge, H - badge
+
 
     # Center rails on seal centers; flush to seal corners vertically
     left_x = int(round(tl_cx - seg_w / 2))

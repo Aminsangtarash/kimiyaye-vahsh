@@ -1,15 +1,17 @@
-import { TEAM_BY_SEAT } from "@kv/contracts";
-import type { Suit } from "@kv/contracts";
+import { TEAM_BY_SEAT, type AnimalRealm, type Suit } from "@kv/contracts";
 import {
   buildSpecialDeck,
   loadCatalog,
   type AnimalCatalogEntry,
   type GameCatalog,
 } from "./catalog.js";
+import { applyHumanTimeoutImpact, applyTrickWonImpact, selectMvpParticipantIds } from "./impact.js";
 import { randomInt, SeededRandom, shuffle, type RandomSource } from "./rng.js";
 import { resolveTrickWinner, teamForSeat } from "./trick.js";
 import {
   DEFAULT_CONFIG,
+  defaultRealmsBySeat,
+  emptySeatStats,
   type AnimalInstance,
   type CurrentTrick,
   type GameAction,
@@ -44,21 +46,28 @@ function animalFromCatalog(entry: AnimalCatalogEntry): AnimalInstance {
 export function createInitialState(
   matchId: string,
   seed: number,
-  config: GameConfig = DEFAULT_CONFIG,
-  _catalog?: GameCatalog,
+  config: Partial<GameConfig> = {},
+  playerRealms: AnimalRealm[] = defaultRealmsBySeat(),
 ): GameState {
+  const merged: GameConfig = {
+    ...DEFAULT_CONFIG,
+    ...config,
+    impact: { ...DEFAULT_CONFIG.impact, ...(config.impact ?? {}) },
+  };
+  if (playerRealms.length !== 4 || new Set(playerRealms).size !== 4) {
+    throw new Error("playerRealms must be four unique AnimalRealm values");
+  }
   return {
     matchId,
     phase: "waiting",
-    config,
+    config: merged,
     seed,
     stateVersion: 0,
+    playerRealms: [...playerRealms],
     hands: [[], [], [], []],
     specialHands: [[], [], [], []],
     currentTrick: null,
-    superiorSuit: null,
-    superiorLockRemaining: 0,
-    pendingAnchorSeat: null,
+    hunterRealm: null,
     currentPlayer: 0,
     tricksPlayedThisHand: 0,
     handScore: { teamTricks: [0, 0] },
@@ -69,6 +78,25 @@ export function createInitialState(
     scoutInfo: { 0: [], 1: [], 2: [], 3: [] },
     surrenderTeam: null,
     matchWinnerTeam: null,
+    seatStats: [0, 1, 2, 3].map(() => emptySeatStats()),
+    mvpParticipantIds: [],
+  };
+}
+
+function startTrick(state: GameState, leader: number): GameState {
+  const hunterRealm = state.playerRealms[leader];
+  return {
+    ...state,
+    hunterRealm,
+    currentTrick: {
+      leader,
+      ledSuit: null,
+      plays: [],
+      silence: false,
+      specialsUsedThisTrick: [false, false, false, false],
+    },
+    currentPlayer: leader,
+    pendingSpecial: null,
   };
 }
 
@@ -79,34 +107,38 @@ function dealHand(state: GameState, catalog: GameCatalog, rng: RandomSource): Ga
   shuffled.forEach((card, i) => {
     hands[i % 4].push(card);
   });
-  const specDeck = shuffle(
-    buildSpecialDeck(catalog).map((slug) => ({
-      instanceId: nextInstanceId("s"),
-      slug,
-    })),
-    rng,
-  );
-  const specialHands: SpecialInstance[][] = [[], [], [], []];
-  for (let p = 0; p < 4; p++) {
-    specialHands[p].push(specDeck.pop()!, specDeck.pop()!);
+
+  let specialHands: SpecialInstance[][] = [[], [], [], []];
+  if (state.config.specialCardsEnabled) {
+    const specDeck = shuffle(
+      buildSpecialDeck(catalog).map((slug) => ({
+        instanceId: nextInstanceId("s"),
+        slug,
+      })),
+      rng,
+    );
+    for (let p = 0; p < 4; p++) {
+      specialHands[p].push(specDeck.pop()!, specDeck.pop()!);
+    }
   }
+
   const leader =
     state.lastTrickWinner ?? state.firstLeaderThisHand ?? randomInt(rng, 0, 3);
-  return {
+  let next: GameState = {
     ...state,
     phase: "playing",
     hands,
     specialHands,
     currentTrick: null,
-    superiorSuit: null,
-    superiorLockRemaining: 0,
-    pendingAnchorSeat: null,
+    hunterRealm: null,
     currentPlayer: leader,
     tricksPlayedThisHand: 0,
     handScore: { teamTricks: [0, 0] },
     pendingSpecial: null,
     firstLeaderThisHand: leader,
   };
+  next = startTrick(next, leader);
+  return next;
 }
 
 function bump(state: GameState): GameState {
@@ -130,6 +162,7 @@ export function legalAnimalPlays(state: GameState, seat: number): AnimalInstance
 }
 
 export function canDeclareChameleon(state: GameState, seat: number, card: AnimalInstance): boolean {
+  if (!state.config.specialCardsEnabled) return false;
   const trick = state.currentTrick;
   if (!trick || trick.plays.length === 0) return false;
   const led = trick.ledSuit!;
@@ -137,80 +170,80 @@ export function canDeclareChameleon(state: GameState, seat: number, card: Animal
   return card.suit !== led;
 }
 
-function startTrick(state: GameState, leader: number): GameState {
-  return {
-    ...state,
-    currentTrick: {
-      leader,
-      ledSuit: null,
-      plays: [],
-      silence: false,
-      specialsUsedThisTrick: [false, false, false, false],
-    },
-    currentPlayer: leader,
-  };
-}
-
 function finishTrick(state: GameState): { state: GameState; events: EngineEvent[] } {
   const trick = state.currentTrick!;
-  const { winnerSeat } = resolveTrickWinner(trick, state.superiorSuit);
+  const hunter = state.hunterRealm;
+  const { winnerSeat } = resolveTrickWinner(trick, hunter);
   const team = teamForSeat(winnerSeat);
-  const events: EngineEvent[] = [{ type: "trick_won", winnerSeat, team }];
-  const handScore = { ...state.handScore, teamTricks: [...state.handScore.teamTricks] as [number, number] };
+  const nextHunter = state.playerRealms[winnerSeat];
+  const events: EngineEvent[] = [
+    { type: "trick_won", winnerSeat, team, nextHunterRealm: nextHunter },
+  ];
+
+  let next = applyTrickWonImpact(state, winnerSeat);
+  events.push({
+    type: "impact",
+    seat: winnerSeat,
+    reason: "TRICK_WON",
+    delta: state.config.impact.trickWon,
+  });
+
+  const handScore = {
+    ...next.handScore,
+    teamTricks: [...next.handScore.teamTricks] as [number, number],
+  };
   handScore.teamTricks[team] += 1;
 
-  let superiorSuit = state.superiorSuit;
-  let superiorLockRemaining = state.superiorLockRemaining;
-  const winnerPlay = trick.plays.find((p) => p.seat === winnerSeat)!;
-  const winnerPrintedSuit = winnerPlay.card.suit;
-
-  if (superiorLockRemaining > 0) {
-    if (superiorSuit === null) superiorSuit = winnerPrintedSuit;
-    superiorLockRemaining -= 1;
-  } else {
-    superiorSuit = winnerPrintedSuit;
-  }
-
-  let pendingAnchorSeat: number | null = state.pendingAnchorSeat;
-  if (pendingAnchorSeat === winnerSeat) {
-    superiorLockRemaining = 2;
-    superiorSuit = winnerPrintedSuit;
-    pendingAnchorSeat = null;
-  }
-
-  let next: GameState = {
-    ...state,
+  next = {
+    ...next,
     phase: "playing",
     currentTrick: null,
     handScore,
-    tricksPlayedThisHand: state.tricksPlayedThisHand + 1,
+    tricksPlayedThisHand: next.tricksPlayedThisHand + 1,
     lastTrickWinner: winnerSeat,
-    superiorSuit,
-    superiorLockRemaining,
-    pendingAnchorSeat,
+    hunterRealm: nextHunter,
     currentPlayer: winnerSeat,
     pendingSpecial: null,
   };
 
-  if (handScore.teamTricks[0] >= state.config.tricksToWinHand || handScore.teamTricks[1] >= state.config.tricksToWinHand) {
-    const handWinner = handScore.teamTricks[0] >= state.config.tricksToWinHand ? 0 : 1;
+  if (
+    handScore.teamTricks[0] >= next.config.tricksToWinHand ||
+    handScore.teamTricks[1] >= next.config.tricksToWinHand
+  ) {
+    const handWinner = handScore.teamTricks[0] >= next.config.tricksToWinHand ? 0 : 1;
     events.push({ type: "hand_won", team: handWinner });
-    const matchScore = { ...state.matchScore, teamHands: [...state.matchScore.teamHands] as [number, number] };
+    const matchScore = {
+      ...next.matchScore,
+      teamHands: [...next.matchScore.teamHands] as [number, number],
+    };
     matchScore.teamHands[handWinner] += 1;
+    const matchDone = matchScore.teamHands[handWinner] >= next.config.handsToWinMatch;
     next = {
       ...next,
-      phase: matchScore.teamHands[handWinner] >= state.config.handsToWinMatch ? "match_complete" : "hand_complete",
+      phase: matchDone ? "match_complete" : "hand_complete",
       matchScore,
-      matchWinnerTeam:
-        matchScore.teamHands[handWinner] >= state.config.handsToWinMatch ? handWinner : null,
+      matchWinnerTeam: matchDone ? handWinner : null,
     };
-    if (next.phase === "hand_complete") {
+    if (matchDone) {
+      next = { ...next, mvpParticipantIds: selectMvpParticipantIds(next) };
+      events.push({ type: "match_won", team: handWinner });
+    } else {
       next = dealHand(next, loadCatalog(), new SeededRandom(state.seed + state.stateVersion));
+      events.push({
+        type: "trick_started",
+        leaderSeat: next.currentTrick!.leader,
+        hunterRealm: next.hunterRealm!,
+      });
     }
     return { state: bump(next), events };
   }
 
   next = startTrick(next, winnerSeat);
+  events.push({
+    type: "trick_started",
+    leaderSeat: winnerSeat,
+    hunterRealm: next.hunterRealm!,
+  });
   return { state: bump(next), events };
 }
 
@@ -222,13 +255,17 @@ function applyPlayCard(
 ): ActionResult {
   const hand = state.hands[seat];
   const card = hand.find((c) => c.instanceId === cardInstanceId);
-  if (!card) {
-    return { ok: false, error: "Card not in hand", state };
-  }
+  if (!card) return { ok: false, error: "Card not in hand", state };
   const legal = legalAnimalPlays(state, seat);
   if (!legal.some((c) => c.instanceId === cardInstanceId)) {
     const trick = state.currentTrick;
-    if (trick && trick.plays.length > 0 && trick.ledSuit && hasSuit(hand, trick.ledSuit) && card.suit !== trick.ledSuit) {
+    if (
+      trick &&
+      trick.plays.length > 0 &&
+      trick.ledSuit &&
+      hasSuit(hand, trick.ledSuit) &&
+      card.suit !== trick.ledSuit
+    ) {
       return { ok: false, error: "Must follow suit", state };
     }
     return { ok: false, error: "Illegal card play", state };
@@ -238,7 +275,7 @@ function applyPlayCard(
   }
   let trick = state.currentTrick;
   if (!trick) {
-    trick = { leader: seat, ledSuit: null, plays: [], silence: false, specialsUsedThisTrick: [false, false, false, false] };
+    return { ok: false, error: "No active trick", state };
   }
   const ledSuit = trick.plays.length === 0 ? card.suit : trick.ledSuit!;
   if (trick.plays.length > 0 && hasSuit(state.hands[seat], ledSuit) && card.suit !== ledSuit) {
@@ -249,7 +286,7 @@ function applyPlayCard(
   const play = {
     seat,
     card,
-    chameleon: Boolean(declareChameleon),
+    chameleon: Boolean(declareChameleon) && state.config.specialCardsEnabled,
     strengthDelta: 0,
   };
   const plays = [...trick.plays, play];
@@ -258,20 +295,27 @@ function applyPlayCard(
     ledSuit: trick.plays.length === 0 ? card.suit : trick.ledSuit,
     plays,
   };
-  const nextSeatIndex = plays.length;
-  if (nextSeatIndex >= 4) {
-    let s: GameState = bump({
-      ...state,
-      hands,
-      currentTrick: nextTrick,
-      phase: "resolving_trick",
-    });
-    const { state: resolved, events } = finishTrick({ ...s, phase: "playing", currentTrick: nextTrick });
-    return { ok: true, state: resolved, events };
+  if (plays.length >= 4) {
+    // Hold the completed trick on the table; server/UI resolve after a short beat.
+    return {
+      ok: true,
+      state: bump({
+        ...state,
+        hands,
+        currentTrick: nextTrick,
+        phase: "resolving_trick",
+        pendingSpecial: null,
+      }),
+      events: [{ type: "trick_awaiting_resolve" }],
+    };
   }
-  const nextPlayer = nextPlayerInTrick({ ...nextTrick, plays });
+  const nextPlayer = (trick.leader + plays.length) % 4;
   let pendingSpecial = null;
-  if (!nextTrick.silence && !nextTrick.specialsUsedThisTrick[seat]) {
+  if (
+    state.config.specialCardsEnabled &&
+    !nextTrick.silence &&
+    !nextTrick.specialsUsedThisTrick[seat]
+  ) {
     pendingSpecial = { seat, kind: "post_play" as const };
   }
   return {
@@ -290,6 +334,10 @@ function findSpecial(hand: SpecialInstance[], id: string): SpecialInstance | und
   return hand.find((s) => s.instanceId === id);
 }
 
+function advanceAfterSpecial(_state: GameState, _seat: number): null {
+  return null;
+}
+
 function applySpecial(
   state: GameState,
   seat: number,
@@ -298,6 +346,9 @@ function applySpecial(
   targetSuit?: Suit,
   targetPlayIndex?: number,
 ): ActionResult {
+  if (!state.config.specialCardsEnabled) {
+    return { ok: false, error: "Special cards disabled in V2 playable mode", state };
+  }
   const spec = findSpecial(state.specialHands[seat], specialInstanceId);
   if (!spec) return { ok: false, error: "Special not in hand", state };
   if (state.currentTrick?.specialsUsedThisTrick[seat]) {
@@ -309,7 +360,6 @@ function applySpecial(
       i === seat ? h.filter((s) => s.instanceId !== specialInstanceId) : h,
     ) as SpecialInstance[][],
   });
-
   const markUsed = (st: GameState): GameState => {
     if (!st.currentTrick) return st;
     const used = [...st.currentTrick.specialsUsedThisTrick] as boolean[];
@@ -336,22 +386,11 @@ function applySpecial(
     };
   }
 
+  /** @deprecated Anchor no longer locks trump under Hunter Realm rules — consume card as no-op for legacy decks */
   if (slug === "anchor") {
-    if (!state.pendingSpecial || state.pendingSpecial.seat !== seat || state.pendingSpecial.kind !== "between_tricks") {
-      return { ok: false, error: "Anchor not available", state };
-    }
     return {
       ok: true,
-      state: bump(
-        removeSpecial(
-          markUsed({
-            ...state,
-            pendingAnchorSeat: seat,
-            pendingSpecial: null,
-            currentPlayer: seat,
-          }),
-        ),
-      ),
+      state: bump(removeSpecial(markUsed({ ...state, pendingSpecial: null }))),
     };
   }
 
@@ -420,10 +459,6 @@ function applySpecial(
   }
 
   if (slug === "shield") {
-    const selfPlay = trick.plays.find((p) => p.seat === seat);
-    if (!selfPlay || selfPlay.strengthDelta !== 0) {
-      /* simplified: shield resets negative delta on self */
-    }
     const plays = trick.plays.map((p) => (p.seat === seat ? { ...p, strengthDelta: 0 } : p));
     return {
       ok: true,
@@ -446,26 +481,12 @@ function applySpecial(
   return { ok: false, error: "Unknown special", state };
 }
 
-function advanceAfterSpecial(state: GameState, seat: number): null {
-  const trick = state.currentTrick;
-  if (!trick) return null;
-  if (trick.plays.length >= 4) return null;
-  const order = [(trick.leader + trick.plays.length) % 4];
-  void order;
-  void seat;
-  return null;
-}
-
-function nextPlayerInTrick(trick: CurrentTrick): number {
-  return (trick.leader + trick.plays.length) % 4;
-}
-
 function passSpecial(state: GameState, seat: number): ActionResult {
   if (!state.pendingSpecial || state.pendingSpecial.seat !== seat) {
     return { ok: false, error: "No special window", state };
   }
   const trick = state.currentTrick!;
-  const nextPlayer = nextPlayerInTrick(trick);
+  const nextPlayer = (trick.leader + trick.plays.length) % 4;
   return {
     ok: true,
     state: bump({ ...state, pendingSpecial: null, currentPlayer: nextPlayer }),
@@ -489,14 +510,37 @@ export function applyAction(
       const r = rng ?? new SeededRandom(state.seed);
       const leader = action.firstLeader ?? randomInt(r, 0, 3);
       const dealt = dealHand(
-        { ...state, firstLeaderThisHand: leader, phase: "dealing" },
+        {
+          ...state,
+          firstLeaderThisHand: leader,
+          lastTrickWinner: null,
+          phase: "dealing",
+          seatStats:
+            state.phase === "waiting"
+              ? [0, 1, 2, 3].map(() => emptySeatStats())
+              : state.seatStats,
+        },
         catalog,
         r,
       );
-      return { ok: true, state: bump(dealt) };
+      const events: EngineEvent[] = [
+        {
+          type: "trick_started",
+          leaderSeat: dealt.currentTrick!.leader,
+          hunterRealm: dealt.hunterRealm!,
+        },
+      ];
+      return { ok: true, state: bump(dealt), events };
     }
     case "PLAY_CARD":
       return applyPlayCard(state, action.seat, action.cardInstanceId, action.declareChameleon);
+    case "RESOLVE_TRICK": {
+      if (state.phase !== "resolving_trick" || !state.currentTrick || state.currentTrick.plays.length < 4) {
+        return { ok: false, error: "No trick to resolve", state };
+      }
+      const { state: resolved, events } = finishTrick(state);
+      return { ok: true, state: resolved, events };
+    }
     case "PLAY_SPECIAL":
       return applySpecial(
         state,
@@ -508,17 +552,31 @@ export function applyAction(
       );
     case "PASS_SPECIAL":
       return passSpecial(state, action.seat);
+    case "HUMAN_TIMEOUT": {
+      let s = applyHumanTimeoutImpact(state, action.seat);
+      if (s.pendingSpecial && s.pendingSpecial.seat === action.seat) {
+        return passSpecial(s, action.seat);
+      }
+      if (s.currentPlayer !== action.seat || s.phase !== "playing") {
+        return { ok: true, state: bump(s) };
+      }
+      const legal = legalAnimalPlays(s, action.seat);
+      if (legal.length === 0) return { ok: true, state: bump(s) };
+      const lowest = [...legal].sort((a, b) => a.strength - b.strength)[0];
+      return applyPlayCard(s, action.seat, lowest.instanceId, false);
+    }
     case "SURRENDER": {
       const team = TEAM_BY_SEAT[action.seat] as 0 | 1;
       const winner = team === 0 ? 1 : 0;
+      const next = {
+        ...state,
+        phase: "match_complete" as const,
+        surrenderTeam: team,
+        matchWinnerTeam: winner,
+      };
       return {
         ok: true,
-        state: bump({
-          ...state,
-          phase: "match_complete",
-          surrenderTeam: team,
-          matchWinnerTeam: winner,
-        }),
+        state: bump({ ...next, mvpParticipantIds: selectMvpParticipantIds(next) }),
         events: [{ type: "match_won", team: winner }],
       };
     }

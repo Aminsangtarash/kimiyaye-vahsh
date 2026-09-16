@@ -22,17 +22,34 @@ export interface MatchRecord {
     sessionIdHash: string;
     userId?: string;
     displayName: string;
+    realm?: string;
+    controllerType?: string;
   }>;
   seedHash: string;
   seed?: number;
   actions: MatchAuditAction[];
-  tricks: Array<{ winnerSeat: number; team: number; superiorAfter: string | null }>;
+  tricks: Array<{
+    winnerSeat: number;
+    team: number;
+    hunterRealmAfter?: string | null;
+    /** @deprecated V1 Superior Suit — never interpret as Hunter Realm */
+    superiorAfter?: string | null;
+  }>;
   scores: { teamTricks: [number, number]; teamHands: [number, number] };
-  result: { winnerTeam: number | null; surrender: boolean } | null;
+  result: {
+    winnerTeam: number | null;
+    surrender: boolean;
+    mvpParticipantIds?: string[];
+    participants?: unknown[];
+    hasBots?: boolean;
+    botSeatCount?: number;
+  } | null;
   rewardStatus: "none" | "pending" | "submitted" | "skipped_guest";
   createdAt: string;
   updatedAt: string;
   completedAt?: string;
+  hasBots?: boolean;
+  botSeatCount?: number;
 }
 
 function dataDir(): string {
@@ -69,7 +86,6 @@ export class MatchStore {
     const path = join(dataDir(), `${matchId}.json`);
     if (!existsSync(path)) return undefined;
     const rec = JSON.parse(readFileSync(path, "utf-8")) as MatchRecord;
-    // Never expose raw seed from disk to callers by default
     delete rec.seed;
     this.cache.set(matchId, rec);
     return rec;
@@ -86,7 +102,12 @@ export class MatchStore {
 
   appendTrick(
     matchId: string,
-    trick: { winnerSeat: number; team: number; superiorAfter: string | null },
+    trick: {
+      winnerSeat: number;
+      team: number;
+      hunterRealmAfter?: string | null;
+      superiorAfter?: string | null;
+    },
   ): void {
     const rec = this.cache.get(matchId);
     if (!rec) return;
@@ -112,6 +133,8 @@ export class MatchStore {
     if (!rec) return;
     rec.result = result;
     rec.rewardStatus = rewardStatus;
+    if (result?.hasBots !== undefined) rec.hasBots = result.hasBots;
+    if (result?.botSeatCount !== undefined) rec.botSeatCount = result.botSeatCount;
     rec.completedAt = new Date().toISOString();
     rec.updatedAt = rec.completedAt;
     delete rec.seed;
@@ -119,16 +142,10 @@ export class MatchStore {
   }
 
   private flush(rec: MatchRecord): void {
-    if (process.env.KV_QUIET === "1") return;
-    const path = join(dataDir(), `${rec.matchId}.json`);
-    const toWrite = { ...rec };
-    if (rec.completedAt) delete toWrite.seed;
-    writeFileSync(path, JSON.stringify(toWrite, null, 2), "utf-8");
+    writeFileSync(join(dataDir(), `${rec.matchId}.json`), JSON.stringify(rec, null, 2));
   }
 
-  private appendLog(matchId: string, entry: Record<string, unknown>): void {
-    if (process.env.KV_QUIET === "1") return;
-    const path = join(dataDir(), `${matchId}.ndjson`);
-    appendFileSync(path, JSON.stringify(entry) + "\n", "utf-8");
+  private appendLog(matchId: string, row: Record<string, unknown>): void {
+    appendFileSync(join(dataDir(), `${matchId}.ndjson`), `${JSON.stringify(row)}\n`);
   }
 }

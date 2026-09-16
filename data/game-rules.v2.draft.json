@@ -1,0 +1,270 @@
+{
+  "project": "کیمیای وحش",
+  "projectLatin": "Kimiyaye Vahsh",
+  "version": "2.0.2-draft",
+  "status": "target-rules-draft-not-wired",
+  "supersedes": {
+    "runtimeCanonical": "data/game-rules.json",
+    "note": "This file is NOT loaded by game-core/server yet. Runtime continues to use v1 Superior Suit + Ready flow until Phase 2."
+  },
+  "relatedDocs": [
+    "docs/GAME_RULES_V2_DRAFT.md",
+    "docs/SPECIAL_CARD_RULES_V2_DRAFT.md",
+    "docs/LOBBY_FLOW_V2.md",
+    "docs/BOT_PLAYER_DESIGN.md",
+    "docs/IMPACT_AND_MVP_SCORING.md",
+    "docs/RULE_REALIGNMENT_REPORT.md"
+  ],
+  "players": 4,
+  "controllers": {
+    "types": ["human", "bot"],
+    "compositionsSupported": ["4h", "3h1b", "2h2b", "1h3b"],
+    "playWithBotsDefault": { "humans": 1, "bots": 3 },
+    "sameRulesEngine": true,
+    "noBotPrivileges": true,
+    "botView": "player-safe-projection-only"
+  },
+  "teams": {
+    "count": 2,
+    "size": 2,
+    "seating": "Partners sit opposite. Seats 0 opposite 2 (Team A); seats 1 opposite 3 (Team B).",
+    "teamIds": ["A", "B"],
+    "independence": "Team membership is independent of represented animal realm. Realm does not imply team."
+  },
+  "playerRealms": {
+    "realms": ["carnivore", "herbivore", "bird", "reptile"],
+    "uniqueness": "Exactly one player represents each realm per match.",
+    "independenceFromHand": "Represented realm is independent of cards dealt to that player.",
+    "assignment": {
+      "primary": "lobby-choice",
+      "rule": "Humans choose from currently available realms. Earlier joiners have more choices. Taken realms cannot be reselected. Change allowed before countdown only to a free realm.",
+      "autoAssignWhenFourthSeatFilled": "Any seat without an explicit realm receives a remaining free realm automatically. Do not block indefinitely.",
+      "immutableFrom": "start_countdown",
+      "playWithBots": "Human selects one realm; bots receive the other three."
+    }
+  },
+  "lobby": {
+    "readyState": "removed",
+    "states": [
+      "WAITING_FOR_PLAYERS",
+      "WAITING_FOR_REALMS",
+      "STARTING",
+      "IN_MATCH",
+      "COMPLETED"
+    ],
+    "startPrerequisites": [
+      "occupiedSeats == 4",
+      "uniqueRealmAssignments == 4",
+      "eachSeatHasController human|bot"
+    ],
+    "autoStart": {
+      "enabled": true,
+      "countdownMsConfigKey": "MATCH_START_COUNTDOWN_MS",
+      "countdownMsRecommended": 3000,
+      "cancelOnHumanLeaveDuringCountdown": true
+    },
+    "uiTarget": {
+      "remove": ["readyButton", "readyStatusGate"],
+      "show": [
+        "connectedPlayers",
+        "botSeats",
+        "selectedRealms",
+        "remainingRealms",
+        "waitingOrMatchmakingStatus",
+        "autoStartCountdown"
+      ]
+    }
+  },
+  "matchmaking": {
+    "quickMatch": {
+      "preferHumans": true,
+      "botFillAfterMsConfigKey": "QUICK_MATCH_BOT_FILL_AFTER_MS",
+      "botFillAfterMsRecommended": 45000,
+      "note": "Do not immediately fill with bots."
+    },
+    "privateRoom": {
+      "autoInjectBotsOnIdle": false,
+      "hostActions": ["fillEmptySeatsWithBots", "addBotToSeat", "removePreMatchBot"]
+    },
+    "playWithBots": {
+      "entryPoint": true,
+      "humans": 1,
+      "bots": 3
+    }
+  },
+  "bots": {
+    "profileV1": "balanced",
+    "futureProfiles": ["easy", "balanced", "hard"],
+    "architecture": {
+      "decisionOutsideGameCore": true,
+      "api": "BotStrategy.chooseAction(playerView, legalActions)",
+      "submitViaSameCommandPath": true,
+      "noTrustedBypass": true
+    },
+    "disconnectTakeover": {
+      "afterReconnectGraceExpires": true,
+      "sameSeat": true,
+      "inherit": ["realm", "team", "hand", "specials", "scores", "gameState"],
+      "redeal": false,
+      "humanReclaimBoundary": "before_next_unresolved_action_never_mid_submitted_bot_action"
+    },
+    "matchMetadata": {
+      "hasBots": true,
+      "botSeatCount": true,
+      "perSeatControllerType": true
+    },
+    "rewardSafetyExtension": {
+      "botMatchesValidForPractice": true,
+      "competitiveMayRequireHasBotsFalse": true,
+      "implementEconomyNow": false
+    }
+  },
+  "decks": {
+    "main": {
+      "cards": 52,
+      "suits": ["carnivore", "herbivore", "bird", "reptile"],
+      "cardsPerSuit": 13,
+      "ranks": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "C", "B", "A"],
+      "source": "data/cards.json",
+      "strengthSource": "data/rank-model.json",
+      "frozen": true,
+      "strengthMapping": {
+        "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+        "C": 11, "B": 12, "A": 13
+      }
+    },
+    "special": {
+      "enabled": true,
+      "targetRosterVersion": "v2-s1",
+      "sourceDraft": "docs/SPECIAL_CARD_RULES_V2_DRAFT.md",
+      "types": [
+        "inversion",
+        "chameleon",
+        "team-bond",
+        "doping",
+        "trap",
+        "final-sacrifice"
+      ],
+      "legacyInactive": ["shield", "scout", "silence", "anchor"],
+      "deckSizeOpen": true,
+      "dealtPerPlayerOpen": true,
+      "notes": "Exact copies-per-type and dealt counts remain open until specials are fully locked."
+    }
+  },
+  "match": {
+    "handsToWinMatch": 3,
+    "tricksToWinHand": 7,
+    "maxTricksPerHand": 13
+  },
+  "deal": {
+    "shuffle": "cryptographically strong RNG in production; any fair shuffle in offline",
+    "animalDeal": "all 52 cards, 13 per player",
+    "specialDeal": "TBD after special copy counts are locked (Phase 1 leaves distribution open)",
+    "firstLead": "For the first hand of a match, choose a random seat to lead (or host policy). For later hands, the player who won the last trick of the previous hand leads."
+  },
+  "hunterRealm": {
+    "id": "leader-representation",
+    "nameEn": "Hunter Realm",
+    "nameFa": "قلمرو شکارچی",
+    "obsoleteRule": "Superior Suit = printed suit of the winning animal",
+    "rule": "For each trick, Hunter Realm is the animal realm represented by the player who leads that trick. The printed suit of any card (including the winning card) never determines Hunter Realm.",
+    "firstTrick": "Hunter Realm is active from Trick 1. It equals the represented realm of the initial leader. There is no Hunter-less opening trick.",
+    "nextTrick": "The winner of a trick becomes the leader of the next trick; therefore the next Hunter Realm is that winner's represented realm.",
+    "examples": [
+      "Trick 1: Leader=Player A (Birds) → Hunter Realm=Birds. Player A need not lead a Bird card.",
+      "Player C (Reptiles) wins Trick 1 using any printed suit → Trick 2 Leader=Player C → Hunter Realm=Reptiles (NOT the suit of the winning card).",
+      "Bird representative wins with a Carnivore card → next Hunter Realm=Birds, not Carnivores."
+    ]
+  },
+  "trick": {
+    "followSuit": "If you hold at least one card of the led suit, you must play a card of that suit.",
+    "void": "If you hold none of the led suit, you may play any animal card.",
+    "resolutionOrder": [
+      "Apply accepted special modifiers (respecting final special priority once locked)",
+      "Cards whose effective suit equals Hunter Realm outrank all non-Hunter cards",
+      "Among Hunter Realm cards, highest effective strength wins",
+      "If no Hunter Realm card was played, highest effective strength among led-suit cards wins",
+      "Off-suit non-Hunter cards cannot win if any led-suit or Hunter card exists",
+      "If effective strength ties on the winning track, the earliest played of those tied cards wins (subject to fractional-strength review)"
+    ],
+    "effectiveStrength": "powerBarFill from rank-model, plus special deltas (Doping/Trap target ±2.5 once locked)",
+    "chameleonConstraint": "Chameleon is only a controlled void adaptation; it must not allow ignoring follow-suit while holding the led suit."
+  },
+  "legendary": {
+    "principle": "A/B/C feel near-invincible; A (13) especially. Rare strategic counter via Final Sacrifice. Do not redesign ranks."
+  },
+  "specials": {
+    "ref": "docs/SPECIAL_CARD_RULES_V2_DRAFT.md",
+    "maxPerPlayerPerTrick": "TBD (likely 1; not locked)"
+  },
+  "scoring": {
+    "hand": "First team to win 7 tricks wins the hand.",
+    "match": "First team to win 3 hands wins the match.",
+    "teamVictoryPrimary": true,
+    "individualNeverOverridesTeam": true
+  },
+  "impact": {
+    "ref": "docs/IMPACT_AND_MVP_SCORING.md",
+    "separateFromWebsiteReward": true,
+    "weights": {
+      "trickWon": 10,
+      "successfulSpecial": 10,
+      "legendaryCounter": 20,
+      "teamAssist": 10,
+      "humanTimeout": -5
+    },
+    "notes": [
+      "Weights are configuration — do not scatter constants in code.",
+      "humanTimeout applies only while seat is human-controlled, never for legitimate bot control.",
+      "Distinct events from one resolution may stack (e.g. SPECIAL_SUCCESS + LEGENDARY_COUNTER + TRICK_WON).",
+      "Do not emit the same event twice for one resolution."
+    ]
+  },
+  "mvp": {
+    "eligible": "winning_team_only",
+    "selection": "highest_impactScore",
+    "uiFa": ["بازیکن مؤثرتر", "برترین بازیکن تیم برنده"],
+    "tieBreakOrder": [
+      "more_tricks_won",
+      "more_successful_specials",
+      "fewer_invalid_or_timeout_actions",
+      "shared_mvp"
+    ],
+    "mvpParticipantIdsIsArray": true,
+    "botsEligible": true,
+    "doesNotChangeWinningTeam": true
+  },
+  "matchSummaryTarget": {
+    "fields": [
+      "winningTeamId",
+      "hasBots",
+      "botSeatCount",
+      "participants[].participantId",
+      "participants[].teamId",
+      "participants[].controllerType",
+      "participants[].realm",
+      "participants[].tricksWon",
+      "participants[].successfulSpecials",
+      "participants[].legendaryCounters",
+      "participants[].teamAssists",
+      "participants[].impactScore",
+      "mvpParticipantIds"
+    ]
+  },
+  "configKeysRecommended": {
+    "MATCH_START_COUNTDOWN_MS": 3000,
+    "QUICK_MATCH_BOT_FILL_AFTER_MS": 45000,
+    "RECONNECT_GRACE_MS": 60000,
+    "BOT_PROFILE_DEFAULT": "balanced",
+    "IMPACT_TRICK_WON": 10,
+    "IMPACT_SUCCESSFUL_SPECIAL": 10,
+    "IMPACT_LEGENDARY_COUNTER": 20,
+    "IMPACT_TEAM_ASSIST": 10,
+    "IMPACT_HUMAN_TIMEOUT": -5
+  },
+  "modes": {
+    "standalone": "Playable without website account (guest/private room/quick match/play with bots).",
+    "connected": "Authenticated users; rewards/tournaments hook into match results without changing core rules."
+  },
+  "lorePolicy": "Lore enriches presentation; legal moves are fully defined by these target rules without story knowledge."
+}

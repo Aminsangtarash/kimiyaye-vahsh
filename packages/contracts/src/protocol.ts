@@ -9,6 +9,7 @@ export const SOCKET_EVENTS = {
   command: "kv:command",
   event: "kv:event",
   quickMatch: "kv:quick_match",
+  playVsBots: "kv:play_vs_bots",
 } as const;
 
 /** Server assigns monotonic stateVersion on each accepted command */

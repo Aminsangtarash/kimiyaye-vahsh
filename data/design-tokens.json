@@ -25,10 +25,11 @@
     },
     "persianNameSize": 42,
     "englishNameSize": 18,
-    "rankBadgeSize": 98,
+    "rankBadgeSize": 186,
+    "rankBadgeFont": "Georgia Bold gold-chrome (Cinzel reserved for English names)",
     "rtlPipeline": ["arabic-reshaper", "python-bidi"],
     "fallback": "Tahoma",
-    "notes": "Mysterious readable pairing: Amiri for Persian names (full Persian glyph coverage), Cinzel for English + rank glyphs. El Messiri omitted — missing Persian codepoints. Dual-line nameplate optically centered as one block."
+    "notes": "Mysterious readable pairing: Amiri for Persian names (full Persian glyph coverage), Cinzel for English names. Rank seals use oversized Georgia Bold + gold chrome for hand readability. El Messiri omitted — missing Persian codepoints. Dual-line nameplate optically centered as one block."
   },
   "suits": {
     "carnivore": {

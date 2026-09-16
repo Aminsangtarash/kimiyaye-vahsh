@@ -3,17 +3,21 @@ import cors from "cors";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { randomUUID } from "node:crypto";
-import { loadServerEnv } from "@kv/contracts";
-import { SOCKET_EVENTS, ClientCommandSchema } from "@kv/contracts";
-import type { Identity, Suit } from "@kv/contracts";
+import { loadServerEnv, SOCKET_EVENTS, ClientCommandSchema } from "@kv/contracts";
+import type { AnimalRealm, Identity, Suit } from "@kv/contracts";
 import {
   applyRoomCommand,
+  createPlayVsBotsRoom,
   createRoom,
   expireStaleRooms,
+  handleDisconnect,
   joinRoom,
   matchStore,
   projectRoomForSeat,
+  setRoomCallbacks,
+  setRoomRuntimeConfig,
   type Room,
+  type RoomCommand,
 } from "./rooms.js";
 import { verifyGameTicket } from "./ticket.js";
 import { MockRewardProvider, buildRewardEvent } from "./rewards.js";
@@ -22,6 +26,22 @@ import { log } from "./logger.js";
 import { hashSession } from "./persist.js";
 
 const env = loadServerEnv();
+setRoomRuntimeConfig({
+  matchStartCountdownMs: env.MATCH_START_COUNTDOWN_MS,
+  quickMatchBotFillAfterMs: env.QUICK_MATCH_BOT_FILL_AFTER_MS,
+  botActionDelayMs: env.NODE_ENV === "test" ? 0 : env.BOT_ACTION_DELAY_MS,
+  trickResolveDelayMs: env.NODE_ENV === "test" ? 0 : 2500,
+  specialCardsEnabled: env.V2_SPECIAL_CARDS_ENABLED,
+  reconnectGraceMs: env.RECONNECT_GRACE_MS,
+  impact: {
+    trickWon: env.IMPACT_TRICK_WON,
+    successfulSpecial: env.IMPACT_SUCCESSFUL_SPECIAL,
+    legendaryCounter: env.IMPACT_LEGENDARY_COUNTER,
+    teamAssist: env.IMPACT_TEAM_ASSIST,
+    humanTimeout: env.IMPACT_HUMAN_TIMEOUT,
+  },
+});
+
 const app: express.Express = express();
 app.use(
   cors({
@@ -30,16 +50,49 @@ app.use(
 );
 app.use(express.json({ limit: "32kb" }));
 
+const rooms = new Map<string, Room>();
+const codeIndex = new Map<string, string>();
+const quickQueue: string[] = [];
+const rewards = new MockRewardProvider();
+const commandLimiter = new RateLimiter(30, 10);
+const joinLimiter = new RateLimiter(10, 2);
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: { origin: env.CORS_ORIGINS.split(",").map((s) => s.trim()) },
+  maxHttpBufferSize: MAX_PAYLOAD_BYTES,
+});
+
+function emitToRoom(room: Room) {
+  for (let seat = 0; seat < 4; seat++) {
+    const s = room.seats[seat];
+    if (!s?.connected || s.controllerType === "bot") continue;
+    const view = projectRoomForSeat(room, seat);
+    io.to(`${room.roomId}:${seat}`).emit(SOCKET_EVENTS.event, {
+      type: "game_state",
+      stateVersion: room.stateVersion,
+      payload: view,
+    });
+  }
+}
+
+setRoomCallbacks({
+  broadcast: emitToRoom,
+  matchStarted: (room) => emitToRoom(room),
+});
+
 app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "kv-game-server", ts: new Date().toISOString() });
+  res.json({
+    ok: true,
+    service: "kv-game-server",
+    v2: true,
+    specialCardsEnabled: env.V2_SPECIAL_CARDS_ENABLED,
+    ts: new Date().toISOString(),
+  });
 });
 
 app.get("/ready", (_req, res) => {
-  res.json({
-    ok: true,
-    rooms: rooms.size,
-    nodeEnv: env.NODE_ENV,
-  });
+  res.json({ ok: true, rooms: rooms.size, nodeEnv: env.NODE_ENV });
 });
 
 app.get("/metrics", (_req, res) => {
@@ -55,7 +108,6 @@ app.get("/metrics", (_req, res) => {
   );
 });
 
-/** Dev/admin-only match audit viewer — disabled in production */
 app.get("/admin/matches/:matchId", (req, res) => {
   if (env.NODE_ENV === "production") {
     res.status(404).json({ error: "Not found" });
@@ -74,24 +126,14 @@ app.get("/admin/matches/:matchId", (req, res) => {
   res.json(rec);
 });
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: { origin: env.CORS_ORIGINS.split(",").map((s) => s.trim()) },
-  maxHttpBufferSize: MAX_PAYLOAD_BYTES,
-});
-
-const rooms = new Map<string, Room>();
-const codeIndex = new Map<string, string>();
-const quickQueue: string[] = [];
-const rewards = new MockRewardProvider();
-const commandLimiter = new RateLimiter(30, 10);
-const joinLimiter = new RateLimiter(10, 2);
-
 setInterval(() => {
   expireStaleRooms(rooms, env.RECONNECT_GRACE_MS);
   commandLimiter.prune();
   joinLimiter.prune();
-}, 30_000).unref();
+  for (const room of rooms.values()) {
+    if (room.mode === "quick" && room.status === "open") emitToRoom(room);
+  }
+}, 5_000).unref();
 
 function identityFromHandshake(auth: Record<string, unknown>): Identity {
   const ticket = typeof auth.ticket === "string" ? auth.ticket : undefined;
@@ -115,28 +157,6 @@ function identityFromHandshake(auth: Record<string, unknown>): Identity {
       ? auth.sessionId
       : randomUUID();
   return { kind: "guest", displayName, sessionId };
-}
-
-function emitToRoom(room: Room) {
-  for (let seat = 0; seat < 4; seat++) {
-    const s = room.seats[seat];
-    if (!s?.connected) continue;
-    const view = projectRoomForSeat(room, seat);
-    io.to(`${room.roomId}:${seat}`).emit(SOCKET_EVENTS.event, {
-      type: "game_state",
-      stateVersion: room.stateVersion,
-      payload: view,
-    });
-  }
-}
-
-function emitToSeat(room: Room, seat: number) {
-  const view = projectRoomForSeat(room, seat);
-  io.to(`${room.roomId}:${seat}`).emit(SOCKET_EVENTS.event, {
-    type: "game_state",
-    stateVersion: room.stateVersion,
-    payload: view,
-  });
 }
 
 io.on("connection", (socket) => {
@@ -168,6 +188,8 @@ io.on("connection", (socket) => {
       rooms.set(room.roomId, room);
       codeIndex.set(room.code, room.roomId);
       quickQueue.push(room.roomId);
+    } else if (occupiedCountSafe(room) < 3) {
+      quickQueue.push(room.roomId);
     }
     const joined = joinRoom(room, identity);
     if ("error" in joined) {
@@ -179,6 +201,29 @@ io.on("connection", (socket) => {
     socket.join(`${room.roomId}:${joined.seat}`);
     ack?.({ ok: true, roomId: room.roomId, code: room.code, seat: joined.seat });
     emitToRoom(room);
+  });
+
+  socket.on(SOCKET_EVENTS.playVsBots, (payload: { realm?: string }, ack) => {
+    if (!joinLimiter.allow(rateKey)) {
+      ack?.({ ok: false, error: "Rate limited" });
+      return;
+    }
+    try {
+      const preferred =
+        payload?.realm && ["carnivore", "herbivore", "bird", "reptile"].includes(payload.realm)
+          ? (payload.realm as AnimalRealm)
+          : undefined;
+      const { room, seat } = createPlayVsBotsRoom(identity, preferred);
+      rooms.set(room.roomId, room);
+      codeIndex.set(room.code, room.roomId);
+      boundRoomId = room.roomId;
+      boundSeat = seat;
+      socket.join(`${room.roomId}:${seat}`);
+      ack?.({ ok: true, roomId: room.roomId, code: room.code, seat });
+      emitToRoom(room);
+    } catch (e) {
+      ack?.({ ok: false, error: e instanceof Error ? e.message : "Failed" });
+    }
   });
 
   socket.on(SOCKET_EVENTS.joinRoom, (payload: { code?: string; create?: boolean }, ack) => {
@@ -206,8 +251,6 @@ io.on("connection", (socket) => {
     boundRoomId = room.roomId;
     boundSeat = joined.seat;
     socket.join(`${room.roomId}:${joined.seat}`);
-    // Recovery: push current legal projection only
-    emitToSeat(room, joined.seat);
     ack?.({ ok: true, roomId: room.roomId, code: room.code, seat: joined.seat });
     emitToRoom(room);
   });
@@ -234,68 +277,13 @@ io.on("connection", (socket) => {
       return;
     }
     const seat = boundSeat;
-    let action;
-    switch (cmd.type) {
-      case "READY":
-        action = { type: "READY" as const, seat };
-        break;
-      case "START_MATCH":
-        action = { type: "START_MATCH" as const, seat };
-        break;
-      case "PLAY_CARD": {
-        const p = cmd.payload as { cardInstanceId?: string; declareChameleon?: boolean };
-        if (!p?.cardInstanceId) {
-          ack?.({ ok: false, error: "Missing card" });
-          return;
-        }
-        action = {
-          type: "PLAY_CARD" as const,
-          seat,
-          cardInstanceId: p.cardInstanceId,
-          declareChameleon: p.declareChameleon,
-        };
-        break;
-      }
-      case "PLAY_SPECIAL": {
-        const p = cmd.payload as {
-          specialInstanceId?: string;
-          targetSeat?: number;
-          targetSuit?: string;
-          targetPlayIndex?: number;
-        };
-        if (!p?.specialInstanceId) {
-          ack?.({ ok: false, error: "Missing special" });
-          return;
-        }
-        action = {
-          type: "PLAY_SPECIAL" as const,
-          seat,
-          specialInstanceId: p.specialInstanceId,
-          targetSeat: p.targetSeat,
-          targetSuit: p.targetSuit as Suit | undefined,
-          targetPlayIndex: p.targetPlayIndex,
-        };
-        break;
-      }
-      case "PASS_SPECIAL":
-        action = { type: "PASS_SPECIAL" as const, seat };
-        break;
-      case "SURRENDER":
-        action = { type: "SURRENDER" as const, seat };
-        break;
-      default:
-        ack?.({ ok: false, error: "Unsupported" });
-        return;
+    const action = mapCommand(cmd.type, seat, cmd.payload);
+    if (!action) {
+      ack?.({ ok: false, error: "Unsupported" });
+      return;
     }
     const result = applyRoomCommand(room, seat, cmd.commandId, cmd.clientSeq, action);
     if (!result.ok) {
-      log("warn", "command_rejected", {
-        roomId: room.roomId,
-        matchId: room.matchRecordId ?? undefined,
-        sessionId: rateKey,
-        event: cmd.type,
-        error: result.error,
-      });
       ack?.({
         ok: false,
         error: result.error,
@@ -304,31 +292,32 @@ io.on("connection", (socket) => {
       });
       return;
     }
+
     if (room.game?.phase === "match_complete" && !result.duplicate) {
-      let anyAuth = false;
-      for (const s of room.seats) {
-        if (
-          s?.identity.kind === "authenticated" &&
-          s.identity.userId &&
-          room.game.matchWinnerTeam !== null
-        ) {
-          anyAuth = true;
-          const team = s.seat % 2 === 0 ? 0 : 1;
-          const teamResult = team === room.game.matchWinnerTeam ? "win" : "loss";
-          void rewards.submit(
-            buildRewardEvent(room.roomId, s.identity.userId, teamResult, env.GAME_TICKET_SECRET),
-          );
+      const hasBots = room.seats.some((s) => s?.controllerType === "bot");
+      if (!(hasBots && env.REWARD_SKIP_BOT_MATCHES)) {
+        for (const s of room.seats) {
+          if (
+            s?.identity.kind === "authenticated" &&
+            s.identity.userId &&
+            room.game.matchWinnerTeam !== null
+          ) {
+            const team = s.seat % 2 === 0 ? 0 : 1;
+            const teamResult = team === room.game.matchWinnerTeam ? "win" : "loss";
+            const ev = buildRewardEvent(
+              room.roomId,
+              s.identity.userId,
+              teamResult,
+              env.GAME_TICKET_SECRET,
+            );
+            void rewards.submit({
+              ...ev,
+              hasBots,
+              mvpParticipantIds: room.game.mvpParticipantIds,
+              impactScore: room.game.seatStats[s.seat]?.impactScore,
+            });
+          }
         }
-      }
-      if (room.matchRecordId) {
-        matchStore.complete(
-          room.matchRecordId,
-          {
-            winnerTeam: room.game.matchWinnerTeam,
-            surrender: room.game.surrenderTeam !== null,
-          },
-          anyAuth ? "submitted" : "skipped_guest",
-        );
       }
     }
     emitToRoom(room);
@@ -338,20 +327,66 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     if (!boundRoomId || boundSeat === null) return;
     const room = rooms.get(boundRoomId);
-    const s = room?.seats[boundSeat];
-    if (s) {
-      s.connected = false;
-      s.lastSeenAt = Date.now();
-      log("info", "socket_disconnect", {
-        roomId: boundRoomId,
-        sessionId: rateKey,
-        event: "disconnect",
-        seat: boundSeat,
-      });
-      if (room) emitToRoom(room);
-    }
+    if (!room) return;
+    handleDisconnect(room, identity.sessionId);
+    emitToRoom(room);
   });
 });
+
+function occupiedCountSafe(room: Room): number {
+  return room.seats.filter(Boolean).length;
+}
+
+function mapCommand(
+  type: string,
+  seat: number,
+  payload: unknown,
+): RoomCommand | null {
+  const p = (payload ?? {}) as Record<string, unknown>;
+  switch (type) {
+    case "SELECT_REALM":
+      if (typeof p.realm !== "string") return null;
+      return { type: "SELECT_REALM", seat, realm: p.realm as AnimalRealm };
+    case "ADD_BOT":
+      return {
+        type: "ADD_BOT",
+        seat,
+        targetSeat: typeof p.targetSeat === "number" ? p.targetSeat : undefined,
+      };
+    case "FILL_BOTS":
+      return { type: "FILL_BOTS", seat };
+    case "REMOVE_BOT":
+      if (typeof p.targetSeat !== "number") return null;
+      return { type: "REMOVE_BOT", seat, targetSeat: p.targetSeat };
+    case "PLAY_CARD":
+      if (typeof p.cardInstanceId !== "string") return null;
+      return {
+        type: "PLAY_CARD",
+        seat,
+        cardInstanceId: p.cardInstanceId,
+        declareChameleon: Boolean(p.declareChameleon),
+      };
+    case "PLAY_SPECIAL":
+      if (typeof p.specialInstanceId !== "string") return null;
+      return {
+        type: "PLAY_SPECIAL",
+        seat,
+        specialInstanceId: p.specialInstanceId,
+        targetSeat: typeof p.targetSeat === "number" ? p.targetSeat : undefined,
+        targetSuit: p.targetSuit as Suit | undefined,
+        targetPlayIndex: typeof p.targetPlayIndex === "number" ? p.targetPlayIndex : undefined,
+      };
+    case "PASS_SPECIAL":
+      return { type: "PASS_SPECIAL", seat };
+    case "SURRENDER":
+      return { type: "SURRENDER", seat };
+    case "READY":
+    case "START_MATCH":
+      return { type: "READY", seat } as unknown as RoomCommand;
+    default:
+      return null;
+  }
+}
 
 httpServer.listen(env.GAME_SERVER_PORT, env.GAME_SERVER_HOST, () => {
   log("info", "server_listen", {
@@ -359,4 +394,3 @@ httpServer.listen(env.GAME_SERVER_PORT, env.GAME_SERVER_HOST, () => {
     port: env.GAME_SERVER_PORT,
   });
 });
-

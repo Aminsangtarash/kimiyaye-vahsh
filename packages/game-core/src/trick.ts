@@ -1,21 +1,17 @@
-import { TEAM_BY_SEAT } from "@kv/contracts";
-import type { Suit } from "@kv/contracts";
+import type { AnimalRealm, Suit } from "@kv/contracts";
 import type { CurrentTrick, TrickCardPlay } from "./types.js";
-
-export function effectiveSuit(play: TrickCardPlay): Suit {
-  if (play.chameleon && play.card.suit !== play.card.suit) {
-    /* chameleon sets effective to led — caller passes led into compare */
-  }
-  return play.chameleon ? (play as TrickCardPlay & { _led?: Suit })._led ?? play.card.suit : play.card.suit;
-}
 
 export function effectiveStrength(play: TrickCardPlay): number {
   return play.card.strength + play.strengthDelta;
 }
 
+/**
+ * Resolve trick winner using Hunter Realm as trump.
+ * hunterRealm must be set once a trick has started (leader's represented realm).
+ */
 export function resolveTrickWinner(
   trick: CurrentTrick,
-  superiorSuit: Suit | null,
+  hunterRealm: AnimalRealm | Suit | null,
 ): { winnerSeat: number; winningPlayIndex: number } {
   const led = trick.ledSuit!;
   const plays = trick.plays.map((p, index) => ({
@@ -25,13 +21,11 @@ export function resolveTrickWinner(
     effStrength: effectiveStrength(p),
   }));
 
-  const hasSuperior = superiorSuit !== null;
-  const superiorPlays = hasSuperior
-    ? plays.filter((p) => p.effSuit === superiorSuit)
-    : [];
+  const hunterPlays =
+    hunterRealm !== null ? plays.filter((p) => p.effSuit === hunterRealm) : [];
   const ledPlays = plays.filter((p) => p.effSuit === led);
 
-  let candidates = superiorPlays.length > 0 ? superiorPlays : ledPlays;
+  let candidates = hunterPlays.length > 0 ? hunterPlays : ledPlays;
   if (candidates.length === 0) {
     candidates = plays;
   }
@@ -48,5 +42,5 @@ export function resolveTrickWinner(
 }
 
 export function teamForSeat(seat: number): 0 | 1 {
-  return TEAM_BY_SEAT[seat] as 0 | 1;
+  return (seat % 2 === 0 ? 0 : 1) as 0 | 1;
 }
