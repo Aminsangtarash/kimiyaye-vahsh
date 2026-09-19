@@ -31,7 +31,9 @@ setRoomRuntimeConfig({
   quickMatchBotFillAfterMs: env.QUICK_MATCH_BOT_FILL_AFTER_MS,
   botActionDelayMs: env.NODE_ENV === "test" ? 0 : env.BOT_ACTION_DELAY_MS,
   trickResolveDelayMs: env.NODE_ENV === "test" ? 0 : 2500,
-  specialCardsEnabled: env.V2_SPECIAL_CARDS_ENABLED,
+  hunterSelectionTimeoutMs: env.NODE_ENV === "test" ? 0 : env.HUNTER_SELECTION_TIMEOUT_MS,
+  resultAckTimeoutMs: env.NODE_ENV === "test" ? 0 : env.RESULT_ACK_TIMEOUT_MS,
+  specialCardsEnabled: env.SPECIAL_CARDS_V1_ENABLED,
   reconnectGraceMs: env.RECONNECT_GRACE_MS,
   impact: {
     trickWon: env.IMPACT_TRICK_WON,
@@ -86,7 +88,7 @@ app.get("/health", (_req, res) => {
     ok: true,
     service: "kv-game-server",
     v2: true,
-    specialCardsEnabled: env.V2_SPECIAL_CARDS_ENABLED,
+    specialCardsEnabled: env.SPECIAL_CARDS_V1_ENABLED,
     ts: new Date().toISOString(),
   });
 });
@@ -347,6 +349,14 @@ function mapCommand(
     case "SELECT_REALM":
       if (typeof p.realm !== "string") return null;
       return { type: "SELECT_REALM", seat, realm: p.realm as AnimalRealm };
+    case "SELECT_HUNTER_REALM":
+      if (typeof p.realm !== "string") return null;
+      return {
+        type: "SELECT_HUNTER_REALM",
+        seat,
+        realm: p.realm as AnimalRealm,
+        source: "manual",
+      };
     case "ADD_BOT":
       return {
         type: "ADD_BOT",
@@ -364,8 +374,16 @@ function mapCommand(
         type: "PLAY_CARD",
         seat,
         cardInstanceId: p.cardInstanceId,
+        specialInstanceIds: Array.isArray(p.specialInstanceIds)
+          ? p.specialInstanceIds.filter((x): x is string => typeof x === "string")
+          : undefined,
         declareChameleon: Boolean(p.declareChameleon),
       };
+    case "REQUEST_SPECIAL_DRAW":
+      return { type: "REQUEST_SPECIAL_DRAW", seat };
+    case "DISCARD_SPECIAL":
+      if (typeof p.specialInstanceId !== "string") return null;
+      return { type: "DISCARD_SPECIAL", seat, specialInstanceId: p.specialInstanceId };
     case "PLAY_SPECIAL":
       if (typeof p.specialInstanceId !== "string") return null;
       return {
@@ -378,6 +396,8 @@ function mapCommand(
       };
     case "PASS_SPECIAL":
       return { type: "PASS_SPECIAL", seat };
+    case "CONTINUE_HAND":
+      return { type: "CONTINUE_HAND" };
     case "SURRENDER":
       return { type: "SURRENDER", seat };
     case "READY":

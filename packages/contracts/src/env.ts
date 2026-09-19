@@ -15,7 +15,7 @@ export const ServerEnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   GAME_SERVER_PORT: z.coerce.number().int().positive().default(4010),
   GAME_SERVER_HOST: z.string().default("0.0.0.0"),
-  CORS_ORIGINS: z.string().default("http://localhost:5173"),
+  CORS_ORIGINS: z.string().default("http://localhost:5173,http://localhost:5174"),
   GAME_TICKET_SECRET: z.string().min(16).default("dev-ticket-secret-change-me"),
   SESSION_SECRET: z.string().min(16).default("dev-session-secret-change-me"),
   RECONNECT_GRACE_MS: z.coerce.number().int().positive().default(60_000),
@@ -23,7 +23,15 @@ export const ServerEnvSchema = z.object({
   MATCH_START_COUNTDOWN_MS: z.coerce.number().int().positive().default(3_000),
   QUICK_MATCH_BOT_FILL_AFTER_MS: z.coerce.number().int().positive().default(45_000),
   BOT_ACTION_DELAY_MS: z.coerce.number().int().nonnegative().default(700),
-  V2_SPECIAL_CARDS_ENABLED: boolEnv(false),
+  /** Human Hunter Selector timeout before auto-pick (bot heuristic). */
+  HUNTER_SELECTION_TIMEOUT_MS: z.coerce.number().int().positive().default(20_000),
+  /** Hand/match result dialog: auto-continue after this many ms if no ack. */
+  RESULT_ACK_TIMEOUT_MS: z.coerce.number().int().positive().default(10_000),
+  /** Special Cards V1 — enabled by default for playable matches. */
+  SPECIAL_CARDS_V1_ENABLED: boolEnv(true),
+  /** @deprecated use SPECIAL_CARDS_V1_ENABLED */
+  V2_SPECIAL_CARDS_ENABLED: boolEnv(true),
+  SPECIAL_DRAW_CHANCE: z.coerce.number().min(0).max(1).default(0.1),
   IMPACT_TRICK_WON: z.coerce.number().default(10),
   IMPACT_SUCCESSFUL_SPECIAL: z.coerce.number().default(10),
   IMPACT_LEGENDARY_COUNTER: z.coerce.number().default(20),

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { randomUUID } from "./uuid";
 import { createGameSocket, SOCKET_EVENTS } from "./socket";
 import { playCardWhoosh, playDealTick, playHunterRoar } from "./sfx";
@@ -76,36 +77,92 @@ interface GameView {
   yourRealm: string;
   playerRealms: string[];
   yourHand: { instanceId: string; slug: string; suit: string; displayRank: string; strength: number }[];
+  yourSpecials?: { instanceId: string; slug: string }[];
+  specialInventory?: { instanceId: string; slug: string; fa: string; shortFa: string }[];
   legalCardIds: string[];
   currentPlayer: number;
   currentLeader: number | null;
   hunterRealm: string | null;
+  hunterSelectorSeat?: number;
+  isHunterSelector?: boolean;
+  selectionStartedAt?: number | null;
+  selectionDeadlineAt?: number | null;
+  hunterSelectionTimeoutMs?: number;
   handScore: { teamTricks: [number, number] };
   matchScore: { teamHands: [number, number] };
   currentTrick: {
     ledSuit: string | null;
     leader: number;
-    plays: { seat: number; card: { slug: string; suit: string; displayRank: string } }[];
+    plays: {
+      seat: number;
+      card: { slug: string; suit: string; displayRank: string; strength?: number };
+      specials?: string[];
+      effectiveSuit?: string;
+      transformedByChameleon?: boolean;
+      chameleon?: boolean;
+      strengthDelta?: number;
+    }[];
+  } | null;
+  trickPreview?: {
+    resolved?: {
+      seat: number;
+      effectivePower: number;
+      effectiveSuit: string;
+      destroyedByArmageddon: boolean;
+      modifiers: { source: string; delta?: number; note: string }[];
+      baseRank: number;
+    }[];
+    fusions?: {
+      seats: [number, number];
+      fusionPower: number;
+      effectiveSuit: string;
+      showsFusionBeast: boolean;
+      winnerSeat: number;
+    }[];
+    inversionActive?: boolean;
+    inversionCancelled?: boolean;
+    huntCommand?: { succeeded: boolean; proposedHunter: string; failReason?: string } | null;
   } | null;
   matchWinnerTeam: number | null;
   phase: string;
   stateVersion?: number;
+  rulesVersion?: number;
   lastTrickWinner?: number | null;
+  lastHandWinnerTeam?: number | null;
   seatStats: { tricksWon: number; impactScore: number }[];
   mvpParticipantIds: string[];
   controllers?: ("human" | "bot")[];
   specialCardsEnabled: boolean;
+  canRequestSpecialDraw?: boolean;
+  specialDrawAttemptedThisTurn?: boolean;
+  pendingSpecialDiscard?: { seat: number; drawnInstanceId: string } | null;
+  specialMaxInventory?: number;
   opponentHandSizes?: number[];
+  resultAckTimeoutMs?: number;
+  tricksPlayedThisHand?: number;
 }
+
+const SPECIAL_FA: Record<string, { fa: string; short: string }> = {
+  doping: { fa: "دوپینگ", short: "+۲٫۵" },
+  trap: { fa: "تله", short: "−۲٫۵ حریف" },
+  chameleon: { fa: "نیرنگ آفتاب‌پرست", short: "تغییر دسته" },
+  inversion: { fa: "نفرین وارونگی", short: "وارونگی" },
+  team_bond: { fa: "همتازی", short: "پیوند تیم" },
+  null: { fa: "پوچ", short: "بی‌اثر" },
+  hunt_command: { fa: "فرمان شکار", short: "تغییر شکارچی" },
+  armageddon: { fa: "آرماگدون", short: "نابودی A" },
+};
 
 interface MatchResult {
   winningTeamId: number | null;
+  matchScore?: { teamHands: [number, number] };
   participants: {
     participantId: string;
     seat: number;
     teamId: number;
     realm: string;
     controllerType: string;
+    displayName?: string;
     tricksWon: number;
     impactScore: number;
   }[];
@@ -222,6 +279,8 @@ export default function App() {
   const [connected, setConnected] = useState(false);
   const [clientSeq, setClientSeq] = useState(0);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [selectedSpecials, setSelectedSpecials] = useState<string[]>([]);
+  const [drawFlash, setDrawFlash] = useState<string | null>(null);
   const [dealVisible, setDealVisible] = useState(0);
   const [dealing, setDealing] = useState(false);
   const [hunterFlash, setHunterFlash] = useState<string | null>(null);
@@ -255,6 +314,11 @@ export default function App() {
 
   const TRICK_HOLD_MS = 2200;
   const COLLECT_ANIM_MS = 1100;
+  const RESULT_DISPLAY_MS = 10_000;
+
+  const [resultSecondsLeft, setResultSecondsLeft] = useState<number | null>(null);
+  const handContinueSentRef = useRef(false);
+  const resultPhaseKeyRef = useRef<string | null>(null);
 
   const sessionId = useMemo(() => randomUUID(), []);
   const socket = useMemo(() => createGameSocket(name, sessionId), [name, sessionId]);
@@ -317,17 +381,71 @@ export default function App() {
     prevHandLen.current = len;
   }, [game?.matchScore.teamHands[0], game?.matchScore.teamHands[1], game?.phase, game?.yourHand.length]);
 
-  // Hunter realm change burst + roar
+  // Reset hunter announce when a new round enters selection
+  useEffect(() => {
+    if (game?.phase === "hunter_selection") {
+      prevHunter.current = null;
+    }
+  }, [game?.phase, game?.matchScore.teamHands[0], game?.matchScore.teamHands[1]]);
+
+  // Tick selection countdown
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (game?.phase !== "hunter_selection") return;
+    const id = window.setInterval(() => setTick((n) => n + 1), 250);
+    return () => window.clearInterval(id);
+  }, [game?.phase]);
+
+  // Hand-result countdown only (match result stays until player closes)
+  useEffect(() => {
+    const isHandResult = game?.phase === "hand_complete";
+    if (!isHandResult) {
+      if (screen !== "results") setResultSecondsLeft(null);
+      handContinueSentRef.current = false;
+      if (screen !== "results") resultPhaseKeyRef.current = null;
+      return;
+    }
+    const key = `hand-${game.matchScore.teamHands[0]}-${game.matchScore.teamHands[1]}`;
+    if (resultPhaseKeyRef.current !== key) {
+      resultPhaseKeyRef.current = key;
+      handContinueSentRef.current = false;
+    }
+    const timeoutMs = game.resultAckTimeoutMs ?? RESULT_DISPLAY_MS;
+    const started = Date.now();
+    setResultSecondsLeft(Math.ceil(timeoutMs / 1000));
+    const id = window.setInterval(() => {
+      const left = Math.max(0, Math.ceil((timeoutMs - (Date.now() - started)) / 1000));
+      setResultSecondsLeft(left);
+    }, 200);
+    return () => window.clearInterval(id);
+  }, [
+    game?.phase,
+    game?.matchScore.teamHands[0],
+    game?.matchScore.teamHands[1],
+    game?.resultAckTimeoutMs,
+    screen,
+  ]);
+
+  // Lock page scroll while hunter / result dialog is open
+  useEffect(() => {
+    if (game?.phase !== "hunter_selection" && game?.phase !== "hand_complete") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [game?.phase]);
+
+  // Announce Hunter once when selected for the round (not every trick)
   useEffect(() => {
     if (!game?.hunterRealm) return;
-    if (prevHunter.current && prevHunter.current !== game.hunterRealm) {
+    if (prevHunter.current !== game.hunterRealm) {
+      prevHunter.current = game.hunterRealm;
       setHunterFlash(game.hunterRealm);
       playHunterRoar();
-      const t = window.setTimeout(() => setHunterFlash(null), 1600);
-      prevHunter.current = game.hunterRealm;
+      const t = window.setTimeout(() => setHunterFlash(null), 1800);
       return () => window.clearTimeout(t);
     }
-    prevHunter.current = game.hunterRealm;
   }, [game?.hunterRealm]);
 
   // Play-to-table whoosh when a new trick card appears
@@ -504,17 +622,61 @@ export default function App() {
   const playSelected = () => {
     if (!selectedCard || !game || seat === null) return;
     if (!game.legalCardIds.includes(selectedCard) || game.currentPlayer !== seat) return;
-    sendCommand("PLAY_CARD", { cardInstanceId: selectedCard });
+    if (game.pendingSpecialDiscard) return;
+    sendCommand("PLAY_CARD", {
+      cardInstanceId: selectedCard,
+      specialInstanceIds: selectedSpecials.length ? selectedSpecials : undefined,
+    });
     setSelectedCard(null);
+    setSelectedSpecials([]);
   };
+
+  const requestSpecialDraw = () => {
+    if (!game?.canRequestSpecialDraw) return;
+    sendCommand("REQUEST_SPECIAL_DRAW");
+    setDrawFlash("در حال امتحان شانس…");
+    window.setTimeout(() => setDrawFlash(null), 1600);
+  };
+
+  const discardSpecial = (specialInstanceId: string) => {
+    sendCommand("DISCARD_SPECIAL", { specialInstanceId });
+  };
+
+  const toggleSpecial = (instanceId: string) => {
+    setSelectedSpecials((prev) => {
+      if (prev.includes(instanceId)) return prev.filter((x) => x !== instanceId);
+      if (prev.length >= 2) return prev;
+      return [...prev, instanceId];
+    });
+  };
+
+  const selectHunterRealm = (realm: string) => {
+    sendCommand("SELECT_HUNTER_REALM", { realm });
+  };
+
+  const continueHand = () => {
+    if (handContinueSentRef.current) return;
+    handContinueSentRef.current = true;
+    sendCommand("CONTINUE_HAND");
+  };
+
+  const hunterSelectRemainingSec =
+    game?.phase === "hunter_selection" && game.selectionDeadlineAt
+      ? Math.max(0, Math.ceil((game.selectionDeadlineAt - Date.now()) / 1000))
+      : null;
 
   const onHandCardClick = (instanceId: string) => {
     if (!game || seat === null) return;
     if (game.currentPlayer !== seat) return;
+    if (game.pendingSpecialDiscard) return;
     if (!game.legalCardIds.includes(instanceId)) return;
     if (selectedCard === instanceId) {
-      sendCommand("PLAY_CARD", { cardInstanceId: instanceId });
+      sendCommand("PLAY_CARD", {
+        cardInstanceId: instanceId,
+        specialInstanceIds: selectedSpecials.length ? selectedSpecials : undefined,
+      });
       setSelectedCard(null);
+      setSelectedSpecials([]);
       return;
     }
     setSelectedCard(instanceId);
@@ -832,6 +994,149 @@ export default function App() {
         </main>
       )}
 
+      {screen === "game" &&
+        game &&
+        seat !== null &&
+        game.phase === "hunter_selection" &&
+        createPortal(
+          <div className="hunter-select-overlay" role="dialog" aria-modal="true" aria-labelledby="hunter-select-title">
+            <div className="hunter-select-dialog">
+              {(game.isHunterSelector ?? game.hunterSelectorSeat === seat) ? (
+                <section className="hunter-select-panel glass-panel">
+                  <header className="hunter-select-head">
+                    <div>
+                      <p className="hunter-select-kicker">قلمرو شما: {realmMeta(game.yourRealm)?.fa}</p>
+                      <h2 id="hunter-select-title">انتخاب قلمرو شکارچی این دور</h2>
+                      <p>با توجه به ۵ کارت نخست، قلمرو شکارچی را انتخاب کنید. بازی بعد از این انتخاب شروع می‌شود.</p>
+                    </div>
+                    {hunterSelectRemainingSec != null && (
+                      <div className="hunter-select-timer">
+                        <strong>{hunterSelectRemainingSec}</strong>
+                        <small>ثانیه</small>
+                      </div>
+                    )}
+                  </header>
+                  <div className="hunter-select-cards">
+                    {game.yourHand.map((c) => (
+                      <figure key={c.instanceId} className="hunter-select-card">
+                        <img src={cardUrl(c.slug)} alt={`${c.slug} ${c.displayRank}`} />
+                      </figure>
+                    ))}
+                  </div>
+                  <div className="hunter-select-options">
+                    {REALMS.map((r) => (
+                      <button
+                        key={r.id}
+                        type="button"
+                        className="hunter-select-option"
+                        style={{ ["--realm" as string]: r.color, ["--glow" as string]: r.glow }}
+                        onClick={() => selectHunterRealm(r.id)}
+                      >
+                        <RealmMark realm={r.id} size={36} />
+                        <strong>{r.fa}</strong>
+                        <small>قلمرو شکارچی</small>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ) : (
+                <section className="hunter-select-wait glass-panel">
+                  <RealmMark realm={game.playerRealms[game.hunterSelectorSeat ?? 0]} size={64} />
+                  <h2 id="hunter-select-title">در انتظار انتخاب قلمرو شکارچی</h2>
+                  <p>
+                    صندلی {(game.hunterSelectorSeat ?? 0) + 1}
+                    {game.controllers?.[game.hunterSelectorSeat ?? 0] === "bot" ? " (ربات)" : ""} در حال انتخاب است…
+                  </p>
+                  {hunterSelectRemainingSec != null && <small>حداکثر {hunterSelectRemainingSec} ثانیه</small>}
+                </section>
+              )}
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {screen === "game" &&
+        game &&
+        seat !== null &&
+        game.phase === "hand_complete" &&
+        createPortal(
+          <div className="result-overlay" role="dialog" aria-modal="true" aria-labelledby="hand-result-title">
+            <div className="result-dialog">
+              <section className="result-panel glass-panel">
+                <p className="result-kicker">پایان دست</p>
+                <h2 id="hand-result-title">
+                  {(game.lastHandWinnerTeam ?? null) === game.team ? "دست را بردید!" : "دست را واگذار کردید"}
+                </h2>
+                <p className="result-hero-line">
+                  برنده دست:{" "}
+                  <strong className="gold">
+                    {(game.lastHandWinnerTeam ?? null) === game.team ? "تیم شما" : "تیم حریف"}
+                  </strong>
+                </p>
+                <div className="result-score-grid">
+                  <div className="result-score-card">
+                    <span>امتیاز دست‌ها</span>
+                    <strong>
+                      {game.matchScore.teamHands[0]} – {game.matchScore.teamHands[1]}
+                    </strong>
+                    <small>تیم زوج / تیم فرد</small>
+                  </div>
+                  <div className="result-score-card">
+                    <span>تریک‌های این دست</span>
+                    <strong>
+                      {game.handScore.teamTricks[0]} – {game.handScore.teamTricks[1]}
+                    </strong>
+                    <small>تریک‌های ثبت‌شده این دست</small>
+                  </div>
+                </div>
+                <p className="result-countdown">
+                  {resultSecondsLeft != null && resultSecondsLeft > 0
+                    ? `ادامه خودکار تا ${resultSecondsLeft} ثانیه`
+                    : "در حال شروع دست بعد…"}
+                </p>
+                <button type="button" className="mode-tile primary wide result-continue-btn" onClick={continueHand}>
+                  <span className="mode-body">
+                    <strong>ادامه بازی</strong>
+                    <small>شروع دست بعدی</small>
+                  </span>
+                </button>
+              </section>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {screen === "game" &&
+        game &&
+        seat !== null &&
+        game.pendingSpecialDiscard &&
+        createPortal(
+          <div className="result-overlay" role="dialog" aria-modal="true" aria-labelledby="discard-title">
+            <div className="result-dialog">
+              <section className="result-panel glass-panel">
+                <p className="result-kicker">موجودی پر است</p>
+                <h2 id="discard-title">یکی را دور بینداز</h2>
+                <p>چهار مکمل دارید — یکی را انتخاب کنید تا دور انداخته شود.</p>
+                <div className="discard-grid">
+                  {(game.specialInventory ?? []).map((s) => (
+                    <button
+                      key={s.instanceId}
+                      type="button"
+                      className={`special-chip large slug-${s.slug} ${s.instanceId === game.pendingSpecialDiscard?.drawnInstanceId ? "new" : ""}`}
+                      onClick={() => discardSpecial(s.instanceId)}
+                    >
+                      <strong>{s.fa}</strong>
+                      <small>{s.shortFa}</small>
+                      {s.instanceId === game.pendingSpecialDiscard?.drawnInstanceId && <em>تازه</em>}
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </div>
+          </div>,
+          document.body,
+        )}
+
       {screen === "game" && game && seat !== null && (
         <main className="board-page">
           <header className="board-top glass-bar">
@@ -843,7 +1148,11 @@ export default function App() {
               </div>
             </div>
             <div className={`turn-badge ${game.currentPlayer === seat ? "yours" : ""}`}>
-              {game.currentPlayer === seat ? "نوبت شما" : `نوبت صندلی ${game.currentPlayer + 1}`}
+              {game.phase === "hunter_selection"
+                ? "انتخاب قلمرو شکارچی…"
+                : game.currentPlayer === seat
+                  ? "نوبت شما"
+                  : `نوبت صندلی ${game.currentPlayer + 1}`}
             </div>
             <div className="board-top-actions score-chips">
               <div
@@ -987,16 +1296,66 @@ export default function App() {
                   ) : tablePlays?.length ? (
                     tablePlays.map((p) => {
                       const meta = realmMeta(p.card.suit);
+                      const live = game.currentTrick?.plays.find((x) => x.seat === p.seat);
+                      const resolved = game.trickPreview?.resolved?.find((x) => x.seat === p.seat);
+                      const specs = live?.specials ?? [];
+                      const fusion = game.trickPreview?.fusions?.find((f) => f.seats.includes(p.seat));
+                      const showBeast = fusion?.showsFusionBeast && fusion.seats[0] === p.seat;
+                      if (fusion?.showsFusionBeast && fusion.seats[1] === p.seat) {
+                        return null;
+                      }
+                      if (showBeast && fusion) {
+                        const a = tablePlays.find((x) => x.seat === fusion.seats[0]);
+                        const b = tablePlays.find((x) => x.seat === fusion.seats[1]);
+                        return (
+                          <figure
+                            key={`fusion-${fusion.seats.join("-")}`}
+                            className={`played-card fusion-beast arrive slot-${relativeSlot(p.seat, seat)}`}
+                            style={{
+                              ["--realm" as string]: realmMeta(fusion.effectiveSuit)?.color ?? "#888",
+                              ["--glow" as string]: realmMeta(fusion.effectiveSuit)?.glow ?? "transparent",
+                            }}
+                          >
+                            <div className="fusion-beast-art">
+                              {a && <img src={cardUrl(a.card.slug)} alt="" />}
+                              {b && <img src={cardUrl(b.card.slug)} alt="" />}
+                            </div>
+                            <figcaption className="fusion-beast-cap">
+                              <strong>هیولای ترکیبی</strong>
+                              <span>قدرت {fusion.fusionPower}</span>
+                              <small>{realmMeta(fusion.effectiveSuit)?.fa}</small>
+                            </figcaption>
+                          </figure>
+                        );
+                      }
                       return (
                         <figure
                           key={`${p.seat}-${p.card.slug}`}
-                          className={`played-card arrive slot-${relativeSlot(p.seat, seat)}`}
+                          className={`played-card arrive slot-${relativeSlot(p.seat, seat)} ${resolved?.destroyedByArmageddon ? "destroyed" : ""} ${specs.includes("doping") ? "fx-doping" : ""} ${specs.includes("trap") ? "fx-trap" : ""} ${game.trickPreview?.inversionActive ? "fx-inversion" : ""} ${fusion && !fusion.showsFusionBeast ? "fx-bond" : ""}`}
                           style={{
                             ["--realm" as string]: meta?.color ?? "#888",
                             ["--glow" as string]: meta?.glow ?? "transparent",
                           }}
+                          title={
+                            resolved
+                              ? `پایه ${resolved.baseRank} → نهایی ${resolved.effectivePower}`
+                              : undefined
+                          }
                         >
                           <img src={cardUrl(p.card.slug)} alt={`${p.card.slug} ${p.card.displayRank}`} />
+                          {resolved && (
+                            <span className="eff-power">
+                              {resolved.destroyedByArmageddon ? "نابود" : resolved.effectivePower}
+                            </span>
+                          )}
+                          {specs.length > 0 && (
+                            <span className="played-specs">
+                              {specs.map((s) => SPECIAL_FA[s]?.fa ?? s).join(" · ")}
+                            </span>
+                          )}
+                          {fusion && !fusion.showsFusionBeast && fusion.seats[0] === p.seat && (
+                            <span className="bond-badge">همتازی {fusion.fusionPower}</span>
+                          )}
                         </figure>
                       );
                     })
@@ -1034,7 +1393,7 @@ export default function App() {
                   {game.hunterRealm ? <RealmMark realm={game.hunterRealm} size={56} /> : <IconMoon size={32} />}
                 </div>
                 <strong>{realmMeta(game.hunterRealm)?.fa ?? "—"}</strong>
-                <p>در این تریک کارت‌های این قلمرو قدرت برتر دارند.</p>
+                <p>ثابت برای تمام تریک‌های این دور · جدا از قلمرو نمایندهٔ شما</p>
               </div>
               <div className="hud-card glass-panel">
                 <div className="hud-title">امتیاز اثرگذاری · MVP</div>
@@ -1058,6 +1417,69 @@ export default function App() {
           </div>
 
           <footer className="hand-bar glass-panel">
+            {game.specialCardsEnabled && (
+              <div className="specials-rail">
+                <div className="specials-rail-head">
+                  <strong>مکمل‌ها</strong>
+                  <small>
+                    {(game.specialInventory ?? game.yourSpecials ?? []).length}/
+                    {game.specialMaxInventory ?? 3}
+                  </small>
+                  {game.currentPlayer === seat && !game.pendingSpecialDiscard && (
+                    <button
+                      type="button"
+                      className="ghost-btn special-draw-btn"
+                      disabled={!game.canRequestSpecialDraw}
+                      onClick={requestSpecialDraw}
+                    >
+                      امتحان شانس برای کارت مکمل
+                    </button>
+                  )}
+                  {drawFlash && <span className="draw-flash">{drawFlash}</span>}
+                  {game.specialDrawAttemptedThisTurn && !game.canRequestSpecialDraw && (
+                    <span className="hint">شانس این نوبت استفاده شد</span>
+                  )}
+                </div>
+                <div className="specials-row">
+                  {(game.specialInventory ?? []).map((s) => {
+                    const on = selectedSpecials.includes(s.instanceId);
+                    return (
+                      <button
+                        key={s.instanceId}
+                        type="button"
+                        className={`special-chip slug-${s.slug} ${on ? "selected" : ""}`}
+                        onClick={() => toggleSpecial(s.instanceId)}
+                        disabled={game.currentPlayer !== seat || Boolean(game.pendingSpecialDiscard)}
+                      >
+                        <strong>{s.fa}</strong>
+                        <small>{s.shortFa}</small>
+                      </button>
+                    );
+                  })}
+                  {(game.specialInventory ?? []).length === 0 && (
+                    <span className="hint">هنوز مکملی ندارید</span>
+                  )}
+                </div>
+              </div>
+            )}
+            {game.trickPreview?.inversionActive && (
+              <div className="trick-status curse">نفرین وارونگی فعال است</div>
+            )}
+            {game.trickPreview?.inversionCancelled && (
+              <div className="trick-status cancel">وارونگی با A روی Lead لغو شد</div>
+            )}
+            {game.trickPreview?.resolved?.some((r) => r.destroyedByArmageddon) && (
+              <div className="trick-status arma">آرماگدون فعال است — کارت A تیم مقابل نابود می‌شود</div>
+            )}
+            {game.trickPreview?.huntCommand && (
+              <div className="trick-status hunt">
+                {game.trickPreview.huntCommand.succeeded
+                  ? "فرمان شکار موفق شد"
+                  : game.currentTrick && game.currentTrick.plays.length >= 4
+                    ? `فرمان شکار شکست خورد${game.trickPreview.huntCommand.failReason ? ` (${game.trickPreview.huntCommand.failReason})` : ""}`
+                    : "فرمان شکار در انتظار…"}
+              </div>
+            )}
             <div className="hand-fan" style={{ ["--n" as string]: game.yourHand.length }}>
               {game.yourHand.map((c, idx) => {
                 const legal = game.legalCardIds.includes(c.instanceId);
@@ -1106,60 +1528,138 @@ export default function App() {
 
       {screen === "results" && (
         <main className="panel-page">
-          <section className="panel-card glass-panel results">
-            <h2>پایان نبرد</h2>
+          <section className="panel-card glass-panel results result-panel-final">
+            <p className="result-kicker">پایان نبرد</p>
+            <h2>
+              {(matchResult?.winningTeamId ?? game?.matchWinnerTeam) === game?.team
+                ? "پیروزی شما!"
+                : "شکست در نبرد"}
+            </h2>
             {(matchResult || game) && (
               <>
-                <p className="result-hero">
-                  تیم برنده:{" "}
-                  <strong className="gold">
-                    {(matchResult?.winningTeamId ?? game?.matchWinnerTeam) === game?.team ? "شما" : "حریف"}
-                  </strong>
-                </p>
-                <p className="mvp-line">
-                  <IconStar size={16} /> بازیکن مؤثرتر:{" "}
-                  {(matchResult?.mvpParticipantIds ?? game?.mvpParticipantIds ?? [])
-                    .map((id) => id.replace("seat-", "صندلی "))
-                    .join(" و ") || "—"}
-                </p>
-                {matchResult?.hasBots && <p className="hint">مسابقه با ربات ({matchResult.botSeatCount} بات)</p>}
-                <table className="result-table">
-                  <thead>
-                    <tr>
-                      <th>بازیکن</th>
-                      <th>قلمرو</th>
-                      <th>تریک</th>
-                      <th>اثرگذاری</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(matchResult?.participants ?? []).map((p) => (
-                      <tr key={p.participantId}>
-                        <td>
-                          صندلی {p.seat + 1}
-                          {p.controllerType === "bot" ? " · ربات" : ""}
-                        </td>
-                        <td>{realmMeta(p.realm)?.fa}</td>
-                        <td>{p.tricksWon}</td>
-                        <td>{p.impactScore}</td>
-                      </tr>
-                    ))}
-                    {!matchResult &&
-                      game?.seatStats.map((s, i) => (
-                        <tr key={i}>
-                          <td>صندلی {i + 1}</td>
-                          <td>{realmMeta(game.playerRealms[i])?.fa}</td>
-                          <td>{s.tricksWon}</td>
-                          <td>{s.impactScore}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+                {(() => {
+                  const winner = matchResult?.winningTeamId ?? game?.matchWinnerTeam;
+                  const hands =
+                    matchResult?.matchScore?.teamHands ?? game?.matchScore.teamHands ?? ([0, 0] as [number, number]);
+                  const mvp = new Set(matchResult?.mvpParticipantIds ?? game?.mvpParticipantIds ?? []);
+                  const rows =
+                    matchResult?.participants?.length
+                      ? matchResult.participants
+                      : (game?.seatStats ?? []).map((s, i) => ({
+                          participantId: `seat-${i}`,
+                          seat: i,
+                          teamId: i % 2,
+                          realm: game!.playerRealms[i],
+                          controllerType: game!.controllers?.[i] ?? "human",
+                          displayName: lobby?.seats[i]?.displayName,
+                          tricksWon: s.tricksWon,
+                          impactScore: s.impactScore,
+                        }));
+                  const teamLabel = (teamId: number) =>
+                    teamId === game?.team ? "تیم شما" : "تیم حریف";
+                  const nameOf = (p: (typeof rows)[number]) =>
+                    p.displayName ||
+                    lobby?.seats[p.seat]?.displayName ||
+                    (p.controllerType === "bot" ? `ربات ${p.seat + 1}` : `بازیکن ${p.seat + 1}`);
+
+                  return (
+                    <>
+                      <div className="match-final-score">
+                        <div className={`match-final-side ${winner === 0 ? "won" : ""}`}>
+                          <span>{teamLabel(0)}</span>
+                          <strong>{hands[0]}</strong>
+                        </div>
+                        <div className="match-final-vs">در برابر</div>
+                        <div className={`match-final-side ${winner === 1 ? "won" : ""}`}>
+                          <span>{teamLabel(1)}</span>
+                          <strong>{hands[1]}</strong>
+                        </div>
+                      </div>
+
+                      <div className="match-teams">
+                        {[0, 1].map((teamId) => {
+                          const members = rows.filter((p) => p.teamId === teamId);
+                          const isWinner = winner === teamId;
+                          return (
+                            <section
+                              key={teamId}
+                              className={`match-team-card ${isWinner ? "winner" : "loser"}`}
+                            >
+                              <header className="match-team-head">
+                                <div>
+                                  <p className="result-kicker">{isWinner ? "برنده" : "بازنده"}</p>
+                                  <h3>{teamLabel(teamId)}</h3>
+                                </div>
+                                <strong className="match-team-hands">{hands[teamId as 0 | 1]} دست</strong>
+                              </header>
+                              <ul className="match-roster">
+                                {members.map((p) => {
+                                  const meta = realmMeta(p.realm);
+                                  const isMvp = mvp.has(p.participantId);
+                                  return (
+                                    <li
+                                      key={p.participantId}
+                                      className={`match-player ${isMvp ? "mvp" : ""} ${p.seat === seat ? "you" : ""}`}
+                                      style={
+                                        meta
+                                          ? {
+                                              ["--realm" as string]: meta.color,
+                                              ["--glow" as string]: meta.glow,
+                                            }
+                                          : undefined
+                                      }
+                                    >
+                                      <div className="match-player-art">
+                                        <img
+                                          src={cardUrl(meta?.sample.slug ?? "lion")}
+                                          alt=""
+                                          className="match-player-card"
+                                        />
+                                        <span className="match-player-mark">
+                                          {meta ? <RealmMark realm={meta.id} size={28} /> : <IconUser size={24} />}
+                                        </span>
+                                      </div>
+                                      <div className="match-player-meta">
+                                        <strong>
+                                          {nameOf(p)}
+                                          {p.seat === seat ? " · شما" : ""}
+                                          {p.controllerType === "bot" ? " · ربات" : ""}
+                                        </strong>
+                                        <small>
+                                          {meta?.fa ?? "قلمرو"} · صندلی {p.seat + 1}
+                                        </small>
+                                        <div className="match-player-stats">
+                                          <span>{p.tricksWon} تریک</span>
+                                          <span>{p.impactScore} اثر</span>
+                                        </div>
+                                        {isMvp && (
+                                          <em className="match-mvp-badge">
+                                            <IconStar size={14} /> مؤثرترین بازیکن
+                                          </em>
+                                        )}
+                                      </div>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </section>
+                          );
+                        })}
+                      </div>
+
+                      {matchResult?.hasBots && (
+                        <p className="hint">مسابقه با ربات ({matchResult.botSeatCount} بات)</p>
+                      )}
+                      <p className="result-stay-hint">نتیجه تا وقتی خودتان ببندید روی صفحه می‌ماند.</p>
+                    </>
+                  );
+                })()}
               </>
             )}
             <button type="button" className="mode-tile primary wide" onClick={() => window.location.reload()}>
               <span className="mode-body">
-                <strong>بازگشت به منو</strong>
+                <strong>بستن و بازگشت به منو</strong>
+                <small>با تأیید شما بسته می‌شود</small>
               </span>
             </button>
           </section>

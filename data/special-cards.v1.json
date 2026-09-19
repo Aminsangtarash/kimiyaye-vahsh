@@ -1,0 +1,117 @@
+{
+  "project": "کیمیای وحش",
+  "specialRulesVersion": 1,
+  "status": "active-v1",
+  "draw": {
+    "chance": 0.1,
+    "maxInventory": 3,
+    "attemptsPerTurn": 1,
+    "timing": "before_animal_play"
+  },
+  "usage": {
+    "maxNonChameleonPerTrick": 1,
+    "chameleonMayCombineWithOneOther": true
+  },
+  "resolutionOrder": [
+    "chameleon",
+    "armageddon",
+    "inversion",
+    "doping_trap",
+    "team_bond",
+    "determine_winner",
+    "hunt_command"
+  ],
+  "poolWeights": {
+    "doping": 10,
+    "trap": 10,
+    "chameleon": 10,
+    "inversion": 10,
+    "team_bond": 10,
+    "null": 10,
+    "hunt_command": 3,
+    "armageddon": 1
+  },
+  "poolWeightTotal": 64,
+  "legacyInactive": [
+    "adrenaline",
+    "poison",
+    "shield",
+    "scout",
+    "silence",
+    "anchor"
+  ],
+  "cards": [
+    {
+      "id": "special-doping",
+      "slug": "doping",
+      "persianName": "دوپینگ",
+      "englishName": "Doping",
+      "rarity": "common",
+      "effect": "+2.5 effective power to your animal card after Inversion.",
+      "effectFa": "۲٫۵+ به قدرت مؤثر کارت حیوان شما پس از وارونگی"
+    },
+    {
+      "id": "special-trap",
+      "slug": "trap",
+      "persianName": "تله",
+      "englishName": "Trap",
+      "rarity": "common",
+      "effect": "-2.5 effective power to both opponent cards after Inversion. Stacks with teammate Traps.",
+      "effectFa": "۲٫۵− به هر دو کارت حریف؛ تله‌های هم‌تیمی جمع می‌شوند"
+    },
+    {
+      "id": "special-chameleon",
+      "slug": "chameleon",
+      "persianName": "نیرنگ آفتاب‌پرست",
+      "englishName": "Chameleon",
+      "rarity": "common",
+      "effect": "When void in Lead Suit (and not leader), transform effective suit to Lead or Hunter based on prior Hunter plays.",
+      "effectFa": "در صورت نبود کارت هم‌دسته، تبدیل دسته مؤثر به Lead یا Hunter"
+    },
+    {
+      "id": "special-inversion",
+      "slug": "inversion",
+      "persianName": "نفرین وارونگی",
+      "englishName": "Inversion",
+      "rarity": "common",
+      "effect": "Invert ranks 1–12 globally for the trick. A(13) immune. A on Lead Suit cancels.",
+      "effectFa": "وارونگی رتبه ۱ تا ۱۲ در کل تریک؛ A مصون است و روی Lead لغو می‌کند"
+    },
+    {
+      "id": "special-team_bond",
+      "slug": "team_bond",
+      "persianName": "همتازی",
+      "englishName": "Team Bond",
+      "rarity": "common",
+      "effect": "Fuse teammate cards of same effective suit into Fusion Beast (cap 12.5) if trick not already cut.",
+      "effectFa": "ادغام کارت هم‌تیمی هم‌دسته به هیولای ترکیبی (سقف ۱۲٫۵) اگر تریک بریده نشده باشد"
+    },
+    {
+      "id": "special-null",
+      "slug": "null",
+      "persianName": "پوچ",
+      "englishName": "Null",
+      "rarity": "common",
+      "effect": "No gameplay effect. Consumed when played.",
+      "effectFa": "بدون اثر گیم‌پلی؛ با بازی شدن مصرف می‌شود"
+    },
+    {
+      "id": "special-hunt_command",
+      "slug": "hunt_command",
+      "persianName": "فرمان شکار",
+      "englishName": "Hunt Command",
+      "rarity": "rare",
+      "effect": "Leader-only (not Trick 1): if teammate matches suit and team wins, change Hunter next trick.",
+      "effectFa": "فقط آغازگر (نه تریک ۱): با حمایت هم‌تیمی و برد تیم، Hunter از تریک بعد عوض می‌شود"
+    },
+    {
+      "id": "special-armageddon",
+      "slug": "armageddon",
+      "persianName": "آرماگدون",
+      "englishName": "Armageddon",
+      "rarity": "very_rare",
+      "effect": "Destroy opponent A cards in this trick. Illegal with own A.",
+      "effectFa": "نابودی کارت A حریف در این تریک؛ همراه A خودتان غیرمجاز است"
+    }
+  ]
+}

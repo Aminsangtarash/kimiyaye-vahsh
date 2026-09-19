@@ -6,8 +6,8 @@ export function effectiveStrength(play: TrickCardPlay): number {
 }
 
 /**
- * Resolve trick winner using Hunter Realm as trump.
- * hunterRealm must be set once a trick has started (leader's represented realm).
+ * Legacy / simple trick winner (no Special V1 pipeline).
+ * Engine finishTrick uses resolveTrickPipeline directly.
  */
 export function resolveTrickWinner(
   trick: CurrentTrick,
@@ -17,7 +17,7 @@ export function resolveTrickWinner(
   const plays = trick.plays.map((p, index) => ({
     play: p,
     index,
-    effSuit: p.chameleon ? led : p.card.suit,
+    effSuit: (p.effectiveSuit ?? (p.chameleon || p.transformedByChameleon ? led : p.card.suit)) as Suit,
     effStrength: effectiveStrength(p),
   }));
 

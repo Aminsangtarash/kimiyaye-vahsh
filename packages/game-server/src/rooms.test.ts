@@ -29,6 +29,7 @@ beforeEach(() => {
     matchStartCountdownMs: 0,
     botActionDelayMs: 0,
     trickResolveDelayMs: 0,
+    hunterSelectionTimeoutMs: 0,
     quickMatchBotFillAfterMs: 50,
     specialCardsEnabled: false,
   });
@@ -46,9 +47,14 @@ describe("lobby V2", () => {
       }
     }
     expect(uniqueRealmsComplete(room)).toBe(true);
-    await new Promise((r) => setTimeout(r, 20));
+    await new Promise((r) => setTimeout(r, 30));
     expect(room.status).toBe("in_progress");
-    expect(room.game?.hunterRealm).toBeTruthy();
+    // With hunterSelectionTimeoutMs=0, auto-select runs on next tick
+    await new Promise((r) => setTimeout(r, 30));
+    expect(room.game?.phase === "playing" || room.game?.hunterRealm).toBeTruthy();
+    if (room.game?.phase === "playing") {
+      expect(room.game.hunterRealm).toBeTruthy();
+    }
   });
 
   it("rejects duplicate realm", () => {

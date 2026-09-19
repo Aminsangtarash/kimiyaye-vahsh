@@ -19,7 +19,9 @@ export interface SpecialCatalogEntry {
   slug: SpecialSlug;
   persianName: string;
   englishName: string;
-  strengthDelta?: number;
+  effect?: string;
+  effectFa?: string;
+  rarity?: string;
 }
 
 export interface GameCatalog {
@@ -49,15 +51,23 @@ export function loadCatalog(fromDir?: string): GameCatalog {
       type: "normal" | "legendary";
     }>;
   };
-  const specialDoc = JSON.parse(readFileSync(join(base, "special-cards.json"), "utf-8")) as {
+  // Prefer Special Cards V1; fall back to legacy file only if v1 missing.
+  let specialDoc: {
     cards: Array<{
       id: string;
       slug: SpecialSlug;
       persianName: string;
       englishName: string;
-      strengthDelta?: number;
+      effect?: string;
+      effectFa?: string;
+      rarity?: string;
     }>;
   };
+  try {
+    specialDoc = JSON.parse(readFileSync(join(base, "special-cards.v1.json"), "utf-8"));
+  } catch {
+    specialDoc = JSON.parse(readFileSync(join(base, "special-cards.json"), "utf-8"));
+  }
   const catalog: GameCatalog = {
     animals: cardsDoc.cards.map((c) => ({
       id: c.id,
@@ -74,17 +84,16 @@ export function loadCatalog(fromDir?: string): GameCatalog {
       slug: c.slug,
       persianName: c.persianName,
       englishName: c.englishName,
-      strengthDelta: c.strengthDelta,
+      effect: c.effect,
+      effectFa: c.effectFa,
+      rarity: c.rarity,
     })),
   };
   if (!fromDir) cached = catalog;
   return catalog;
 }
 
+/** @deprecated V1 uses weighted draw — no fixed deal deck. */
 export function buildSpecialDeck(catalog: GameCatalog): SpecialSlug[] {
-  const deck: SpecialSlug[] = [];
-  for (const s of catalog.specials) {
-    deck.push(s.slug, s.slug);
-  }
-  return deck;
+  return catalog.specials.map((s) => s.slug);
 }

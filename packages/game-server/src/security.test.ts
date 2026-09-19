@@ -20,7 +20,7 @@ const guest = (n: string): Identity => ({
 });
 
 async function startFour(room: ReturnType<typeof createRoom>) {
-  setRoomRuntimeConfig({ matchStartCountdownMs: 0, botActionDelayMs: 0, trickResolveDelayMs: 0 });
+  setRoomRuntimeConfig({ matchStartCountdownMs: 0, botActionDelayMs: 0, trickResolveDelayMs: 0, hunterSelectionTimeoutMs: 0 });
   const seats: number[] = [];
   const realms = ["carnivore", "herbivore", "bird", "reptile"] as const;
   for (let i = 0; i < 4; i++) {

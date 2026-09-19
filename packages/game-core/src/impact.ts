@@ -32,6 +32,32 @@ export function applyHumanTimeoutImpact(state: GameState, seat: number): GameSta
   return { ...state, seatStats };
 }
 
+export function applySuccessfulSpecialImpact(state: GameState, seat: number): GameState {
+  const w = state.config.impact.successfulSpecial;
+  const seatStats = state.seatStats.map((s, i) => {
+    if (i !== seat) return s;
+    return {
+      ...s,
+      successfulSpecials: s.successfulSpecials + 1,
+      impactScore: s.impactScore + w,
+    };
+  });
+  return { ...state, seatStats };
+}
+
+export function applyLegendaryCounterImpact(state: GameState, seat: number): GameState {
+  const w = state.config.impact.legendaryCounter;
+  const seatStats = state.seatStats.map((s, i) => {
+    if (i !== seat) return s;
+    return {
+      ...s,
+      legendaryCounters: s.legendaryCounters + 1,
+      impactScore: s.impactScore + w,
+    };
+  });
+  return { ...state, seatStats };
+}
+
 /**
  * MVP among winning-team seats only.
  * Tie-break: tricksWon → successfulSpecials → fewer humanTimeouts → shared.

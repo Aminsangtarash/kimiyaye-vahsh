@@ -26,12 +26,17 @@ export type DisplayRank = z.infer<typeof DisplayRankSchema>;
 export const GamePhaseSchema = z.enum([
   "waiting",
   "dealing",
+  "hunter_selection",
+  "dealing_remainder",
   "playing",
   "resolving_trick",
   "hand_complete",
   "match_complete",
 ]);
 export type GamePhase = z.infer<typeof GamePhaseSchema>;
+
+/** Fixed-Hunter (Hokm-inspired) ruleset — supersedes dynamic leader-hunter. */
+export const RULES_VERSION = 3;
 
 export const ControllerTypeSchema = z.enum(["human", "bot"]);
 export type ControllerType = z.infer<typeof ControllerTypeSchema>;
@@ -47,13 +52,17 @@ export type LobbyPhase = z.infer<typeof LobbyPhaseSchema>;
 
 export const ClientCommandTypeSchema = z.enum([
   "SELECT_REALM",
+  "SELECT_HUNTER_REALM",
   "ADD_BOT",
   "FILL_BOTS",
   "REMOVE_BOT",
   "PLAY_CARD",
+  "REQUEST_SPECIAL_DRAW",
+  "DISCARD_SPECIAL",
   "PLAY_SPECIAL",
   "PASS_SPECIAL",
   "SURRENDER",
+  "CONTINUE_HAND",
   /** @deprecated V1 — ignored for V2 start gate */
   "READY",
   /** @deprecated V1 host start — V2 uses auto-start */
@@ -61,21 +70,35 @@ export const ClientCommandTypeSchema = z.enum([
 ]);
 export type ClientCommandType = z.infer<typeof ClientCommandTypeSchema>;
 
-/** Legacy specials — inactive while V2_SPECIAL_CARDS_ENABLED=false */
+export const SelectHunterRealmPayloadSchema = z.object({
+  realm: AnimalRealmSchema,
+});
+
+/** Special Cards V1 active set. Legacy specials are inactive. */
 export const SpecialSlugSchema = z.enum([
-  "adrenaline",
-  "poison",
+  "doping",
+  "trap",
   "chameleon",
-  "shield",
-  "scout",
-  "silence",
-  "anchor",
+  "inversion",
+  "team_bond",
+  "null",
+  "hunt_command",
+  "armageddon",
 ]);
 export type SpecialSlug = z.infer<typeof SpecialSlugSchema>;
 
+export const SPECIAL_RULES_VERSION = 1 as const;
+
 export const PlayCardPayloadSchema = z.object({
   cardInstanceId: z.string().min(1),
+  /** Special Cards V1 — attach 0–2 specials (Chameleon + one other, or a single special). */
+  specialInstanceIds: z.array(z.string().min(1)).max(2).optional(),
+  /** @deprecated legacy chameleon flag — ignored under specialRulesVersion=1 */
   declareChameleon: z.boolean().optional(),
+});
+
+export const DiscardSpecialPayloadSchema = z.object({
+  specialInstanceId: z.string().min(1),
 });
 
 export const PlaySpecialPayloadSchema = z.object({
@@ -102,7 +125,9 @@ export const ClientCommandSchema = z.object({
     .union([
       PlayCardPayloadSchema,
       PlaySpecialPayloadSchema,
+      DiscardSpecialPayloadSchema,
       SelectRealmPayloadSchema,
+      SelectHunterRealmPayloadSchema,
       SeatPayloadSchema,
       z.object({}),
     ])

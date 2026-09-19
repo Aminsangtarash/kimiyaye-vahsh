@@ -1,7 +1,8 @@
 {
   "project": "کیمیای وحش",
   "version": 1,
-  "status": "approved-v1",
+  "status": "legacy-inactive",
+  "note": "Legacy specials. Active runtime set is data/special-cards.v1.json (specialRulesVersion=1).",
   "designGoals": [
     "Preserve Hokm-like trick structure: follow-suit, hand-reading, teammate play",
     "Add depth without making animal ranks meaningless",

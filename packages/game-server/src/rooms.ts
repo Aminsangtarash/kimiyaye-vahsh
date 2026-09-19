@@ -12,6 +12,7 @@ import {
 import {
   applyAction,
   buildMatchParticipants,
+  chooseHunterRealm,
   createInitialState,
   projectForSeat,
   SeededRandom,
@@ -74,6 +75,10 @@ export interface RoomRuntimeConfig {
   botActionDelayMs: number;
   /** How long completed tricks stay visible before collect (ms). */
   trickResolveDelayMs: number;
+  /** Human Hunter Selector timeout before auto-pick. */
+  hunterSelectionTimeoutMs: number;
+  /** Hand result auto-continue / match result dismiss timeout. */
+  resultAckTimeoutMs: number;
   specialCardsEnabled: boolean;
   impact: {
     trickWon: number;
@@ -93,7 +98,9 @@ let runtimeConfig: RoomRuntimeConfig = {
   quickMatchBotFillAfterMs: 45000,
   botActionDelayMs: 0,
   trickResolveDelayMs: 2000,
-  specialCardsEnabled: false,
+  hunterSelectionTimeoutMs: 20000,
+  resultAckTimeoutMs: 10000,
+  specialCardsEnabled: true,
   impact: {
     trickWon: 10,
     successfulSpecial: 10,
@@ -272,7 +279,7 @@ function beginMatch(room: Room): void {
   log("info", "match_started", { matchId: room.roomId, roomId: room.roomId, event: "start" });
   broadcast(room);
   onMatchStarted?.(room);
-  scheduleBotTurns(room);
+  scheduleAfterGameAction(room);
 }
 
 function beginMatchRecord(room: Room, seed: number): MatchRecord {
@@ -463,6 +470,7 @@ export function maybeBotTakeover(room: Room): void {
   if (room.status !== "in_progress" || !room.game) return;
   const grace = runtimeConfig.reconnectGraceMs;
   const now = Date.now();
+  let tookOverSelector = false;
   for (const s of room.seats) {
     if (!s || s.controllerType !== "human") continue;
     if (s.connected) continue;
@@ -472,6 +480,12 @@ export function maybeBotTakeover(room: Room): void {
     s.identity = { ...botIdentity(s.seat), displayName: `${s.ownerIdentity.displayName} (ربات)` };
     s.connected = true;
     room.stateVersion += 1;
+    if (room.game.phase === "hunter_selection" && s.seat === room.game.hunterSelectorSeat) {
+      tookOverSelector = true;
+    }
+  }
+  if (tookOverSelector) {
+    scheduleHunterSelection(room);
   }
 }
 
@@ -577,8 +591,30 @@ export function applyRoomCommand(
   room.stateVersion = room.game.stateVersion;
   persistProgress(room, seat, commandId, action, r.events);
 
+  if (action.type === "SELECT_HUNTER_REALM") {
+    const t = hunterSelectTimers.get(room.roomId);
+    if (t) {
+      clearTimeout(t);
+      hunterSelectTimers.delete(room.roomId);
+    }
+  }
+
+  if (action.type === "CONTINUE_HAND") {
+    clearHandContinueTimer(room.roomId);
+  }
+
   if (room.game.phase === "resolving_trick") {
     scheduleTrickResolve(room);
+    return { ok: true, room };
+  }
+
+  if (room.game.phase === "hand_complete") {
+    scheduleHandContinue(room);
+    return { ok: true, room };
+  }
+
+  if (room.game.phase === "hunter_selection") {
+    scheduleHunterSelection(room);
     return { ok: true, room };
   }
 
@@ -595,7 +631,7 @@ function persistProgress(
   seat: number,
   commandId: string,
   action: RoomCommand,
-  events: { type: string; winnerSeat?: number; team?: number; nextHunterRealm?: string }[] | undefined,
+  events: { type: string; winnerSeat?: number; team?: number; hunterRealm?: string }[] | undefined,
 ): void {
   if (!room.matchRecordId || !room.game) return;
   matchStore.appendAction(room.matchRecordId, {
@@ -614,9 +650,21 @@ function persistProgress(
       matchStore.appendTrick(room.matchRecordId, {
         winnerSeat: ev.winnerSeat,
         team: ev.team ?? 0,
-        hunterRealmAfter: ev.nextHunterRealm ?? room.game.hunterRealm,
+        hunterRealmAfter: room.game.hunterRealm,
         /** @deprecated historical field — do not treat as Hunter Realm for V1 records */
         superiorAfter: null,
+      });
+    }
+    if (ev.type === "hunter_realm_selected" && ev.hunterRealm) {
+      matchStore.appendAction(room.matchRecordId, {
+        at: new Date().toISOString(),
+        seat,
+        type: "HUNTER_REALM_SELECTED",
+        commandId: `hunter-${room.stateVersion}`,
+        summary: {
+          hunterRealm: ev.hunterRealm,
+          source: (ev as { source?: string }).source,
+        },
       });
     }
   }
@@ -648,11 +696,155 @@ function sanitizeActionSummary(action: RoomCommand): Record<string, unknown> {
     return { cardInstanceId: action.cardInstanceId };
   }
   if (action.type === "SELECT_REALM") return { realm: action.realm };
+  if (action.type === "SELECT_HUNTER_REALM") {
+    return { realm: action.realm, source: action.source ?? "manual" };
+  }
   return { type: action.type };
 }
 
 const botTimers = new Map<string, ReturnType<typeof setTimeout>>();
 const trickResolveTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const hunterSelectTimers = new Map<string, ReturnType<typeof setTimeout>>();
+
+function scheduleAfterGameAction(room: Room): void {
+  if (!room.game) return;
+  if (room.game.phase === "match_complete") {
+    finalizeMatch(room);
+    return;
+  }
+  if (room.game.phase === "hand_complete") {
+    scheduleHandContinue(room);
+    return;
+  }
+  if (room.game.phase === "resolving_trick") {
+    scheduleTrickResolve(room);
+    return;
+  }
+  if (room.game.phase === "hunter_selection") {
+    scheduleHunterSelection(room);
+    return;
+  }
+  scheduleBotTurns(room);
+}
+
+const handContinueTimers = new Map<string, ReturnType<typeof setTimeout>>();
+
+function clearHandContinueTimer(roomId: string): void {
+  const t = handContinueTimers.get(roomId);
+  if (t) {
+    clearTimeout(t);
+    handContinueTimers.delete(roomId);
+  }
+}
+
+function scheduleHandContinue(room: Room): void {
+  if (!room.game || room.game.phase !== "hand_complete") return;
+  clearHandContinueTimer(room.roomId);
+  const delay = runtimeConfig.resultAckTimeoutMs;
+  const run = () => {
+    handContinueTimers.delete(room.roomId);
+    runContinueHand(room);
+  };
+  if (delay <= 0) {
+    run();
+    return;
+  }
+  handContinueTimers.set(room.roomId, setTimeout(run, delay));
+}
+
+function runContinueHand(room: Room): void {
+  if (!room.game || room.game.phase !== "hand_complete") return;
+  clearHandContinueTimer(room.roomId);
+  const r = applyAction(room.game, { type: "CONTINUE_HAND" });
+  if (!r.ok) {
+    log("error", "continue_hand_failed", { roomId: room.roomId, error: r.error });
+    return;
+  }
+  room.game = r.state;
+  room.stateVersion = room.game.stateVersion;
+  persistProgress(room, room.game.hunterSelectorSeat, `continue-${room.stateVersion}`, { type: "CONTINUE_HAND" }, r.events);
+  broadcast(room);
+  scheduleAfterGameAction(room);
+}
+
+function scheduleHunterSelection(room: Room): void {
+  if (!room.game || room.game.phase !== "hunter_selection") return;
+  const existing = hunterSelectTimers.get(room.roomId);
+  if (existing) clearTimeout(existing);
+
+  const seat = room.game.hunterSelectorSeat;
+  const assignment = room.seats[seat];
+  if (!assignment) return;
+
+  // Bot selector: choose promptly with bot delay
+  if (assignment.controllerType === "bot") {
+    const delay = runtimeConfig.botActionDelayMs;
+    const t = setTimeout(() => {
+      hunterSelectTimers.delete(room.roomId);
+      runBotHunterSelect(room, seat);
+    }, delay);
+    hunterSelectTimers.set(room.roomId, t);
+    return;
+  }
+
+  // Human selector: timeout → auto heuristic
+  const delay = runtimeConfig.hunterSelectionTimeoutMs;
+  if (delay <= 0) {
+    runAutoHunterSelect(room, seat, "auto_timeout");
+    return;
+  }
+  const t = setTimeout(() => {
+    hunterSelectTimers.delete(room.roomId);
+    runAutoHunterSelect(room, seat, "auto_timeout");
+  }, delay);
+  hunterSelectTimers.set(room.roomId, t);
+}
+
+function runAutoHunterSelect(
+  room: Room,
+  seat: number,
+  source: "auto_timeout" | "bot",
+): void {
+  if (!room.game || room.game.phase !== "hunter_selection") return;
+  if (room.game.hunterSelectorSeat !== seat) return;
+  const five = room.game.hands[seat];
+  const rng = new SeededRandom(room.game.seed + room.game.stateVersion + seat * 17);
+  const realm = chooseHunterRealm(five, () => rng.next());
+  const r = applyAction(room.game, {
+    type: "SELECT_HUNTER_REALM",
+    seat,
+    realm,
+    source,
+  });
+  if (!r.ok) {
+    log("error", "hunter_select_failed", {
+      roomId: room.roomId,
+      seat,
+      source,
+      error: r.error,
+    });
+    return;
+  }
+  room.game = r.state;
+  room.stateVersion = room.game.stateVersion;
+  persistProgress(
+    room,
+    seat,
+    `hunter-${source}-${room.stateVersion}`,
+    { type: "SELECT_HUNTER_REALM", seat, realm, source },
+    r.events,
+  );
+  broadcast(room);
+  scheduleAfterGameAction(room);
+}
+
+function runBotHunterSelect(room: Room, seat: number): void {
+  const assignment = room.seats[seat];
+  if (!assignment || assignment.controllerType !== "bot") return;
+  // Do NOT set botActing here — runAutoHunterSelect → scheduleBotTurns would
+  // see botActing=true and skip scheduling the first play forever.
+  runAutoHunterSelect(room, seat, "bot");
+}
 
 function scheduleTrickResolve(room: Room): void {
   if (!room.game || room.game.phase !== "resolving_trick") return;
@@ -669,14 +861,8 @@ function scheduleTrickResolve(room: Room): void {
     if (room.matchRecordId) {
       persistProgress(room, room.game.lastTrickWinner ?? 0, `resolve-${room.stateVersion}`, { type: "RESOLVE_TRICK" } as RoomCommand, r.events);
     }
-    if (room.game.phase === "match_complete") {
-      finalizeMatch(room);
-    } else {
-      // Let clients finish the collect animation before bots lead the next trick.
-      const botPause = Math.max(runtimeConfig.botActionDelayMs, 900);
-      setTimeout(() => scheduleBotTurns(room), botPause);
-    }
     broadcast(room);
+    scheduleAfterGameAction(room);
   };
   if (delay <= 0) {
     run();
@@ -734,9 +920,16 @@ function runBotAction(room: Room, seat: number): void {
   const commandId = randomUUID();
   let action: GameAction;
   if (intent.type === "PLAY_CARD") {
-    action = { type: "PLAY_CARD", seat, cardInstanceId: intent.cardInstanceId };
-  } else if (intent.type === "PASS_SPECIAL") {
-    action = { type: "PASS_SPECIAL", seat };
+    action = {
+      type: "PLAY_CARD",
+      seat,
+      cardInstanceId: intent.cardInstanceId,
+      specialInstanceIds: intent.specialInstanceIds,
+    };
+  } else if (intent.type === "REQUEST_SPECIAL_DRAW") {
+    action = { type: "REQUEST_SPECIAL_DRAW", seat };
+  } else if (intent.type === "DISCARD_SPECIAL") {
+    action = { type: "DISCARD_SPECIAL", seat, specialInstanceId: intent.specialInstanceId };
   } else {
     action = { type: "SURRENDER", seat };
   }
@@ -745,7 +938,7 @@ function runBotAction(room: Room, seat: number): void {
   const r = applyAction(room.game, action);
   assignment.botActing = false;
   if (!r.ok) {
-    // fallback: pass special or lowest card already chosen — try first legal
+    // fallback: lowest legal card without specials
     const legal = view.legalCardIds;
     if (legal[0]) {
       const r2 = applyAction(room.game, { type: "PLAY_CARD", seat, cardInstanceId: legal[0] });
@@ -771,6 +964,10 @@ function runBotAction(room: Room, seat: number): void {
     finalizeMatch(room);
   } else if (room.game.phase === "resolving_trick") {
     scheduleTrickResolve(room);
+  } else if (room.game.phase === "hand_complete") {
+    scheduleHandContinue(room);
+  } else if (room.game.phase === "hunter_selection") {
+    scheduleHunterSelection(room);
   } else {
     scheduleBotTurns(room);
   }
@@ -779,16 +976,43 @@ function runBotAction(room: Room, seat: number): void {
 
 /** Headless: 4 bots complete a match (regression). */
 export function runFourBotMatch(seed = 42): GameState {
-  setRoomRuntimeConfig({ botActionDelayMs: 0, matchStartCountdownMs: 0, trickResolveDelayMs: 0 });
+  setRoomRuntimeConfig({
+    botActionDelayMs: 0,
+    matchStartCountdownMs: 0,
+    trickResolveDelayMs: 0,
+    hunterSelectionTimeoutMs: 0,
+    resultAckTimeoutMs: 0,
+  });
   const room = createRoom("bots");
   for (let i = 0; i < 4; i++) addBotToSeat(room);
   autoAssignMissingRealms(room);
   const realms = room.seats.map((s) => s!.realm!) as AnimalRealm[];
-  let game = createInitialState(room.roomId, seed, { specialCardsEnabled: false }, realms);
+  let game = createInitialState(room.roomId, seed, { specialCardsEnabled: true }, realms);
   let r = applyAction(game, { type: "START_MATCH" }, undefined, new SeededRandom(seed));
   game = r.state;
-  let safety = 5000;
+  let safety = 8000;
   while (game.phase !== "match_complete" && safety-- > 0) {
+    if (game.phase === "hand_complete") {
+      r = applyAction(game, { type: "CONTINUE_HAND" });
+      if (!r.ok) break;
+      game = r.state;
+      continue;
+    }
+    if (game.phase === "hunter_selection") {
+      const seat = game.hunterSelectorSeat;
+      const five = game.hands[seat];
+      const rng = new SeededRandom(game.seed + game.stateVersion + seat * 17);
+      const realm = chooseHunterRealm(five, () => rng.next());
+      r = applyAction(game, {
+        type: "SELECT_HUNTER_REALM",
+        seat,
+        realm,
+        source: "bot",
+      });
+      if (!r.ok) break;
+      game = r.state;
+      continue;
+    }
     if (game.phase === "resolving_trick") {
       r = applyAction(game, { type: "RESOLVE_TRICK" });
       if (!r.ok) break;
@@ -799,14 +1023,31 @@ export function runFourBotMatch(seed = 42): GameState {
     const seat = game.currentPlayer;
     const view = projectForSeat(game, seat);
     const intent = balancedStrategy.chooseAction(view, () => {
-      return ((game.stateVersion * 17 + seat * 13) % 1000) / 1000;
+      return new SeededRandom(game.seed + game.stateVersion * 99991 + seat * 17).next();
     });
-    if (!intent || intent.type !== "PLAY_CARD") {
-      if (intent?.type === "PASS_SPECIAL") {
-        r = applyAction(game, { type: "PASS_SPECIAL", seat });
-      } else break;
+    if (!intent) break;
+    if (intent.type === "REQUEST_SPECIAL_DRAW") {
+      r = applyAction(
+        game,
+        { type: "REQUEST_SPECIAL_DRAW", seat },
+        undefined,
+        new SeededRandom(game.seed + game.stateVersion * 7919 + seat * 104729),
+      );
+    } else if (intent.type === "DISCARD_SPECIAL") {
+      r = applyAction(game, {
+        type: "DISCARD_SPECIAL",
+        seat,
+        specialInstanceId: intent.specialInstanceId,
+      });
+    } else if (intent.type === "PLAY_CARD") {
+      r = applyAction(game, {
+        type: "PLAY_CARD",
+        seat,
+        cardInstanceId: intent.cardInstanceId,
+        specialInstanceIds: intent.specialInstanceIds,
+      });
     } else {
-      r = applyAction(game, { type: "PLAY_CARD", seat, cardInstanceId: intent.cardInstanceId });
+      break;
     }
     if (!r.ok) {
       const legal = view.legalCardIds[0];
@@ -828,7 +1069,11 @@ export function projectRoomForSeat(room: Room, seat: number) {
     room.game.phase === "match_complete"
       ? {
           winningTeamId: room.game.matchWinnerTeam,
-          participants: buildMatchParticipants(room.game, controllers),
+          matchScore: { ...room.game.matchScore, teamHands: [...room.game.matchScore.teamHands] as [number, number] },
+          participants: buildMatchParticipants(room.game, controllers).map((p) => ({
+            ...p,
+            displayName: room.seats[p.seat]?.identity.displayName ?? `صندلی ${p.seat + 1}`,
+          })),
           mvpParticipantIds: room.game.mvpParticipantIds,
           hasBots: controllers.some((c) => c === "bot"),
           botSeatCount: controllers.filter((c) => c === "bot").length,
@@ -839,6 +1084,12 @@ export function projectRoomForSeat(room: Room, seat: number) {
     game: {
       ...projectForSeat(room.game, seat),
       controllers,
+      hunterSelectionTimeoutMs: runtimeConfig.hunterSelectionTimeoutMs,
+      resultAckTimeoutMs: runtimeConfig.resultAckTimeoutMs,
+      selectionDeadlineAt:
+        room.game.phase === "hunter_selection" && room.game.selectionStartedAt
+          ? room.game.selectionStartedAt + runtimeConfig.hunterSelectionTimeoutMs
+          : null,
     },
     matchResult,
   };
